@@ -1,0 +1,8 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d8817477_002Defd6_002D4f77_002Da057_002Dcd5513c9c671/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="SessionManagerTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::741898D3-D39D-4789-B022-0918FE595F57::net5.0::PM.CloudPlatform.ForkliftManager.Test.SessionManager.SessionManagerTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::741898D3-D39D-4789-B022-0918FE595F57::net5.0::PM.CloudPlatform.ForkliftManager.Test.UnitTest1.Test1&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Resps/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

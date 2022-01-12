@@ -1,0 +1,5 @@
+F:\LE-workspace\PMPlatform\01Code\0101NET\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\win-x64\PubTmp\Out\appsettings.Development.json
+F:\LE-workspace\PMPlatform\01Code\0101NET\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\win-x64\PubTmp\Out\appsettings.json
+F:\LE-workspace\PMPlatform\01Code\0101NET\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\win-x64\PubTmp\Out\PM.CloudPlatform.ForkliftManager.Apis.pdb
+F:\LE-workspace\PMPlatform\01Code\0101NET\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\win-x64\PubTmp\Out\e_sqlite3.dll
+F:\LE-workspace\PMPlatform\01Code\0101NET\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\win-x64\PubTmp\Out\PM.CloudPlatform.ForkliftManager.Apis.exe

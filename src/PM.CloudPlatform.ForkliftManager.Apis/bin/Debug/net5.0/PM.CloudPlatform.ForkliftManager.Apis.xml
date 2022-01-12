@@ -1,0 +1,2096 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PM.CloudPlatform.ForkliftManager.Apis</name>
+    </assembly>
+    <members>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Authorization.PermissionHandler">
+            <summary>
+            重写Permission
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Authorization.TokenParameter">
+            <summary>
+            Token
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Config.DbSettings">
+            <summary>
+            数据库设置集合
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Config.DbSettings.Settings">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Config.DbSetting">
+            <summary>
+            数据库设置
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Config.DbSetting.Name">
+            <summary>
+            数据库名
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Config.DbSetting.IsEnable">
+            <summary>
+            是否使用该数据库
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Config.DbSetting.ConnectionString">
+            <summary>
+            数据库连接字符串
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3">
+            <summary>
+            基础Api配置
+            </summary>
+            <typeparam name="TRepository">仓储类型</typeparam>
+            <typeparam name="TEntity">实体类型</typeparam>
+            <typeparam name="TModel">模型类型</typeparam>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase{`1},AutoMapper.IMapper)">
+            <summary>
+            实例化基础Api配置
+            </summary>
+            <param name="repository">配置仓储</param>
+            <param name="mapper">映射器</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.GetEntitiesAsync">
+            <summary>
+            获取所有的实体
+            </summary>
+            <returns>所有的实体数据</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.GetEntitiesByPagedAsync(PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase)">
+            <summary>
+            获取分页数据
+            </summary>
+            <param name="parameters">参数</param>
+            <returns>分页数据</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.GetEntityByIdAsync(System.Guid)">
+            <summary>
+            通过Id获取数据
+            </summary>
+            <param name="id">Id</param>
+            <returns>数据</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.GetEntitiesCollectionAsync(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            通过数据集合获取数据
+            </summary>
+            <param name="ids">Id集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.CreateEntityAsync(`2)">
+            <summary>
+            创建一条实体数据
+            </summary>
+            <param name="entity">实体数据(Id不必填写)</param>
+            <returns>创建的数据</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.CreateEntitiesAsync(System.Collections.Generic.IEnumerable{`2})">
+            <summary>
+            创建很多条实体数据
+            </summary>
+            <param name="models">实体数据</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.UpdateEntityAsync(`1)">
+            <summary>
+            更新一条实体的数据
+            </summary>
+            <param name="model">更新的数据</param>
+            <returns>更新后的数据</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.UpdateEntitiesAsync(System.Collections.Generic.IEnumerable{`1})">
+            <summary>
+            更新多条实体数据
+            </summary>
+            <param name="models">实体数据的集合</param>
+            <returns>更新失败的数据</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.DeleteEntityAsync(System.Guid)">
+            <summary>
+            删除一条数据
+            </summary>
+            <param name="id">要删除的数据的Id</param>
+            <returns>删除的数据</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base.MyControllerBase`3.DeleteEntitiesAsync(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            删除很多条数据
+            </summary>
+            <param name="ids">id集合</param>
+            <returns>204</returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.CarController">
+            <summary>
+            车辆档案
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.CarController.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Repositories.CarRepository,AutoMapper.IMapper)">
+             <summary>
+            
+             </summary>
+             <param name="repository"></param>
+             <param name="mapper"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.CarTypeController">
+            <summary>
+            车辆类型
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.CarTypeController.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase{PM.CloudPlatform.ForkliftManager.Apis.Entities.CarType},AutoMapper.IMapper)">
+             <summary>
+            
+             </summary>
+             <param name="repository"></param>
+             <param name="mapper"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.ElectronicFenceController">
+            <summary>
+            电子围栏
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.ElectronicFenceController.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase{PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence},AutoMapper.IMapper)">
+             <summary>
+            
+             </summary>
+             <param name="repository"></param>
+             <param name="mapper"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.GpsPositionRecordController">
+            <summary>
+            车辆轨迹
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.RentalCompanyController">
+            <summary>
+            租借公司
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.RentalCompanyController.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase{PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalCompany},AutoMapper.IMapper)">
+             <summary>
+            
+             </summary>
+             <param name="repository"></param>
+             <param name="mapper"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.RentalRecordController">
+            <summary>
+            租借记录
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.RentalRecordController.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase{PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord},AutoMapper.IMapper)">
+             <summary>
+            
+             </summary>
+             <param name="repository"></param>
+             <param name="mapper"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.UserController">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.UserController.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase{PM.CloudPlatform.ForkliftManager.Apis.Entities.User},AutoMapper.IMapper)">
+            <summary>
+            </summary>
+            <param name="repository"> </param>
+            <param name="mapper">     </param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.UseRecordController">
+            <summary>
+            使用记录
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.UseRecordController.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase{PM.CloudPlatform.ForkliftManager.Apis.Entities.UseRecord},AutoMapper.IMapper)">
+             <summary>
+            
+             </summary>
+             <param name="repository"></param>
+             <param name="mapper"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Controllers.WeatherForecastController">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.WeatherForecastController.#ctor(Microsoft.Extensions.Logging.ILogger{PM.CloudPlatform.ForkliftManager.Apis.Controllers.WeatherForecastController})">
+             <summary>
+            
+             </summary>
+             <param name="logger"></param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Controllers.WeatherForecastController.Get">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext})">
+             <summary>
+            
+             </summary>
+             <param name="options"></param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+             <summary>
+            
+             </summary>
+             <param name="modelBuilder"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase">
+            <summary>
+            查询参数
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="F:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase.MaxPageSize">
+            <summary>
+            每页最大项数
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase.SearchTerm">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase.PageNumber">
+            <summary>
+            页码
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase._pageSize">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase.OrderBy">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase.Fields">
+            <summary>
+            排序字段
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase.PageSize">
+            <summary>
+            页面大小
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.Base.EntityBase">
+            <summary>
+            实体基类
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Base.EntityBase.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Base.EntityBase.CreateDate">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Base.EntityBase.CreateUserId">
+            <summary>
+            创建人Id
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Base.EntityBase.CreateUserName">
+            <summary>
+            创建人名称
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Base.EntityBase.ModifyDate">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Base.EntityBase.ModifyUserId">
+            <summary>
+            修改人Id
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Base.EntityBase.ModifyUserName">
+            <summary>
+            修改人名称
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car">
+            <summary>
+            车辆档案
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.LicensePlateNumber">
+            <summary>
+            车牌号
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.Brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.SerialNumber">
+            <summary>
+            编号
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.CarModel">
+            <summary>
+            车辆型号
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.CarTypeId">
+            <summary>
+            车辆类型
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.BuyTime">
+            <summary>
+            购买时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.LengthOfUse">
+            <summary>
+            使用时长
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.NumberOfMaintenance">
+            <summary>
+            保养次数
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.LastMaintenanceOfTime">
+            <summary>
+            最后一次保养时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Car.LastLengthOfUse">
+            <summary>
+            最后一次保养时使用的时间
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.CarType">
+            <summary>
+            车辆类型
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.CarType.Type">
+            <summary>
+            车辆类型
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence">
+            <summary>
+            电子围栏
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence.RentalCompanyId">
+            <summary>
+            公司ID
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence.Name">
+            <summary>
+            围栏名称
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence.LngLats">
+            <summary>
+            坐标集合
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence.RentalCompany">
+            <summary>
+            租借公司
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence.Cars">
+            <summary>
+            围栏内的车辆
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.GpsPositionRecord">
+            <summary>
+            Gps定位数据
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.Module">
+            <summary>
+            模块管理
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Module.Name">
+            <summary>
+            模块名称
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Module.Url">
+            <summary>
+            模块Url
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Module.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Module.ParentId">
+            <summary>
+            父级Id
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalCompany">
+            <summary>
+            租借单位
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalCompany.Name">
+            <summary>
+            单位名称
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalCompany.Address">
+            <summary>
+            单位地址
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalCompany.Contact">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalCompany.Tel">
+            <summary>
+            电话
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalCompany.Cars">
+            <summary>
+            租借的车辆
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalCompany.ElectronicFences">
+            <summary>
+            电子围栏
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord">
+            <summary>
+            租借记录
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.RentalCompanyId">
+            <summary>
+            租借公司ID
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.RentalEmployeeName">
+            <summary>
+            租借处理人姓名
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.RentalEmployeeTel">
+            <summary>
+            租借处理人电话
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.RentalStartTime">
+            <summary>
+            租借开始时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.RentalEndTime">
+            <summary>
+            租借结束时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.IsReturn">
+            <summary>
+            是否归还
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.ReturnTime">
+            <summary>
+            归还时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.ReturnAckEmployeeName">
+            <summary>
+            归还确认人姓名
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.ReturnAckEmployeeTel">
+            <summary>
+            归还确认人电话
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.Cars">
+            <summary>
+            租借的车辆
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord.RentalCompany">
+            <summary>
+            租借的公司
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.Role">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Role.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Role.Users">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Role.Modules">
+            <summary>
+            管理的模块
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.Terminal">
+            <summary>
+            终端
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.Terminal.IMEI">
+            <summary>
+            IMEI
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecord">
+            <summary>
+            终端绑定记录
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecord.TerminalId">
+            <summary>
+            终端Id
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecord.CarId">
+            <summary>
+            车辆Id
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecord.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecord.Terminal">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecord.Car">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalLoginRecord">
+            <summary>
+            终端登录记录
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.User">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.User.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.User.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.User.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.User.Tel">
+            <summary>
+            联系方式
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Entities.UseRecord">
+            <summary>
+            使用记录
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.UseRecord.CarId">
+            <summary>
+            车辆ID
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.UseRecord.StartTime">
+            <summary>
+            开始使用时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.UseRecord.EndTime">
+            <summary>
+            结束使用时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.UseRecord.LengthOfTime">
+            <summary>
+            使用时长
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Entities.UseRecord.Car">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Enums.Location">
+            <summary>
+            坐标
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Enums.Location.Lng">
+            <summary>
+            经度
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Enums.Location.Lat">
+            <summary>
+            纬度
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Extensions.DbContextExtensions">
+            <summary>
+            数据库上下文扩展
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.DbContextExtensions.AddEntityTypes(Microsoft.EntityFrameworkCore.ModelBuilder,System.Type)">
+            <summary>
+            添加实体到数据库上下文中
+            </summary>
+            <param name="modelBuilder"> </param>
+            <param name="entityType">   </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.DbContextExtensions.AddDb(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            配置数据库上下文
+            <para> 可切换数据库 </para>
+            </summary>
+            <param name="services"> </param>
+            <param name="config">   </param>
+            <returns> </returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Extensions.HashAlgorithmExtensions">
+            <summary>
+            Hash负载均衡
+            <remark>
+            作者: Powers
+            创始时间: 2021-02-25
+            描述:
+                将Kafka一个主题下的消息负载均衡到不同的分区.
+            </remark>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.HashAlgorithmExtensions.Hash(System.Byte[],System.Int32)">
+            <summary>
+            使用Ketama算法
+            </summary>
+            <param name="digest"></param>
+            <param name="nTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.HashAlgorithmExtensions.ComputeMd5(System.String)">
+            <summary>
+            ComputeMd5
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Extensions.JsonExtensions">
+            <summary>
+            Json扩展
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Extensions.JTT808Extensions">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.JTT808Extensions.AddJTT808(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+             <summary>
+            
+             </summary>
+             <param name="services"></param>
+             <returns></returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Extensions.LngLatExtensions">
+            <summary>
+            坐标扩展
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.LngLatExtensions.LngLatListToJsonString(System.Collections.Generic.List{PM.CloudPlatform.ForkliftManager.Apis.Enums.Location})">
+             <summary>
+            
+             </summary>
+             <param name="locations"></param>
+             <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.LngLatExtensions.LngLatListToJsonString(System.Collections.Generic.IEnumerable{PM.CloudPlatform.ForkliftManager.Apis.Enums.Location})">
+             <summary>
+            
+             </summary>
+             <param name="locations"></param>
+             <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.LngLatExtensions.JsonToLngLatList(System.String)">
+             <summary>
+            
+             </summary>
+             <param name="lnglats"></param>
+             <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.LngLatExtensions.JsonToLngLatListAsEnumerable(System.String)">
+             <summary>
+            
+             </summary>
+             <param name="lnglats"></param>
+             <returns></returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Extensions.RepositoryExtensions">
+            <summary>
+            仓储扩展
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.RepositoryExtensions.AddRepositoryByNamespace(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)">
+            <summary>
+            使用命名空间加载仓储
+            </summary>
+            <param name="services"></param>
+            <param name="repoNamespace"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.RepositoryExtensions.AddRepositoryByClass(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Type)">
+            <summary>
+            使用基类加载仓储
+            </summary>
+            <param name="services"></param>
+            <param name="repoType"></param>
+            <returns></returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Extensions.ServerBuilderExtensions">
+            <summary>
+            服务器扩展
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.ServerBuilderExtensions.AddTcpServer(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            添加Tcp服务器
+            </summary>
+            <param name="services"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Extensions.ServerBuilderExtensions.AddWsServer(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            添加Ws服务器
+            </summary>
+            <param name="services"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Handlers.EV26MsgIdTcpHandlerBase">
+            <summary>
+            Tcp消息处理器基类 <remark>
+            作者: Powers
+            创始时间: 2022-01-07 描述: 通过传入的消息, 生成对应的应答消息 并返回 </remark>
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Helper.PagedList`1">
+            <summary>
+            分页
+            </summary>
+            <typeparam name="T">每页数据的类型</typeparam>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Helper.PagedList`1.CurrentPage">
+            <summary>
+            当前页
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Helper.PagedList`1.TotalPages">
+            <summary>
+            总页数
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Helper.PagedList`1.PageSize">
+            <summary>
+            每页大小
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Helper.PagedList`1.TotalCount">
+            <summary>
+            总数
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Helper.PagedList`1.HasPrevious">
+            <summary>
+            是否存在上一页
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Helper.PagedList`1.HasNext">
+            <summary>
+            是否存在下一页
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Helper.PagedList`1.#ctor(System.Collections.Generic.List{`0},System.Int32,System.Int32,System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="items"></param>
+             <param name="count"></param>
+             <param name="pageNumber"></param>
+             <param name="pageSize"></param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Helper.PagedList`1.CreateAsync(System.Linq.IQueryable{`0},System.Int32,System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="sourse"></param>
+             <param name="pageNumber"></param>
+             <param name="pageSize"></param>
+             <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.EV26MsgIdProducer.ProduceAsync(System.String,System.String,System.Byte[])">
+            <summary>
+            生产消息到默认主题
+            </summary>
+            <param name="msgId">      消息ID </param>
+            <param name="terminalNo"> 电话号 </param>
+            <param name="data">       数据 </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.EV26MsgIdProducer.ProduceAsync(System.String,System.String,System.String,System.Byte[])">
+            <summary>
+            生产消息到特定的主题
+            </summary>
+            <param name="topicName">  主题 </param>
+            <param name="msgId">      消息ID </param>
+            <param name="terminalNo"> 电话号 </param>
+            <param name="data">       数据 </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.EV26MsgIdProducer.Flush">
+            <summary>
+            擦除缓存区
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.EV26MsgIdProducer.Flush(System.Int32)">
+            <summary>
+            定时移除缓存区
+            </summary>
+            <param name="timeSpan"> </param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Kafka.EV26MsgIdProducerPartitionFactoryImpl">
+            <summary>
+            Kafka分区工厂
+            <remark>
+            作者: Powers
+            描述:
+                对JT808生产者生产的消息进行Hash,
+            负载均衡到同一个主题下的不同分区.
+            </remark>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.EV26MsgIdProducerPartitionFactoryImpl.CreatePartition(System.String,System.String,System.String)">
+            <summary>
+            创建kafka分区, 根据电话号, 通过Hash算法返回分区号
+            </summary>
+            <param name="topicName">主题名</param>
+            <param name="msgId">消息Id</param>
+            <param name="terminalNo">电话号</param>
+            <returns>分区号</returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26Consumer">
+            <summary>
+            消费者接口
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26Consumer.OnMessage(System.Action{System.ValueTuple{System.String,System.Byte[]}})">
+            <summary>
+            监听接收消息
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26Consumer.Cts">
+            <summary>
+            Task Token
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26Consumer.Subscribe">
+            <summary>
+            订阅
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26Consumer.Unsubscribe">
+            <summary>
+            取消订阅
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26Producer">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26Producer.ProduceAsync(System.String,System.String,System.Byte[])">
+            <summary>
+            生产消息到默认主题
+            </summary>
+            <param name="msgId">消息Id</param>
+            <param name="terminalNo">设备终端号</param>
+            <param name="data">data</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26Producer.ProduceAsync(System.String,System.String,System.String,System.Byte[])">
+            <summary>
+            生产消息到指定主题
+            </summary>
+            <param name="topicName">主题名</param>
+            <param name="msgId">消息Id</param>
+            <param name="terminalNo">设备终端号</param>
+            <param name="data">data</param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26ProducerPartitionFactory">
+            <summary>
+            EV26分区工厂接口
+            <remark>
+            作者: Powers
+            描述:
+                提供了JT808负载均衡分区的功能接口
+            </remark>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26ProducerPartitionFactory.CreatePartition(System.String,System.String,System.String)">
+            <summary>
+            EV26生产者分区工厂
+            分区策略:
+            1. 可以根据设备终端号进行分区
+            2. 可以根据MsgId(消息Id)+ 谁被终端号进行分区
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26PubSub">
+            <summary>
+            发布与订阅接口
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Kafka.IEV26PubSub.TopicName">
+            <summary>
+            主题名称
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Kafka.ISessionPublishing">
+            <summary>
+            Session发布接口
+            <remark>
+            作者: Powers
+            描述:
+                提供了Session发布的基本功能功能接口
+            </remark>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.ISessionPublishing.PublishAsync(System.String)">
+            <summary>
+            根据默认主题推送消息
+            </summary>
+            <param name="value">消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Kafka.ISessionPublishing.PublishAsync(System.String,System.String)">
+            <summary>
+            根据自定义主题推送消息
+            </summary>
+            <param name="topicName">主题</param>
+            <param name="value">消息</param>
+            <returns></returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1">
+            <summary>
+            Session管理器
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.Sessions">
+            <summary>
+            存储的Session
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.Count">
+            <summary>
+            Session的数量
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.#ctor">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.TryGet(System.String)">
+            <summary>
+            获取一个Session
+            </summary>
+            <param name="key"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.TryAddOrUpdate(System.String,`0)">
+            <summary>
+            添加或者更新一个Session
+            </summary>
+            <param name="key">     </param>
+            <param name="session"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.TryRemove(System.String)">
+            <summary>
+            移除一个Session
+            </summary>
+            <param name="key"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.TryRemoveBySessionId(System.String)">
+            <summary>
+            通过Session移除Session
+            </summary>
+            <param name="sessionId"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.TryRemoveZombieSessions">
+            <summary>
+            删除僵尸链接
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.TryRemoveAll">
+            <summary>
+            移除所有Session
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.SendAsync(`0,System.ReadOnlyMemory{System.Byte})">
+            <summary>
+            </summary>
+            <param name="session"> </param>
+            <param name="buffer">  </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.SendAsync(PM.CloudPlatform.ForkliftManager.Apis.Sessions.ClientSession,System.String)">
+            <summary>
+            </summary>
+            <param name="session"> </param>
+            <param name="message"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Managers.SessionManager`1.FindIdBySession(`0)">
+            <summary>
+            </summary>
+            <param name="session"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Models.Base.DtoBase">
+            <summary>
+            Dto基类
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto">
+            <summary>
+            车辆档案
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.LicensePlateNumber">
+            <summary>
+            车牌号
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.Brand">
+            <summary>
+            品牌
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.SerialNumber">
+            <summary>
+            编号
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.CarModel">
+            <summary>
+            车辆型号
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.CarType">
+            <summary>
+            车辆类型
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.BuyTime">
+            <summary>
+            购买时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.LengthOfUse">
+            <summary>
+            使用时长
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.NumberOfMaintenance">
+            <summary>
+            保养次数
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.LastMaintenanceOfTime">
+            <summary>
+            最后一次保养时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarDto.LastLengthOfUse">
+            <summary>
+            最后一次保养时使用的时间
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Models.CarTypeDto">
+            <summary>
+            车辆类型
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.CarTypeDto.Type">
+            <summary>
+            车辆类型
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Models.ElectronicFenceDto">
+            <summary>
+            电子围栏
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.ElectronicFenceDto.Name">
+            <summary>
+            围栏名称
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.ElectronicFenceDto.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.ElectronicFenceDto.LngLats">
+            <summary>
+            坐标集合
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.ElectronicFenceDto.RentalCompany">
+            <summary>
+            租借公司
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.ElectronicFenceDto.Cars">
+            <summary>
+            围栏内的车辆
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalCompanyDto">
+            <summary>
+            租借单位
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalCompanyDto.Name">
+            <summary>
+            单位名称
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalCompanyDto.Address">
+            <summary>
+            单位地址
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalCompanyDto.Contact">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalCompanyDto.Tel">
+            <summary>
+            电话
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalCompanyDto.Cars">
+            <summary>
+            租借的车辆
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalCompanyDto.ElectronicFences">
+            <summary>
+            电子围栏
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.RentalCompany">
+            <summary>
+            租借公司ID
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.RentalEmployeeName">
+            <summary>
+            租借处理人姓名
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.RentalEmployeeTel">
+            <summary>
+            租借处理人电话
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.RentalStartTime">
+            <summary>
+            租借开始时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.RentalEndTime">
+            <summary>
+            租借结束时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.IsReturn">
+            <summary>
+            是否归还
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.ReturnTime">
+            <summary>
+            归还时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.ReturnAckEmployeeName">
+            <summary>
+            归还确认人姓名
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.ReturnAckEmployeeTel">
+            <summary>
+            归还确认人电话
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.RentalRecordDto.Cars">
+            <summary>
+            租借的车辆
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Models.UserDto">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.UserDto.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.UserDto.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.UserDto.Name">
+            <summary>
+            姓名
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.UserDto.Tel">
+            <summary>
+            联系方式
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Models.UseRecordDto">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.UseRecordDto.Car">
+            <summary>
+            车辆
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.UseRecordDto.StartTime">
+            <summary>
+            开始使用时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.UseRecordDto.EndTime">
+            <summary>
+            结束使用时间
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Models.UseRecordDto.LengthOfTime">
+            <summary>
+            使用时长
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Options.KafkaOption">
+            <summary>
+            Kafka设置
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.KafkaOption.Value">
+            <summary>
+            当前配置
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.KafkaOption.EV26Topic">
+            <summary>
+            EV26主题
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.KafkaOption.EV26SessionOnlineTopic">
+            <summary>
+            EV26Session上线主题
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.KafkaOption.EV26SessionOfflineTopic">
+            <summary>
+            EV26Session下线主题
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.KafkaOption.EV26ConsumerGroup">
+            <summary>
+            EV26消费者组
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.KafkaOption.EV26SessionConsumerGroup">
+            <summary>
+            EV26Session消费者组
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.KafkaOption.KafkaConfig">
+            <summary>
+            Kafka Ip和端口
+            <remarks>Ip:Port</remarks>
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Options.ServerOption">
+            <summary>
+            服务器配置
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.ServerOption.Value">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.ServerOption.TcpListeners">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.ServerOption.WsListeners">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Options.Listener">
+            <summary>
+            服务器属性
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.Listener.Ip">
+            <summary>
+            IP
+            </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Options.Listener.Port">
+            <summary>
+            端口
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Profiles.ProfileBase">
+            <summary>
+            映射配置
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Profiles.ProfileBase.#ctor">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Program">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Program.Main(System.String[])">
+            <summary>
+            </summary>
+            <param name="args"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            </summary>
+            <param name="args"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1">
+            <summary>
+            仓储基类接口(CRUD)
+            </summary>
+            <typeparam name="T">储存的实体类型</typeparam>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.AddEntity(`0)">
+            <summary>
+            增加一个Entity
+            </summary>
+            <param name="entity">一个实体对象</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.AddEntityAsync(`0)">
+            <summary>
+            增加一个Entity
+            <remarks>异步</remarks>
+            </summary>
+            <param name="entity">一个实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.AddEntities(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            增加一个Entity集合
+            </summary>
+            <param name="entities">实体集合</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.AddEntitiesAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            增加一个实体集合
+            <remarks>异步</remarks>
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.GetEntityById(System.Guid)">
+            <summary>
+            通过Id获取一个实体
+            </summary>
+            <param name="id">实体的Id</param>
+            <returns>实体对象</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.GetEntityByIdAsync(System.Guid)">
+            <summary>
+            通过Id获取一个实体
+            </summary>
+            <remarks>异步</remarks>
+            <param name="id">实体的Id</param>
+            <returns>实体对象</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.GetEntitiesByIds(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            通过Id集合获取多个实体
+            </summary>
+            <param name="ids">实体的Id集合</param>
+            <returns>多个实体</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.GetEntitiesByIdsAsync(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            通过Id集合获取多个实体
+            </summary>
+            <remarks>异步</remarks>
+            <param name="ids">实体的Id集合</param>
+            <returns>多个实体</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.GetEntities">
+            <summary>
+            获取所有实体
+            </summary>
+            <returns>所有实体的集合</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.GetEntitiesAsync">
+            <summary>
+            获取所有实体
+            </summary>
+            <remarks>异步</remarks>
+            <returns>所有实体的集合</returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.GetEntities(PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase)">
+            <summary>
+            分页获取数据
+            </summary>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.GetEntitiesAsync(PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase)">
+            <summary>
+            分页获取数据
+            </summary>
+            <remarks>异步</remarks>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.UpdateEntity(`0)">
+            <summary>
+            更新一个实体
+            </summary>
+            <param name="entity">要更新的实体对象</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.UpdateEntityAsync(`0)">
+            <summary>
+            更新一个实体
+            </summary>
+            <remarks>异步</remarks>
+            <param name="entity">要更新的实体对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.UpdateEntities(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            更新实体集合
+            </summary>
+            <param name="entities">实体集合</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.UpdateEntitiesAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            更新实体集合
+            </summary>
+            <param name="entities">实体集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.DeleteEntity(`0)">
+            <summary>
+            删除一个实体
+            </summary>
+            <param name="entity">要删除的实体</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.DeleteEntityAsync(`0)">
+            <summary>
+            删除一个实体
+            </summary>
+            <remarks>异步</remarks>
+            <param name="entity">要删除的实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.DeleteEntityById(System.Guid)">
+            <summary>
+            删除一个实体
+            </summary>
+            <param name="id">要删除的实体的Id</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.DeleteEntityByIdAsync(System.Guid)">
+            <summary>
+            删除一个实体
+            </summary>
+            <remarks>异步</remarks>
+            <param name="id">要删除的实体的Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.DeleteEntities(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            删除一个实体集合
+            </summary>
+            <param name="entities">实体集合</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.DeleteEntitiesAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            删除一个实体集合
+            </summary>
+            <remarks>异步</remarks>
+            <param name="entities">实体集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.DeleteEntitiesByIds(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            删除一个实体集合
+            </summary>
+            <param name="ids">实体的Id集合</param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.DeleteEntitiesByIdsAsync(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            删除一个实体集合
+            </summary>
+            <remarks>异步</remarks>
+            <param name="ids">实体的Id集合</param>
+            <returns></returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.EntityExistById(System.Guid)">
+            <summary>
+            通过Id查看一个实体是否存在
+            </summary>
+            <param name="id">Id</param>
+            <returns>
+            <para>true:存在</para>
+            <para>false:不存在</para>
+            </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.EntityExistByIdAsync(System.Guid)">
+            <summary>
+            通过Id查看一个实体是否存在
+            </summary>
+            <remarks>异步</remarks>
+            <param name="id">Id</param>
+            <returns>
+            <para>true:存在</para>
+            <para>false:不存在</para>
+            </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.EntityExist(`0)">
+            <summary>
+            查看一个实体是否存在
+            </summary>
+            <param name="entity">实体</param>
+            <returns>
+            <para>true:存在</para>
+            <para>false:不存在</para>
+            </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.EntityExistAsync(`0)">
+            <summary>
+            查看一个实体是否存在
+            </summary>
+            <remarks>异步</remarks>
+            <param name="entity">实体</param>
+            <returns>
+            <para>true:存在</para>
+            <para>false:不存在</para>
+            </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.Save">
+            <summary>
+            保存并提交更改
+            </summary>
+            <returns>
+            <para>true:提交应用成功</para>
+            <para>false:提交应用失败</para>
+            </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.IRepositoryBase`1.SaveAsync">
+            <summary>
+            保存并提交更改
+            </summary>
+            <returns>
+            <para>true:提交应用成功</para>
+            <para>false:提交应用失败</para>
+            </returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1">
+            <summary>
+            </summary>
+            <typeparam name="T"> </typeparam>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.DbSet">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext)">
+            <summary>
+            </summary>
+            <param name="dbContext"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.AddEntity(`0)">
+            <summary>
+            </summary>
+            <param name="entity"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.AddEntityAsync(`0)">
+            <summary>
+            </summary>
+            <param name="entity"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.AddEntities(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            </summary>
+            <param name="entities"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.AddEntitiesAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            </summary>
+            <param name="entities"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.GetEntityById(System.Guid)">
+            <summary>
+            </summary>
+            <param name="id"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.GetEntityByIdAsync(System.Guid)">
+            <summary>
+            </summary>
+            <param name="id"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.GetEntitiesByIds(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            </summary>
+            <param name="ids"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.GetEntitiesByIdsAsync(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            </summary>
+            <param name="ids"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.GetEntities">
+            <summary>
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.GetEntitiesAsync">
+            <summary>
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.GetEntities(PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase)">
+            <summary>
+            获取分页数据
+            </summary>
+            <param name="parameters"> 查询条件 </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.GetEntitiesAsync(PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base.DtoParametersBase)">
+            <summary>
+            获取分页数据
+            </summary>
+            <param name="parameters"> 查询条件 </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.UpdateEntity(`0)">
+            <summary>
+            </summary>
+            <param name="entity"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.UpdateEntityAsync(`0)">
+            <summary>
+            </summary>
+            <param name="entity"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.UpdateEntities(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            </summary>
+            <param name="entities"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.UpdateEntitiesAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            </summary>
+            <param name="entities"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.DeleteEntity(`0)">
+            <summary>
+            </summary>
+            <param name="entity"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.DeleteEntityAsync(`0)">
+            <summary>
+            </summary>
+            <param name="entity"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.DeleteEntityById(System.Guid)">
+            <summary>
+            </summary>
+            <param name="id"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.DeleteEntityByIdAsync(System.Guid)">
+            <summary>
+            </summary>
+            <param name="id"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.DeleteEntities(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            </summary>
+            <param name="entities"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.DeleteEntitiesAsync(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            </summary>
+            <param name="entities"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.DeleteEntitiesByIds(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            </summary>
+            <param name="ids"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.DeleteEntitiesByIdsAsync(System.Collections.Generic.IEnumerable{System.Guid})">
+            <summary>
+            </summary>
+            <param name="ids"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.EntityExistById(System.Guid)">
+            <summary>
+            </summary>
+            <param name="id"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.EntityExistByIdAsync(System.Guid)">
+            <summary>
+            </summary>
+            <param name="id"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.EntityExist(`0)">
+            <summary>
+            </summary>
+            <param name="entity"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.EntityExistAsync(`0)">
+            <summary>
+            </summary>
+            <param name="entity"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.Save">
+            <summary>
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base.RepositoryBase`1.SaveAsync">
+            <summary>
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Repositories.CarRepository">
+            <summary>
+            车辆档案
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.CarRepository.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext)">
+             <summary>
+            
+             </summary>
+             <param name="dbContext"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Repositories.CarTypeRepository">
+            <summary>
+            车辆类型
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.CarTypeRepository.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext)">
+             <summary>
+            
+             </summary>
+             <param name="dbContext"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Repositories.ElectronicFenceRepository">
+            <summary>
+            电子围栏
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.ElectronicFenceRepository.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext)">
+             <summary>
+            
+             </summary>
+             <param name="dbContext"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Repositories.RentalCompanyRepository">
+            <summary>
+            租借公司
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.RentalCompanyRepository.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext)">
+             <summary>
+            
+             </summary>
+             <param name="dbContext"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Repositories.RentalRecordRepository">
+            <summary>
+            租借记录
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.RentalRecordRepository.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext)">
+             <summary>
+            
+             </summary>
+             <param name="dbContext"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Repositories.UseRecordRepository">
+            <summary>
+            使用记录
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.UseRecordRepository.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext)">
+             <summary>
+            
+             </summary>
+             <param name="dbContext"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Repositories.UserRepository">
+            <summary>
+            用户
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Repositories.UserRepository.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Data.ForkliftManagerDbContext)">
+             <summary>
+            
+             </summary>
+             <param name="dbContext"></param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Services.A7670MessageConsumerService">
+            <summary>
+            消费消息
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Services.A7670MessageConsumerService.#ctor(PM.CloudPlatform.ForkliftManager.Apis.Managers.ClientSessionManagers)">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Services.A7670MessageConsumerService.ExecuteAsync(System.Threading.CancellationToken)">
+            <summary>
+            </summary>
+            <param name="stoppingToken"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Services.TcpSocketServerHostedService">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Services.TcpSocketServerHostedService.#ctor(Microsoft.Extensions.Options.IOptions{PM.CloudPlatform.ForkliftManager.Apis.Options.ServerOption},Microsoft.Extensions.Options.IOptions{PM.CloudPlatform.ForkliftManager.Apis.Options.KafkaOption},PM.CloudPlatform.ForkliftManager.Apis.Managers.ClientSessionManagers,PM.CloudPlatform.ForkliftManager.Apis.Managers.TerminalSessionManager,Microsoft.Extensions.Logging.ILogger{PM.CloudPlatform.ForkliftManager.Apis.Services.TcpSocketServerHostedService},Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)">
+            <summary>
+            Tcp Server服务
+            </summary>
+            <param name="serverOptions">            </param>
+            <param name="kafkaOptions">             </param>
+            <param name="clientSessionManager">     </param>
+            <param name="gpsTrackerSessionManager"> </param>
+            <param name="logger">                   </param>
+            <param name="factory">                  </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Services.TcpSocketServerHostedService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            </summary>
+            <param name="cancellationToken"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Services.TcpSocketServerHostedService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            </summary>
+            <param name="cancellationToken"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Services.WebSocketServerHostedService">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Services.WebSocketServerHostedService.#ctor(Microsoft.Extensions.Options.IOptions{PM.CloudPlatform.ForkliftManager.Apis.Options.ServerOption},PM.CloudPlatform.ForkliftManager.Apis.Managers.ClientSessionManagers,PM.CloudPlatform.ForkliftManager.Apis.Managers.TerminalSessionManager,Microsoft.Extensions.DependencyInjection.IServiceScopeFactory)">
+            <summary>
+            </summary>
+            <param name="serverOptions">            </param>
+            <param name="clientSessionManager">     </param>
+            <param name="gpsTrackerSessionManager"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Services.WebSocketServerHostedService.StartAsync(System.Threading.CancellationToken)">
+            <summary>
+            WebSocketServer
+            </summary>
+            <param name="cancellationToken"> </param>
+            <returns> </returns>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Services.WebSocketServerHostedService.StopAsync(System.Threading.CancellationToken)">
+            <summary>
+            </summary>
+            <param name="cancellationToken"> </param>
+            <returns> </returns>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Sessions.ClientSession">
+            <summary>
+            客户端连接的Session
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Sessions.GpsTrackerSession">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.Startup">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            </summary>
+            <param name="configuration"> </param>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.Startup.Configuration">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            </summary>
+            <param name="services"> </param>
+        </member>
+        <member name="M:PM.CloudPlatform.ForkliftManager.Apis.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            </summary>
+            <param name="app"> </param>
+            <param name="env"> </param>
+        </member>
+        <member name="T:PM.CloudPlatform.ForkliftManager.Apis.WeatherForecast">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.WeatherForecast.Date">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.WeatherForecast.TemperatureC">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.WeatherForecast.TemperatureF">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:PM.CloudPlatform.ForkliftManager.Apis.WeatherForecast.Summary">
+             <summary>
+            
+             </summary>
+        </member>
+    </members>
+</doc>

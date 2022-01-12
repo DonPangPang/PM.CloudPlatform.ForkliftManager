@@ -1,0 +1,150 @@
+{
+  "format": 1,
+  "restore": {
+    "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj": {}
+  },
+  "projects": {
+    "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj",
+        "projectName": "PM.CloudPlatform.ForkliftManager.Apis",
+        "projectPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj",
+        "packagesPath": "C:\\Users\\pm011\\.nuget\\packages\\",
+        "outputPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\obj\\publish\\linux-x64\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\pm011\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "http://192.168.31.39:8588/v3/index.json": {},
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/supersocket/api/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "Confluent.Kafka": {
+              "target": "Package",
+              "version": "[1.7.0-RC4, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[5.0.13, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.Extensions.Caching.Redis": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "NbazhGPS.Protocol": {
+              "target": "Package",
+              "version": "[1.0.8, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Npgsql.EntityFrameworkCore.PostgreSQL": {
+              "target": "Package",
+              "version": "[5.0.5.1, )"
+            },
+            "Pang.AutoMapperMiddleware": {
+              "target": "Package",
+              "version": "[1.0.1, )"
+            },
+            "SuperSocket": {
+              "target": "Package",
+              "version": "[2.0.0-beta.8.344, )"
+            },
+            "SuperSocket.Server": {
+              "target": "Package",
+              "version": "[2.0.0-beta.8.344, )"
+            },
+            "SuperSocket.WebSocket.Server": {
+              "target": "Package",
+              "version": "[2.0.0-beta.8.331, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[5.6.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.linux-x64",
+              "version": "[5.0.13, 5.0.13]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.linux-x64",
+              "version": "[5.0.13, 5.0.13]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.linux-x64",
+              "version": "[5.0.13, 5.0.13]"
+            }
+          ],
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "linux-x64": {
+          "#import": []
+        }
+      }
+    }
+  }
+}
