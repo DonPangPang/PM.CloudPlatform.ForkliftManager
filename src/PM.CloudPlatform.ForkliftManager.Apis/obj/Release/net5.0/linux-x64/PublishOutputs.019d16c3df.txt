@@ -1,9 +1,0 @@
-E:\CCSource\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\linux-x64\PubTmp\Out\appsettings.Development.json
-E:\CCSource\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\linux-x64\PubTmp\Out\appsettings.json
-E:\CCSource\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\linux-x64\PubTmp\Out\PM.CloudPlatform.ForkliftManager.Apis.pdb
-E:\CCSource\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\linux-x64\PubTmp\Out\alpine-librdkafka.so
-E:\CCSource\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\linux-x64\PubTmp\Out\centos6-librdkafka.so
-E:\CCSource\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\linux-x64\PubTmp\Out\centos7-librdkafka.so
-E:\CCSource\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\linux-x64\PubTmp\Out\librdkafka.so
-E:\CCSource\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\linux-x64\PubTmp\Out\libe_sqlite3.so
-E:\CCSource\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\obj\Release\net5.0\linux-x64\PubTmp\Out\PM.CloudPlatform.ForkliftManager.Apis
