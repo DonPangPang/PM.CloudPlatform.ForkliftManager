@@ -10,7 +10,7 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    [Migration("20220112080624_init_db")]
+    [Migration("20220112152830_init_db")]
     partial class init_db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,7 +172,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.ToTable("ElectronicFence");
                 });
 
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.GpsPositionRecords", b =>
+            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.GpsPositionRecord", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -234,7 +234,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GpsPositionRecords");
+                    b.ToTable("GpsPositionRecord");
                 });
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Module", b =>
@@ -451,7 +451,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.ToTable("Terminal");
                 });
 
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecords", b =>
+            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecord", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -490,10 +490,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 
                     b.HasIndex("TerminalId");
 
-                    b.ToTable("TerminalBindRecords");
+                    b.ToTable("TerminalBindRecord");
                 });
 
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalLoginRecords", b =>
+            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalLoginRecord", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -524,7 +524,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 
                     b.HasIndex("TerminalId");
 
-                    b.ToTable("TerminalLoginRecords");
+                    b.ToTable("TerminalLoginRecord");
                 });
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.UseRecord", b =>
@@ -679,7 +679,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecords", b =>
+            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalBindRecord", b =>
                 {
                     b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", "Car")
                         .WithMany()
@@ -698,7 +698,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Navigation("Terminal");
                 });
 
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalLoginRecords", b =>
+            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.TerminalLoginRecord", b =>
                 {
                     b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Terminal", "Terminal")
                         .WithMany()

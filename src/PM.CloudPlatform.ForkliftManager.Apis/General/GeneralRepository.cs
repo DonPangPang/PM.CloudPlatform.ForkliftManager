@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PM.CloudPlatform.ForkliftManager.Apis.Data;
@@ -122,6 +123,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.General
             return await _forkliftManagerDbContext.Set<T>().FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
+        public async Task<T> FindAsync<T>(Expression<Func<T, bool>> expression) where T : EntityBase
+        {
+            return await _forkliftManagerDbContext.Set<T>().Where(expression).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<T>> FindAsync<T>() where T : EntityBase
         {
             return await _forkliftManagerDbContext.Set<T>().ToListAsync();
@@ -141,6 +147,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.General
                 throw new ArgumentNullException(nameof(entity));
 
             return await _forkliftManagerDbContext.Set<T>().AnyAsync();
+        }
+
+        public async Task<bool> ExistAsync<T>(Expression<Func<T, bool>> expression) where T : EntityBase
+        {
+            return await _forkliftManagerDbContext.Set<T>().AnyAsync(expression);
         }
 
         public async Task<bool> SaveAsync()

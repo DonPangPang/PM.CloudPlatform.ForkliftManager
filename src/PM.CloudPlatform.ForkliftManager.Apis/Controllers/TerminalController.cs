@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NbazhGPS.Protocol;
@@ -16,6 +17,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("any")]
     [Route("api/[Controller]/[Action]")]
+    [Authorize]
     public class TerminalController : ControllerBase
     {
         private readonly TerminalSessionManager _gpsTrackerSessionManager;

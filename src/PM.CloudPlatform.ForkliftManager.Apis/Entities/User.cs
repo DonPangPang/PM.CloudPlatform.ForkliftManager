@@ -1,4 +1,6 @@
-﻿using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
+﻿using System.Collections;
+using System.Collections.Generic;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
 {
@@ -26,5 +28,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// 联系方式
         /// </summary>
         public string Tel { get; set; }
+
+        /// <summary>
+        /// 角色
+        /// </summary>
+        public ICollection<Role> Roles { get; set; }
     }
 }

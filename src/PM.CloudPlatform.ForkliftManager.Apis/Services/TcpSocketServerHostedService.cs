@@ -14,6 +14,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using Microsoft.AspNetCore.SignalR.Protocol;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using NbazhGPS.Protocol;
@@ -120,11 +121,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                         if (p.Header.MsgId.Equals(NbazhGpsMessageIds.登陆包.ToByteValue()))
                         {
+                            var terminalId = (p.Bodies as Nbazh0X01)!.TerminalId;
+                            s["TerminalId"] = terminalId;
                             // TODO: 终端登录
-                            if (true)
+                            var terminal = await _generalRepository.GetQueryable<Terminal>()
+                                .FirstOrDefaultAsync(x => x.IMEI.Equals(terminalId), cancellationToken: cancellationToken);
+                            if (terminal is not null)
                             {
-                                var terminalId = (p.Bodies as Nbazh0X01)!.TerminalId;
-                                s["TerminalId"] = terminalId;
                                 await _gpsTrackerSessionManager.TryAddOrUpdate(terminalId, s as GpsTrackerSession);
                             }
                             else

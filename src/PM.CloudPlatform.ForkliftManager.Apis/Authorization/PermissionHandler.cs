@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
+using PM.CloudPlatform.ForkliftManager.Apis.General;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
 {
@@ -11,10 +12,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
     /// </summary>
     public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
     {
+        private readonly IGeneralRepository _generalRepository;
         private readonly PermissionRequirement _tokenParameter;
 
-        public PermissionHandler(IConfiguration config)
+        public PermissionHandler(IConfiguration config, IGeneralRepository generalRepository)
         {
+            _generalRepository = generalRepository;
             _tokenParameter = config.GetSection("TokenParameter").Get<PermissionRequirement>();
         }
 

@@ -26,7 +26,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GpsPositionRecords",
+                name: "GpsPositionRecord",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -51,7 +51,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GpsPositionRecords", x => x.Id);
+                    table.PrimaryKey("PK_GpsPositionRecord", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -315,7 +315,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TerminalBindRecords",
+                name: "TerminalBindRecord",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -331,15 +331,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TerminalBindRecords", x => x.Id);
+                    table.PrimaryKey("PK_TerminalBindRecord", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TerminalBindRecords_Car_CarId",
+                        name: "FK_TerminalBindRecord_Car_CarId",
                         column: x => x.CarId,
                         principalTable: "Car",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TerminalBindRecords_Terminal_TerminalId",
+                        name: "FK_TerminalBindRecord_Terminal_TerminalId",
                         column: x => x.TerminalId,
                         principalTable: "Terminal",
                         principalColumn: "Id",
@@ -347,7 +347,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TerminalLoginRecords",
+                name: "TerminalLoginRecord",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -361,9 +361,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TerminalLoginRecords", x => x.Id);
+                    table.PrimaryKey("PK_TerminalLoginRecord", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TerminalLoginRecords_Terminal_TerminalId",
+                        name: "FK_TerminalLoginRecord_Terminal_TerminalId",
                         column: x => x.TerminalId,
                         principalTable: "Terminal",
                         principalColumn: "Id",
@@ -411,18 +411,18 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 column: "CarId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TerminalBindRecords_CarId",
-                table: "TerminalBindRecords",
+                name: "IX_TerminalBindRecord_CarId",
+                table: "TerminalBindRecord",
                 column: "CarId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TerminalBindRecords_TerminalId",
-                table: "TerminalBindRecords",
+                name: "IX_TerminalBindRecord_TerminalId",
+                table: "TerminalBindRecord",
                 column: "TerminalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TerminalLoginRecords_TerminalId",
-                table: "TerminalLoginRecords",
+                name: "IX_TerminalLoginRecord_TerminalId",
+                table: "TerminalLoginRecord",
                 column: "TerminalId");
 
             migrationBuilder.CreateIndex(
@@ -439,16 +439,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "GpsPositionRecords");
+                name: "GpsPositionRecord");
 
             migrationBuilder.DropTable(
                 name: "Module");
 
             migrationBuilder.DropTable(
-                name: "TerminalBindRecords");
+                name: "TerminalBindRecord");
 
             migrationBuilder.DropTable(
-                name: "TerminalLoginRecords");
+                name: "TerminalLoginRecord");
 
             migrationBuilder.DropTable(
                 name: "User");

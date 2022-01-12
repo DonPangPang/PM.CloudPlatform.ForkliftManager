@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
@@ -15,14 +16,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("any")]
     [Route("api/[Controller]/[Action]")]
+    [Authorize]
     public class RentalCompanyController : MyControllerBase<RentalCompanyRepository, RentalCompany, RentalCompanyDto>
     {
         /// <summary>
-        ///
         /// </summary>
-        /// <param name="repository"></param>
-        /// <param name="mapper"></param>
-        public RentalCompanyController(RepositoryBase<RentalCompany> repository, IMapper mapper) : base(repository, mapper)
+        /// <param name="repository"> </param>
+        /// <param name="mapper">     </param>
+        public RentalCompanyController(RentalCompanyRepository repository, IMapper mapper) : base(repository, mapper)
         {
         }
     }

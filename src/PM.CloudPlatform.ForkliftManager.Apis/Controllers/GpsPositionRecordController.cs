@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
@@ -15,9 +16,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("any")]
     [Route("api/[Controller]/[Action]")]
+    [Authorize]
     public class GpsPositionRecordController : MyControllerBase<GpsPositionRecordRepository, GpsPositionRecord, GpsPositionRecordDto>
     {
-        public GpsPositionRecordController(RepositoryBase<GpsPositionRecord> repository, IMapper mapper) : base(repository, mapper)
+        public GpsPositionRecordController(GpsPositionRecordRepository repository, IMapper mapper) : base(repository, mapper)
         {
         }
     }

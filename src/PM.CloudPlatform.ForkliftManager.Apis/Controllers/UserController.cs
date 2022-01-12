@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
@@ -15,13 +16,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("any")]
     [Route("api/[Controller]/[Action]")]
+    [Authorize]
     public class UserController : MyControllerBase<UserRepository, User, UserDto>
     {
         /// <summary>
         /// </summary>
         /// <param name="repository"> </param>
         /// <param name="mapper">     </param>
-        public UserController(RepositoryBase<User> repository, IMapper mapper) : base(repository, mapper)
+        public UserController(UserRepository repository, IMapper mapper) : base(repository, mapper)
         {
         }
     }

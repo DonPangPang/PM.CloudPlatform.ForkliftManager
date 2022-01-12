@@ -216,8 +216,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
             app.UseRouting();
             app.UseCors("Any");
 
-            //app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseAutoMapperMiddleware();
 
