@@ -17,7 +17,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
-    public class UseRecordController : MyControllerBase<UseRecordRepository, UseRecord, UseRecordDto>
+    public class UseRecordController : MyControllerBase<UseRecordRepository, UseRecord, UseRecordDto, UserAddOrUpdateDto>
     {
         /// <summary>
         /// </summary>

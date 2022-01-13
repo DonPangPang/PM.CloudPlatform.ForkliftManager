@@ -17,7 +17,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
-    public class ElectronicFenceController : MyControllerBase<ElectronicFenceRepository, ElectronicFence, ElectronicFenceDto>
+    public class ElectronicFenceController : MyControllerBase<ElectronicFenceRepository, ElectronicFence, ElectronicFenceDto, ElectronicFenceAddOrUpdateDto>
     {
         /// <summary>
         /// </summary>

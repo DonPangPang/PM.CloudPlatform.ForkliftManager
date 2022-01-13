@@ -17,7 +17,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
-    public class ModuleController : MyControllerBase<ModuleRepository, Module, ModuleDto>
+    public class ModuleController : MyControllerBase<ModuleRepository, Module, ModuleDto, ModuleAddOrUpdateDto>
     {
         public ModuleController(ModuleRepository repository, IMapper mapper) : base(repository, mapper)
         {

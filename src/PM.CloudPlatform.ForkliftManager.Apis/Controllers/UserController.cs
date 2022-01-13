@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -26,25 +27,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
-    public class UserController : MyControllerBase<UserRepository, User, UserDto>
+    public class UserController : MyControllerBase<UserRepository, User, UserDto, UserAddOrUpdateDto>
     {
         private readonly IGeneralRepository _generalRepository;
 
         private readonly DbSet<User> Users;
-        private readonly DbSet<Role> Roles;
-        private readonly DbSet<Module> Modules;
 
         /// <summary>
         /// </summary>
         /// <param name="repository">        </param>
         /// <param name="mapper">            </param>
         /// <param name="generalRepository"> </param>
-        public UserController(UserRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(repository, mapper)
+        public UserController(UserRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(
+            repository, mapper)
         {
             _generalRepository = generalRepository;
             Users = _generalRepository.GetDbSet<User>();
-            Roles = _generalRepository.GetDbSet<Role>();
-            Modules = _generalRepository.GetDbSet<Module>();
         }
 
         /// <summary>
@@ -55,10 +53,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLoginUserInfo()
         {
-            var userInfo = await Task.Run(() =>
-            {
-                return LoginUserInfo.Get<UserDto>();
-            });
+            var userInfo = await Task.Run(() => { return LoginUserInfo.Get<UserDto>(); });
 
             if (userInfo is not null)
             {
@@ -81,7 +76,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             if (userInfo is not null)
             {
-                var roles = await Users.Where(user => user.Id.Equals(userInfo.Id)).SelectMany(t => t.Roles!).ToListAsync();
+                var roles = await Users.Where(user => user.Id.Equals(userInfo.Id)).SelectMany(t => t.Roles!)
+                    .ToListAsync();
 
                 var returnDto = roles.MapTo<RoleDto>();
 
@@ -104,7 +100,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             if (userInfo is not null)
             {
-                var modules = await Users.Where(user => user.Id.Equals(userInfo.Id)).SelectMany(t => t.Roles!).SelectMany(t => t.Modules!).ToListAsync();
+                var modules = await Users.Where(user => user.Id.Equals(userInfo.Id)).SelectMany(t => t.Roles!)
+                    .SelectMany(t => t.Modules!).ToListAsync();
                 var returnDto = modules.MapTo<ModuleDto>();
 
                 //var res = await Users.SelectMany(u => u.Roles!.Select(r => new { u, r })).ToListAsync();

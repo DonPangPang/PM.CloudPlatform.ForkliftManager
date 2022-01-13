@@ -20,8 +20,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
     /// <typeparam name="TRepository"> 仓储类型 </typeparam>
     /// <typeparam name="TEntity"> 实体类型 </typeparam>
     /// <typeparam name="TModel"> 模型类型 </typeparam>
-    public class MyControllerBase<TRepository, TEntity, TModel> : ControllerBase
-        where TRepository : RepositoryBase<TEntity> where TEntity : EntityBase where TModel : DtoBase
+    /// <typeparam name="TAddOrUpdateDto"> 新增或更新类型 </typeparam>
+    public class MyControllerBase<TRepository, TEntity, TModel, TAddOrUpdateDto> : ControllerBase
+        where TRepository : RepositoryBase<TEntity>
+        where TEntity : EntityBase
+        where TModel : DtoBase
+    where TAddOrUpdateDto : class
     {
         private readonly TRepository _repository;
         private readonly IMapper _mapper;
@@ -56,7 +60,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// </summary>
         /// <param name="parameters"> 参数 </param>
         /// <returns> 分页数据 </returns>
-        [HttpGet]
+        [HttpGet("{parameters}")]
         public async Task<IActionResult> GetEntitiesByPagedAsync([FromQuery] DtoParametersBase parameters)
         {
             if (parameters is null)
@@ -76,7 +80,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// </summary>
         /// <param name="id"> Id </param>
         /// <returns> 数据 </returns>
-        [HttpGet]
+        [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetEntityByIdAsync(Guid id)
         {
             var data = await _repository.GetEntityByIdAsync(id);
@@ -91,7 +95,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// </summary>
         /// <param name="ids"> Id集合 </param>
         /// <returns> </returns>
-        [HttpGet]
+        [HttpGet("{ids}")]
         public async Task<IActionResult> GetEntitiesCollectionAsync(
             [FromQuery] IEnumerable<Guid> ids)
         {
@@ -113,7 +117,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// <param name="entity"> 实体数据(Id不必填写) </param>
         /// <returns> 创建的数据 </returns>
         [HttpPost]
-        public async Task<IActionResult> CreateEntityAsync([FromBody] TModel entity)
+        public async Task<IActionResult> CreateEntityAsync([FromBody] TAddOrUpdateDto entity)
         {
             if (entity is null)
             {
@@ -137,7 +141,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// <param name="models"> 实体数据 </param>
         /// <returns> </returns>
         [HttpPost]
-        public async Task<IActionResult> CreateEntitiesAsync([FromBody] IEnumerable<TModel> models)
+        public async Task<IActionResult> CreateEntitiesAsync([FromBody] IEnumerable<TAddOrUpdateDto> models)
         {
             if (models is null)
             {
@@ -164,29 +168,30 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// <summary>
         /// 更新一条实体的数据
         /// </summary>
+        /// <param name="id">    </param>
         /// <param name="model"> 更新的数据 </param>
         /// <returns> 更新后的数据 </returns>
-        [HttpPut]
-        public async Task<IActionResult> UpdateEntityAsync([FromBody] TEntity model)
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateEntityAsync(Guid id, [FromBody] TAddOrUpdateDto model)
         {
             if (model is null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if (!await _repository.EntityExistAsync(model))
+            if (!await _repository.EntityExistByIdAsync(id))
             {
                 return Fail("数据不存在");
             }
 
-            var oldEntity = await _repository.GetEntityByIdAsync(model.Id);
+            var oldEntity = await _repository.GetEntityByIdAsync(id);
 
             if (oldEntity is null)
             {
                 var addEntity = _mapper.Map<TEntity>(model);
                 addEntity.Create();
                 addEntity.Modify();
-                addEntity.Id = model.Id;
+                addEntity.Id = id;
 
                 await _repository.AddEntityAsync(addEntity);
 
@@ -264,7 +269,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// </summary>
         /// <param name="id"> 要删除的数据的Id </param>
         /// <returns> 删除的数据 </returns>
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteEntityAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -287,7 +292,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// </summary>
         /// <param name="ids"> id集合 </param>
         /// <returns> 204 </returns>
-        [HttpDelete]
+        [HttpDelete("{ids}")]
         public async Task<IActionResult> DeleteEntitiesAsync(IEnumerable<Guid> ids)
         {
             if (ids is null)

@@ -24,7 +24,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
-    public class TerminalController : MyControllerBase<TerminalRepository, Terminal, TerminalDto>
+    public class TerminalController : MyControllerBase<TerminalRepository, Terminal, TerminalDto, TerminalAddOrUpdateDto>
     {
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
 

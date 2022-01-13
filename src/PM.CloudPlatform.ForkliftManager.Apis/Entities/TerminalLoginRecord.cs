@@ -8,8 +8,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
     /// </summary>
     public class TerminalLoginRecord : EntityBase
     {
+        /// <summary>
+        /// 终端Id
+        /// </summary>
         public Guid TerminalId { get; set; }
 
-        public Terminal? Terminal { get; set; }
+        /// <summary>
+        /// 终端
+        /// </summary>
+        public Terminal Terminal { get; set; }
     }
 }

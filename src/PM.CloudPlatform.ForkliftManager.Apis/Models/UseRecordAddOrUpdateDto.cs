@@ -1,12 +1,11 @@
-﻿using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
-using System;
+﻿using System;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
     /// <summary>
     /// 使用记录
     /// </summary>
-    public class UseRecordDto : DtoBase
+    public class UseRecordAddOrUpdateDto
     {
         /// <summary>
         /// 车辆

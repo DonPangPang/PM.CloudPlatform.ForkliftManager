@@ -9,8 +9,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
     /// </summary>
     public class TerminalLoginRecordDto : DtoBase
     {
+        /// <summary>
+        /// 终端Id
+        /// </summary>
         public Guid TerminalId { get; set; }
 
+        /// <summary>
+        /// 终端
+        /// </summary>
         public Terminal Terminal { get; set; }
     }
 }
