@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -28,10 +29,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     {
         private readonly IGeneralRepository _generalRepository;
 
-        private readonly IQueryable<User> _user;
-        private readonly IQueryable<Role> _roles;
-
-        private readonly IQueryable<Module> _modules;
+        private readonly DbSet<User> Users;
+        private readonly DbSet<Role> Roles;
+        private readonly DbSet<Module> Modules;
 
         /// <summary>
         /// </summary>
@@ -41,9 +41,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public UserController(UserRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(repository, mapper)
         {
             _generalRepository = generalRepository;
-            _user = _generalRepository.GetQueryable<User>();
-            _roles = _generalRepository.GetQueryable<Role>();
-            _modules = _generalRepository.GetQueryable<Terminal>()
+            Users = _generalRepository.GetDbSet<User>();
+            Roles = _generalRepository.GetDbSet<Role>();
+            Modules = _generalRepository.GetDbSet<Module>();
         }
 
         /// <summary>
@@ -80,9 +80,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             if (userInfo is not null)
             {
-                var user = await _user.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Id.Equals(userInfo.Id));
+                var roles = await Users.Where(user => user.Id.Equals(userInfo.Id)).SelectMany(t => t.Roles!).ToListAsync();
 
-                var returnDto = user.MapTo<UserDto>();
+                var returnDto = roles.MapTo<RoleDto>();
 
                 return Success(returnDto);
             }
@@ -103,9 +103,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             if (userInfo is not null)
             {
-                var user = await _user.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Id.Equals(userInfo.Id));
-
-                var returnDto = user.MapTo<UserDto>();
+                var modules = await Users.Where(user => user.Id.Equals(userInfo.Id)).SelectMany(t => t.Roles!).SelectMany(t => t.Modules!).ToListAsync();
+                var returnDto = modules.MapTo<ModuleDto>();
 
                 return Success(returnDto);
             }

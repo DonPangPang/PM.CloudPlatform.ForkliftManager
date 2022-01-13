@@ -19,6 +19,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.General
             _forkliftManagerDbContext = forkliftManagerDbContext;
         }
 
+        public DbSet<T> GetDbSet<T>() where T : EntityBase
+        {
+            return _forkliftManagerDbContext.Set<T>();
+        }
+
         public IQueryable<T> GetQueryable<T>() where T : EntityBase
         {
             return _forkliftManagerDbContext.Set<T>().AsQueryable();

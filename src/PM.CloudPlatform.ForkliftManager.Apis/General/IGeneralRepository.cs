@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.General
 {
     public interface IGeneralRepository
     {
+        DbSet<T> GetDbSet<T>() where T : EntityBase;
+
         IQueryable<T> GetQueryable<T>() where T : EntityBase;
 
         Task InsertAsync<T>(T entity) where T : EntityBase;
@@ -28,6 +31,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.General
         Task UpdateAsync<T>(IEnumerable<T> entities) where T : EntityBase;
 
         Task<T> FindAsync<T>(Guid id) where T : EntityBase;
+
         Task<T> FindAsync<T>(Expression<Func<T, bool>> expression) where T : EntityBase;
 
         Task<IEnumerable<T>> FindAsync<T>() where T : EntityBase;
