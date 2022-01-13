@@ -167,7 +167,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
                 {
                     builder.AllowAnyHeader()
                         .AllowAnyMethod()
-                        .AllowAnyOrigin();
+                        .AllowAnyOrigin()
+                        .AllowCredentials();
                 });
             });
 
@@ -188,6 +189,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
             services.Configure<KafkaOption>(Configuration.GetSection("KafkaOption"));
             //services.AddSingleton<TcpSocketServerHostedService>();
 
+            services.AddDistributedMemoryCache();
+            services.AddLoginUserInfo();
+
             services.AddTcpServer();
 
             services.AddWsServer();
@@ -206,7 +210,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            app.UseLoginUserInfo();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PM.CloudPlatform.ForkliftManager.Apis v1"));
 

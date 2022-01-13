@@ -73,10 +73,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _generalRepository = factory.CreateScope().ServiceProvider.GetRequiredService<IGeneralRepository>();
 
-            _provider = new EV26MsgIdProducer(new ProducerConfig()
-            {
-                BootstrapServers = kafkaOptions.Value.KafkaConfig
-            }, kafkaOptions);
+            //_provider = new EV26MsgIdProducer(new ProducerConfig()
+            //{
+            //    BootstrapServers = kafkaOptions.Value.KafkaConfig
+            //}, kafkaOptions);
         }
 
         /// <summary>

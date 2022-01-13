@@ -32,7 +32,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Handlers
                 _logger.LogDebug(string.Join(" ", request.OriginalPackage));
                 _logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(request.Package));
             }
-            _ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
+            //_ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
 
             return base.NoResponse(request);
         }
@@ -44,7 +44,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Handlers
                 _logger.LogDebug(string.Join(" ", request.OriginalPackage));
                 _logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(request.Package));
             }
-            _ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
+            //_ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
 
             return base.EmptyResponse(request);
         }
@@ -56,7 +56,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Handlers
                 _logger.LogDebug(string.Join(" ", request.OriginalPackage));
                 _logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(request.Package));
             }
-            _ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
+            //_ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
 
             return base.Msg0X27(request);
         }
@@ -68,7 +68,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Handlers
                 _logger.LogDebug(string.Join(" ", request.OriginalPackage));
                 _logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(request.Package));
             }
-            _ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
+            //_ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
 
             return base.Msg0X2A(request);
         }
@@ -80,7 +80,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Handlers
                 _logger.LogDebug(string.Join(" ", request.OriginalPackage));
                 _logger.LogDebug(Newtonsoft.Json.JsonConvert.SerializeObject(request.Package));
             }
-            _ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
+            //_ev26Producer.ProduceAsync(request.Package.Header.MsgId.ToString(), _session["TerminalId"].ToString(), request.OriginalPackage);
 
             return base.Msg0X8A(request);
         }

@@ -14,7 +14,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     /// 租借记录
     /// </summary>
     [ApiController]
-    [EnableCors("any")]
+    [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
     public class RentalRecordController : MyControllerBase<RentalRecordRepository, RentalRecord, RentalRecordDto>

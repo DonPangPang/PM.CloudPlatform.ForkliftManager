@@ -14,7 +14,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     /// 车辆类型
     /// </summary>
     [ApiController]
-    [EnableCors("any")]
+    [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
     public class CarTypeController : MyControllerBase<CarTypeRepository, CarType, CarTypeDto>

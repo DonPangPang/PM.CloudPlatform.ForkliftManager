@@ -11,31 +11,31 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 单位名称
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary>
         /// 单位地址
         /// </summary>
-        public string Address { get; set; }
+        public string Address { get; set; } = null!;
 
         /// <summary>
         /// 联系人
         /// </summary>
-        public string Contact { get; set; }
+        public string Contact { get; set; } = null!;
 
         /// <summary>
         /// 电话
         /// </summary>
-        public string Tel { get; set; }
+        public string Tel { get; set; } = null!;
 
         /// <summary>
         /// 租借的车辆
         /// </summary>
-        public ICollection<Car> Cars { get; set; }
+        public ICollection<Car>? Cars { get; set; }
 
         /// <summary>
         /// 电子围栏
         /// </summary>
-        public ICollection<ElectronicFence> ElectronicFences { get; set; }
+        public ICollection<ElectronicFence>? ElectronicFences { get; set; }
     }
 }

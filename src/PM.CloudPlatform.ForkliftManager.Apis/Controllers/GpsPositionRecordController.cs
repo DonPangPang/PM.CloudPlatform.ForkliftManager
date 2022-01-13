@@ -14,7 +14,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     /// 车辆轨迹
     /// </summary>
     [ApiController]
-    [EnableCors("any")]
+    [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
     public class GpsPositionRecordController : MyControllerBase<GpsPositionRecordRepository, GpsPositionRecord, GpsPositionRecordDto>

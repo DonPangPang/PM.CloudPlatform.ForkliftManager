@@ -25,16 +25,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         /// <summary>
         /// </summary>
-        public string SearchTerm { get; set; }
+        public string? SearchTerm { get; set; }
 
         /// <summary>
         /// 页码
         /// </summary>
-        public int PageNumber { get; set; }
+        public int PageNumber { get; set; } = 1;
 
         /// <summary>
         /// </summary>
@@ -43,12 +43,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base
         /// <summary>
         /// 排序
         /// </summary>
-        public string OrderBy { get; set; }
+        public string? OrderBy { get; set; }
 
         /// <summary>
         /// 排序字段
         /// </summary>
-        public string Fields { get; set; }
+        public string? Fields { get; set; }
 
         /// <summary>
         /// 页面大小

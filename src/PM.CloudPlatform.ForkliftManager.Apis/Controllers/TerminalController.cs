@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -8,21 +9,26 @@ using NbazhGPS.Protocol;
 using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.Extensions;
 using NbazhGPS.Protocol.MessageBody;
+using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Managers;
+using PM.CloudPlatform.ForkliftManager.Apis.Models;
+using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
+using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Sessions;
 using SuperSocket;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 {
     [ApiController]
-    [EnableCors("any")]
+    [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
-    public class TerminalController : ControllerBase
+    public class TerminalController : MyControllerBase<TerminalRepository, Terminal, TerminalDto>
     {
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
 
-        public TerminalController(TerminalSessionManager gpsTrackerSessionManager)
+        public TerminalController(RepositoryBase<Terminal> repository, IMapper mapper, TerminalSessionManager gpsTrackerSessionManager) : base(repository, mapper)
         {
             _gpsTrackerSessionManager = gpsTrackerSessionManager;
         }
@@ -31,7 +37,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public IActionResult GetTerminals()
         {
             var terminals = _gpsTrackerSessionManager.GetAllSessions().Select(x => new { x.Key, x.Value.State });
-            return Ok(terminals);
+            return Success(terminals);
         }
 
         [HttpGet]
@@ -51,7 +57,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             await ((IAppSession)session)!.SendAsync(new ReadOnlyMemory<byte>(buffer));
 
-            return Ok();
+            return Success();
         }
     }
 }

@@ -10,7 +10,7 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    [Migration("20220112152830_init_db")]
+    [Migration("20220113022431_init_db")]
     partial class init_db
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,28 +28,36 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Brand")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("BuyTime")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("CarModel")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("CarTypeId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid?>("ElectronicFenceId")
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("LastLengthOfUse")
                         .HasColumnType("integer");
@@ -61,12 +69,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("LicensePlateNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
@@ -82,6 +91,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("SerialNumber")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -103,25 +113,32 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -135,31 +152,40 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LngLats")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("RentalCompanyId")
@@ -184,10 +210,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<int>("CellId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
@@ -198,6 +224,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 
                     b.Property<DateTime?>("DateTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("GpsRealTimeHeadIn")
                         .HasColumnType("integer");
@@ -220,10 +252,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<long?>("Mileage")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
@@ -243,40 +275,53 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ParentId")
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ParentModuleId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid?>("RoleId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Url")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentModuleId");
 
                     b.HasIndex("RoleId");
 
@@ -290,33 +335,43 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Contact")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Tel")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -330,22 +385,28 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsReturn")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
@@ -355,9 +416,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("RentalEmployeeName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("RentalEmployeeTel")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("RentalEndTime")
@@ -367,9 +430,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ReturnAckEmployeeName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ReturnAckEmployeeTel")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("ReturnTime")
@@ -388,28 +453,40 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Role");
                 });
@@ -420,25 +497,32 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CarId")
+                    b.Property<Guid?>("CarId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("IMEI")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
@@ -460,22 +544,28 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<Guid>("CarId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
@@ -499,19 +589,25 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
@@ -536,14 +632,20 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<Guid>("CarId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
+
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("timestamp without time zone");
@@ -551,10 +653,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<int>("LengthOfTime")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
@@ -576,42 +678,47 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreateDate")
+                    b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("CreateUserId")
+                    b.Property<Guid?>("CreateUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("ModifyDate")
+                    b.Property<bool>("DeleteMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("EnableMark")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid>("ModifyUserId")
+                    b.Property<Guid?>("ModifyUserId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("RoleId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Tel")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("User");
                 });
@@ -652,9 +759,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Module", b =>
                 {
+                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Module", "ParentModule")
+                        .WithMany()
+                        .HasForeignKey("ParentModuleId");
+
                     b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Role", null)
                         .WithMany("Modules")
                         .HasForeignKey("RoleId");
+
+                    b.Navigation("ParentModule");
                 });
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord", b =>
@@ -668,13 +781,18 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Navigation("RentalCompany");
                 });
 
+            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Role", b =>
+                {
+                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.User", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Terminal", b =>
                 {
                     b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", "Car")
                         .WithMany()
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CarId");
 
                     b.Navigation("Car");
                 });
@@ -720,13 +838,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Navigation("Car");
                 });
 
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.User", b =>
-                {
-                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Role", null)
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId");
-                });
-
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence", b =>
                 {
                     b.Navigation("Cars");
@@ -747,8 +858,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Role", b =>
                 {
                     b.Navigation("Modules");
+                });
 
-                    b.Navigation("Users");
+            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.User", b =>
+                {
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

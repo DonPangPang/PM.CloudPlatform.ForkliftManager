@@ -11,11 +11,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 角色名称
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary>
         /// 管理的模块
         /// </summary>
-        public ICollection<Module> Modules { get; set; }
+        public ICollection<Module>? Modules { get; set; }
     }
 }

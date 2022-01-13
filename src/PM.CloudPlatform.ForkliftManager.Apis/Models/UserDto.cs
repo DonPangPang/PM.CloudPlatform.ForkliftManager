@@ -1,10 +1,13 @@
-﻿using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
+﻿using AutoMapper;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
     /// <summary>
     /// 用户
     /// </summary>
+    [AutoMap(typeof(User), ReverseMap = true)]
     public class UserDto : DtoBase
     {
         /// <summary>

@@ -14,7 +14,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     /// 电子围栏
     /// </summary>
     [ApiController]
-    [EnableCors("any")]
+    [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
     [Authorize]
     public class ElectronicFenceController : MyControllerBase<ElectronicFenceRepository, ElectronicFence, ElectronicFenceDto>

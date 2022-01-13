@@ -10,6 +10,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
     {
         public Guid TerminalId { get; set; }
 
-        public Terminal Terminal { get; set; }
+        public Terminal? Terminal { get; set; }
     }
 }

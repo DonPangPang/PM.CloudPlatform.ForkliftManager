@@ -1,23 +1,25 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
+using AutoMapper;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 
-namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
+namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
     /// <summary>
-    /// 模块管理
+    /// 模块
     /// </summary>
-    public class Module : EntityBase
+    [AutoMap(typeof(Module), ReverseMap = true)]
+    public class ModuleDto : DtoBase
     {
         /// <summary>
         /// 模块名称
         /// </summary>
-        public string Name { get; set; } = null!;
+        public string Name { get; set; }
 
         /// <summary>
         /// 模块Url
         /// </summary>
-        public string? Url { get; set; }
+        public string Url { get; set; }
 
         /// <summary>
         /// 描述
@@ -29,6 +31,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// </summary>
         public Guid? ParentId { get; set; }
 
-        public Module? ParentModule { get; set; }
+        public ModuleDto? ParentModule { get; set; }
     }
 }

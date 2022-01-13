@@ -21,14 +21,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 描述
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         /// <summary>
         /// </summary>
-        public Terminal Terminal { get; set; }
+        public Terminal? Terminal { get; set; }
 
         /// <summary>
         /// </summary>
-        public Car Car { get; set; }
+        public Car? Car { get; set; }
     }
 }

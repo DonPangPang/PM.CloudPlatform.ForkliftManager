@@ -5,8 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql.Replication;
+using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Authorization;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
@@ -24,6 +27,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     {
         private readonly IGeneralRepository _generalRepository;
         private PermissionRequirement _tokenParameter;
+
         public AuthorizationController(IGeneralRepository generalRepository)
         {
             _generalRepository = generalRepository;
@@ -36,22 +40,48 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         }
 
         /// <summary>
+        /// 注册接口
+        /// </summary>
+        /// <param name="request"> </param>
+        /// <returns> </returns>
+        [HttpPost]
+        public async Task<IActionResult> Register([FromBody] UserAddOrUpdateDto request)
+        {
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+            {
+                return Success("账号或密码不能为空");
+            }
+
+            var user = request.MapTo<User>();
+            user.Create();
+            await _generalRepository.InsertAsync(user);
+            if (await _generalRepository.SaveAsync())
+            {
+                return Ok("注册成功");
+            }
+            else
+            {
+                return NotFound("注册失败");
+            }
+        }
+
+        /// <summary>
         /// 获取Token
         /// </summary>
-        /// <param name="request">用户名和密码</param>
-        /// <returns>Token</returns>
+        /// <param name="request"> 用户名和密码 </param>
+        /// <returns> Token </returns>
         [HttpPost]
-        public async Task<IActionResult> RequestToken([FromBody] UserDto request)
+        public async Task<IActionResult> RequestToken([FromBody] LoginDto request)
         {
-            if (request.Username == null && request.Password == null)
+            if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
                 return BadRequest("Invalid Request");
 
-            if (!(await _generalRepository.ExistAsync<User>(x=>x.Username.Equals(request.Username))))
+            if (!(await _generalRepository.ExistAsync<User>(x => x.Username.Equals(request.Username))))
             {
                 return BadRequest("账号不存在");
             }
 
-            var user = await _generalRepository.FindAsync<User>(x=>x.Username.Equals(request.Username));
+            var user = await _generalRepository.FindAsync<User>(x => x.Username.Equals(request.Username));
             if (user.Password != request.Password)
             {
                 return BadRequest("密码错误");
@@ -84,6 +114,86 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
             return token;
+        }
+
+        [NonAction]
+        public virtual OkObjectResult Success([ActionResultObjectValue] object value)
+        {
+            return new OkObjectResult(new
+            {
+                code = 200,
+                data = value
+            });
+        }
+
+        [NonAction]
+        public virtual OkObjectResult Success()
+        {
+            return new OkObjectResult(new
+            {
+                code = 200
+            });
+        }
+
+        [NonAction]
+        public virtual OkObjectResult Success(string msg)
+        {
+            return new OkObjectResult(new
+            {
+                code = 200,
+                msg = msg
+            });
+        }
+
+        [NonAction]
+        public virtual OkObjectResult Success(string msg, [ActionResultObjectValue] object value)
+        {
+            return new OkObjectResult(new
+            {
+                code = 200,
+                msg = msg,
+                data = value
+            });
+        }
+
+        [NonAction]
+        public virtual OkObjectResult Fail([ActionResultObjectValue] object value)
+        {
+            return new OkObjectResult(new
+            {
+                code = 400,
+                data = value
+            });
+        }
+
+        [NonAction]
+        public virtual OkObjectResult Fail()
+        {
+            return new OkObjectResult(new
+            {
+                code = 400
+            });
+        }
+
+        [NonAction]
+        public virtual OkObjectResult Fail(string msg)
+        {
+            return new OkObjectResult(new
+            {
+                code = 400,
+                msg = msg
+            });
+        }
+
+        [NonAction]
+        public virtual OkObjectResult Fail(string msg, [ActionResultObjectValue] object value)
+        {
+            return new OkObjectResult(new
+            {
+                code = 400,
+                msg = msg,
+                data = value
+            });
         }
     }
 }

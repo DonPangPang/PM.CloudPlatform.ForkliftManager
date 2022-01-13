@@ -29,8 +29,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public int LengthOfTime { get; set; }
 
         /// <summary>
-        ///
         /// </summary>
-        public Car Car { get; set; }
+        public Car? Car { get; set; }
     }
 }

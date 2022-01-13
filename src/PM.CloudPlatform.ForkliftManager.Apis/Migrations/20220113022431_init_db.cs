@@ -12,13 +12,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,12 +44,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     DataReportingMode = table.Column<byte>(type: "smallint", nullable: false),
                     GpsRealTimeHeadIn = table.Column<int>(type: "integer", nullable: false),
                     Mileage = table.Column<long>(type: "bigint", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,16 +63,18 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Address = table.Column<string>(type: "text", nullable: true),
-                    Contact = table.Column<string>(type: "text", nullable: true),
-                    Tel = table.Column<string>(type: "text", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: false),
+                    Contact = table.Column<string>(type: "text", nullable: false),
+                    Tel = table.Column<string>(type: "text", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,21 +82,26 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Tel = table.Column<string>(type: "text", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,15 +110,17 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     RentalCompanyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    LngLats = table.Column<string>(type: "text", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    LngLats = table.Column<string>(type: "text", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -126,20 +139,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     RentalCompanyId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RentalEmployeeName = table.Column<string>(type: "text", nullable: true),
-                    RentalEmployeeTel = table.Column<string>(type: "text", nullable: true),
+                    RentalEmployeeName = table.Column<string>(type: "text", nullable: false),
+                    RentalEmployeeTel = table.Column<string>(type: "text", nullable: false),
                     RentalStartTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     RentalEndTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsReturn = table.Column<bool>(type: "boolean", nullable: false),
                     ReturnTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ReturnAckEmployeeName = table.Column<string>(type: "text", nullable: true),
-                    ReturnAckEmployeeTel = table.Column<string>(type: "text", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReturnAckEmployeeName = table.Column<string>(type: "text", nullable: false),
+                    ReturnAckEmployeeTel = table.Column<string>(type: "text", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -153,57 +168,28 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Module",
+                name: "Role",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Url = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    ParentId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Module", x => x.Id);
+                    table.PrimaryKey("PK_Role", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Module_Role_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: true),
-                    Password = table.Column<string>(type: "text", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Tel = table.Column<string>(type: "text", nullable: true),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_User_Role_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "Role",
+                        name: "FK_Role_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -213,10 +199,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    LicensePlateNumber = table.Column<string>(type: "text", nullable: true),
-                    Brand = table.Column<string>(type: "text", nullable: true),
-                    SerialNumber = table.Column<string>(type: "text", nullable: true),
-                    CarModel = table.Column<string>(type: "text", nullable: true),
+                    LicensePlateNumber = table.Column<string>(type: "text", nullable: false),
+                    Brand = table.Column<string>(type: "text", nullable: false),
+                    SerialNumber = table.Column<string>(type: "text", nullable: false),
+                    CarModel = table.Column<string>(type: "text", nullable: false),
                     CarTypeId = table.Column<Guid>(type: "uuid", nullable: false),
                     BuyTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LengthOfUse = table.Column<int>(type: "integer", nullable: false),
@@ -226,12 +212,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     ElectronicFenceId = table.Column<Guid>(type: "uuid", nullable: true),
                     RentalCompanyId = table.Column<Guid>(type: "uuid", nullable: true),
                     RentalRecordId = table.Column<Guid>(type: "uuid", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,18 +251,57 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Module",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    ParentId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ParentModuleId = table.Column<Guid>(type: "uuid", nullable: true),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreateUserName = table.Column<string>(type: "text", nullable: true),
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Module", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Module_Module_ParentModuleId",
+                        column: x => x.ParentModuleId,
+                        principalTable: "Module",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Module_Role_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "Role",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Terminal",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IMEI = table.Column<string>(type: "text", nullable: true),
-                    CarId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IMEI = table.Column<string>(type: "text", nullable: false),
+                    CarId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -284,7 +311,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         column: x => x.CarId,
                         principalTable: "Car",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -296,12 +323,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     StartTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     EndTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LengthOfTime = table.Column<int>(type: "integer", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -322,12 +351,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     TerminalId = table.Column<Guid>(type: "uuid", nullable: false),
                     CarId = table.Column<Guid>(type: "uuid", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -352,12 +383,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     TerminalId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreateUserId = table.Column<Guid>(type: "uuid", nullable: true),
                     CreateUserName = table.Column<string>(type: "text", nullable: true),
-                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ModifyUserName = table.Column<string>(type: "text", nullable: true)
+                    ModifyDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    ModifyUserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ModifyUserName = table.Column<string>(type: "text", nullable: true),
+                    EnableMark = table.Column<bool>(type: "boolean", nullable: false),
+                    DeleteMark = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -396,6 +429,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 column: "RentalCompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Module_ParentModuleId",
+                table: "Module",
+                column: "ParentModuleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Module_RoleId",
                 table: "Module",
                 column: "RoleId");
@@ -404,6 +442,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 name: "IX_RentalRecord_RentalCompanyId",
                 table: "RentalRecord",
                 column: "RentalCompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Role_UserId",
+                table: "Role",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Terminal_CarId",
@@ -426,11 +469,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 column: "TerminalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_RoleId",
-                table: "User",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UseRecord_CarId",
                 table: "UseRecord",
                 column: "CarId");
@@ -451,16 +489,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 name: "TerminalLoginRecord");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "UseRecord");
 
             migrationBuilder.DropTable(
-                name: "UseRecord");
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "Terminal");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Car");
