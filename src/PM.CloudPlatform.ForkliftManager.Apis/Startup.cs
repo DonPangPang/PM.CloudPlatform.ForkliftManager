@@ -167,8 +167,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
                 {
                     builder.AllowAnyHeader()
                         .AllowAnyMethod()
-                        .AllowAnyOrigin()
-                        .AllowCredentials();
+                        .AllowAnyOrigin();
                 });
             });
 

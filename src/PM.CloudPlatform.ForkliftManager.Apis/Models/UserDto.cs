@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 
@@ -29,5 +30,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// 联系方式
         /// </summary>
         public string Tel { get; set; }
+
+        /// <summary>
+        /// 用户的角色
+        /// </summary>
+        public ICollection<RoleDto>? Roles { get; set; }
     }
 }

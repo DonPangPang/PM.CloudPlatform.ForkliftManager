@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PM.CloudPlatform.ForkliftManager.Apis.Data;
@@ -9,9 +10,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    partial class ForkliftManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220113081907_init_db_01")]
+    partial class init_db_01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,9 +99,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<Guid?>("RentalCompanyId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("RentalRecordId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("SerialNumber")
                         .HasColumnType("text");
 
@@ -110,8 +109,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.HasIndex("ElectronicFenceId");
 
                     b.HasIndex("RentalCompanyId");
-
-                    b.HasIndex("RentalRecordId");
 
                     b.ToTable("Car");
                 });
@@ -386,6 +383,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("CarId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime?>("CreateDate")
                         .HasColumnType("timestamp without time zone");
 
@@ -440,6 +440,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CarId");
 
                     b.HasIndex("RentalCompanyId");
 
@@ -763,10 +765,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .WithMany("Cars")
                         .HasForeignKey("RentalCompanyId");
 
-                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("RentalRecordId");
-
                     b.Navigation("CarType");
                 });
 
@@ -792,11 +790,17 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord", b =>
                 {
+                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId");
+
                     b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalCompany", "RentalCompany")
                         .WithMany()
                         .HasForeignKey("RentalCompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Car");
 
                     b.Navigation("RentalCompany");
                 });
@@ -876,11 +880,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Navigation("Cars");
 
                     b.Navigation("ElectronicFences");
-                });
-
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.RentalRecord", b =>
-                {
-                    b.Navigation("Cars");
                 });
 #pragma warning restore 612, 618
         }

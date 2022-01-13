@@ -1,10 +1,12 @@
 ﻿using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
@@ -27,6 +29,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         private readonly IGeneralRepository _generalRepository;
 
         private readonly IQueryable<User> _user;
+        private readonly IQueryable<Role> _roles;
+
+        private readonly IQueryable<Module> _modules;
 
         /// <summary>
         /// </summary>
@@ -37,6 +42,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         {
             _generalRepository = generalRepository;
             _user = _generalRepository.GetQueryable<User>();
+            _roles = _generalRepository.GetQueryable<Role>();
+            _modules = _generalRepository.GetQueryable<Terminal>()
         }
 
         /// <summary>
@@ -52,7 +59,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 return LoginUserInfo.Get<UserDto>();
             });
 
-            return Ok(userInfo);
+            if (userInfo is not null)
+            {
+                return Success(userInfo);
+            }
+            else
+            {
+                return Fail("用户登录信息丢失");
+            }
         }
 
         /// <summary>
@@ -64,23 +78,41 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         {
             var userInfo = LoginUserInfo.Get<UserDto>();
 
-            var userRoles = await _user.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Id.Equals(userInfo.Id));
+            if (userInfo is not null)
+            {
+                var user = await _user.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Id.Equals(userInfo.Id));
 
-            return Ok(userRoles);
+                var returnDto = user.MapTo<UserDto>();
+
+                return Success(returnDto);
+            }
+            else
+            {
+                return Fail("用户登录信息丢失");
+            }
         }
 
-        ///// <summary>
-        ///// 获取登录用户的模块
-        ///// </summary>
-        ///// <returns> </returns>
-        //public async Task<IActionResult> GetLoginUserModules()
-        //{
-        //    var userInfo = LoginUserInfo.Get<UserDto>();
+        /// <summary>
+        /// 获取登录用户的模块
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetLoginUserModules()
+        {
+            var userInfo = LoginUserInfo.Get<UserDto>();
 
-        // var userRoles = await _user.Include(x => x.Roles).ThenInclude(y => y.Modules)
-        // .FirstOrDefaultAsync(x => x.Id.Equals(userInfo.Id));
+            if (userInfo is not null)
+            {
+                var user = await _user.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Id.Equals(userInfo.Id));
 
-        //    return Ok(userRoles);
-        //}
+                var returnDto = user.MapTo<UserDto>();
+
+                return Success(returnDto);
+            }
+            else
+            {
+                return Fail("用户登录信息丢失");
+            }
+        }
     }
 }

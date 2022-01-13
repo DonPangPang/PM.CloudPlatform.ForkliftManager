@@ -13,6 +13,7 @@ using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Authorization;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
+using PM.CloudPlatform.ForkliftManager.Apis.Helper;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
@@ -52,16 +53,21 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 return Success("账号或密码不能为空");
             }
 
+            if (await _generalRepository.ExistAsync<User>(x => x.Username.Equals(request.Username)))
+            {
+                return Fail("账号已存在");
+            }
+
             var user = request.MapTo<User>();
             user.Create();
             await _generalRepository.InsertAsync(user);
             if (await _generalRepository.SaveAsync())
             {
-                return Ok("注册成功");
+                return Success("注册成功");
             }
             else
             {
-                return NotFound("注册失败");
+                return Fail("注册失败");
             }
         }
 
@@ -74,24 +80,26 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> RequestToken([FromBody] LoginDto request)
         {
             if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
-                return BadRequest("Invalid Request");
+                return Fail("Invalid Request");
 
             if (!(await _generalRepository.ExistAsync<User>(x => x.Username.Equals(request.Username))))
             {
-                return BadRequest("账号不存在");
+                return Fail("账号不存在");
             }
 
             var user = await _generalRepository.FindAsync<User>(x => x.Username.Equals(request.Username));
             if (user.Password != request.Password)
             {
-                return BadRequest("密码错误");
+                return Fail("密码错误");
             }
 
             //生成Token和RefreshToken
             var token = GenUserToken(user.Id, request.Username, "admin");
             var refreshToken = "123456";
 
-            return Ok(new[] { token, refreshToken });
+            LoginUserInfo.Set(user);
+
+            return Success(new[] { token, refreshToken });
         }
 
         //生成Token代码

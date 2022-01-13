@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
@@ -29,6 +31,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// </summary>
         public Guid? ParentId { get; set; }
 
+        /// <summary>
+        /// 父模块
+        /// </summary>
         public Module? ParentModule { get; set; }
+
+        /// <summary>
+        /// 对应的角色
+        /// </summary>
+        public ICollection<Role>? Roles { get; set; }
     }
 }

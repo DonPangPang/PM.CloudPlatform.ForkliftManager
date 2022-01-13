@@ -11,7 +11,7 @@ using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 {
     /// <summary>
-    /// 租借记录
+    /// 角色
     /// </summary>
     [ApiController]
     [EnableCors("Any")]

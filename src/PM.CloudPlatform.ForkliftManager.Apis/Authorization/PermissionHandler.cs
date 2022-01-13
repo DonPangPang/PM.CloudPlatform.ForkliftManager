@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
@@ -43,6 +46,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
                 context.Fail();
                 await Task.CompletedTask;
             }
+
+            var id = Guid.Parse(context.User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name))!.Value);
+
+            var urls = await _generalRepository.GetQueryable<User>()
+                .Include(x => x.Roles)
+                .ThenInclude(y => y.Modules).Where(x => x.Id.Equals(id)).ToListAsync();
 
             context.Succeed(requirement);
             await Task.CompletedTask;
