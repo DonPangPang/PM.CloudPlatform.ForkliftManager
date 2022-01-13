@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
@@ -105,6 +106,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 var modules = await Users.Where(user => user.Id.Equals(userInfo.Id)).SelectMany(t => t.Roles!).SelectMany(t => t.Modules!).ToListAsync();
                 var returnDto = modules.MapTo<ModuleDto>();
+
+                //var res = await Users.SelectMany(u => u.Roles!.Select(r => new { u, r })).ToListAsync();
 
                 return Success(returnDto);
             }
