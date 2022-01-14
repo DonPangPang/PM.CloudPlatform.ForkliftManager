@@ -36,7 +36,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.PipelineFilters
             }
             else
             {
-                throw new ProtocolException($"首字节未知 {flag}");
+                return null;
+                //throw new ProtocolException($"首字节未知 {flag}");
             }
 
             reader.Rewind(1);

@@ -42,7 +42,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         private readonly IOptions<KafkaOption> _kafkaOptions;
         private readonly ClientSessionManagers _clientSessionManager;
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
-        private readonly UseRecordRepository _useRecordRepository;
         private readonly ILogger<TcpSocketServerHostedService> _logger;
         private readonly IGeneralRepository _generalRepository;
         private readonly NbazhGpsSerializer _nbazhGpsSerializer = new NbazhGpsSerializer();
@@ -126,9 +125,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                             // TODO: 终端登录
                             var terminal = await _generalRepository.GetQueryable<Terminal>()
                                 .FirstOrDefaultAsync(x => x.IMEI.Equals(terminalId), cancellationToken: cancellationToken);
-                            if (terminal is not null)
+
+                            //if (terminal is not null)
+                            if (true)
                             {
-                                await _gpsTrackerSessionManager.TryAddOrUpdate(terminalId, s as GpsTrackerSession);
+                                await _gpsTrackerSessionManager.TryAddOrUpdate(terminalId, (s as GpsTrackerSession)!);
                             }
                             else
                             {
@@ -138,9 +139,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                         if (p.Header.MsgId.Equals(NbazhGpsMessageIds.Gps定位包.ToByteValue()))
                         {
-                            var gpsPositionRecord = (p.Bodies as Nbazh0X22)!.MapTo<GpsPositionRecord>();
+                            var gpsPositionRecord = (p.Bodies as Nbazh0X22)!.MapTo<GpsPositionRecordTemp>().MapTo<GpsPositionRecord>();
+                            gpsPositionRecord.Create(Guid.NewGuid(), s["TerminalId"].ToString() ?? "Unknown Terminal.");
 
                             await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
+                            await _generalRepository.SaveAsync();
 
                             await Task.Run(async () =>
                             {
@@ -151,7 +154,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                         TerminalId = s["TerminalId"].ToString(),
                                         Lon = gpsPositionRecord.Lon,
                                         Lat = gpsPositionRecord.Lat,
-                                        Heading = gpsPositionRecord.HeadingAndStatus.Heading,
+                                        Heading = gpsPositionRecord.Heading,
                                         Speed = gpsPositionRecord.Speed
                                     }.ToJson());
                                 }

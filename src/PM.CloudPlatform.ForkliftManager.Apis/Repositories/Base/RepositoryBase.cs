@@ -170,7 +170,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
         /// <returns> </returns>
         public async Task<IEnumerable<T>> GetEntitiesAsync()
         {
-            return await DbSet.ToListAsync();
+            try
+            {
+                return await DbSet.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         /// <summary>

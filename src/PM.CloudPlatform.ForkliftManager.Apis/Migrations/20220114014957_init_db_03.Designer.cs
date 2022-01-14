@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PM.CloudPlatform.ForkliftManager.Apis.Data;
@@ -9,9 +10,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    partial class ForkliftManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220114014957_init_db_03")]
+    partial class init_db_03
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,49 +118,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.ToTable("Car");
                 });
 
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.CarMaintenanceRecord", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CarId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("CreateUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CreateUserName")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("DeleteMark")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("EnableMark")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("MaintenanceTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("ModifyDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("ModifyUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ModifyUserName")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarId");
-
-                    b.ToTable("CarMaintenanceRecord");
-                });
-
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.CarType", b =>
                 {
                     b.Property<Guid>("Id")
@@ -254,7 +213,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<byte?>("AccState")
+                    b.Property<byte>("AccState")
                         .HasColumnType("smallint");
 
                     b.Property<int>("CellId")
@@ -269,7 +228,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<string>("CreateUserName")
                         .HasColumnType("text");
 
-                    b.Property<byte?>("DataReportingMode")
+                    b.Property<byte>("DataReportingMode")
                         .HasColumnType("smallint");
 
                     b.Property<DateTime?>("DateTime")
@@ -284,22 +243,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<int>("EorWLon")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("GpsInfoLength")
+                    b.Property<int>("GpsInfoLength")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("GpsLocatedFunc")
+                    b.Property<int>("GpsLocatedFunc")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("GpsRealTimeHeadIn")
+                    b.Property<int>("GpsRealTimeHeadIn")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("GpsSatelliteCount")
+                    b.Property<int>("GpsSatelliteCount")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("Heading")
+                    b.Property<int>("Heading")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("IsGpsLocated")
+                    b.Property<int>("IsGpsLocated")
                         .HasColumnType("integer");
 
                     b.Property<int>("LAC")
@@ -832,17 +791,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasForeignKey("RentalRecordId");
 
                     b.Navigation("CarType");
-                });
-
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.CarMaintenanceRecord", b =>
-                {
-                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence", b =>

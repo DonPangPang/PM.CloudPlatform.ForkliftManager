@@ -52,7 +52,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
 
             var returnDto = _mapper.Map<IEnumerable<TModel>>(data);
 
-            return Success(data);
+            return Success(returnDto);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// </summary>
         /// <param name="parameters"> 参数 </param>
         /// <returns> 分页数据 </returns>
-        [HttpGet("{parameters}")]
+        [HttpGet]
         public async Task<IActionResult> GetEntitiesByPagedAsync([FromQuery] DtoParametersBase parameters)
         {
             if (parameters is null)
@@ -80,7 +80,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// </summary>
         /// <param name="id"> Id </param>
         /// <returns> 数据 </returns>
-        [HttpGet("{id:guid}")]
+        [HttpGet]
         public async Task<IActionResult> GetEntityByIdAsync(Guid id)
         {
             var data = await _repository.GetEntityByIdAsync(id);
@@ -95,7 +95,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// </summary>
         /// <param name="ids"> Id集合 </param>
         /// <returns> </returns>
-        [HttpGet("{ids}")]
+        [HttpGet]
         public async Task<IActionResult> GetEntitiesCollectionAsync(
             [FromQuery] IEnumerable<Guid> ids)
         {

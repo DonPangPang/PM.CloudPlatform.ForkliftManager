@@ -33,7 +33,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 车辆类型
         /// </summary>
-        public CarTypeDto CarType { get; set; }
+        public Guid CarTypeId { get; set; }
 
         /// <summary>
         /// 购买时间

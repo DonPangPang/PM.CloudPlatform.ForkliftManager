@@ -12,7 +12,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// IMEI
         /// </summary>
-        public string IMEI { get; set; }
+        public string? IMEI { get; set; }
 
         public Guid? CarId { get; set; }
 

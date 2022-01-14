@@ -1,13 +1,16 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using AutoMapper;
 using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
+    [AutoMap(typeof(GpsPositionRecord), ReverseMap = true)]
     public class GpsPositionRecordDto : DtoBase
     {
         public System.DateTime? DateTime { get; set; }

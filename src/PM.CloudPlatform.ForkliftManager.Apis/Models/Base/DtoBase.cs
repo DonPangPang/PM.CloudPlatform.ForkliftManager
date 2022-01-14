@@ -46,11 +46,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models.Base
         /// <summary>
         /// 启用标识
         /// </summary>
-        public bool EnableMark { get; set; } = true;
+        public bool? EnableMark { get; set; }
 
         /// <summary>
         /// 删除标识
         /// </summary>
-        public bool DeleteMark { get; set; } = false;
+        public bool? DeleteMark { get; set; }
     }
 }

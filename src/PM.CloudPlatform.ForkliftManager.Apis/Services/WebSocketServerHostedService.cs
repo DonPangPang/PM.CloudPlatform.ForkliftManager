@@ -9,6 +9,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Services
@@ -66,7 +69,20 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                 })
                 .UseWebSocketMessageHandler(async (s, p) =>
                 {
-                    await s.SendAsync(p.Message);
+                    var package = p.Message.ToObject<ClientPackage>();
+
+                    if (package.PackageType == PackageType.Heart)
+                    {
+                        var msg = package.ToJson();
+                        await s.SendAsync(msg);
+                        return;
+                    }
+
+                    if (package.PackageType == PackageType.Login)
+                    {
+                        await _clientSessionManager.TryAddOrUpdate(p.Message, (s as ClientSession)!);
+                        await s.SendAsync("登录成功");
+                    }
                 })
                 .UseInProcSessionContainer()
                 .BuildAsServer();
@@ -84,5 +100,21 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         {
             await Task.CompletedTask;
         }
+    }
+
+    public enum PackageType
+    {
+        Heart = 0,
+        Login = 1,
+        Gps = 2,
+    }
+
+    public class ClientPackage
+    {
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PackageType PackageType { get; set; }
+
+        public string ClientId { get; set; } = null!;
+        public object? Data { get; set; }
     }
 }

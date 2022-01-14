@@ -66,6 +66,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities.Base
             }
         }
 
+        public virtual void Create(Guid terminalId, string IMEI)
+        {
+            Id = Guid.NewGuid();
+            CreateDate = DateTime.Now;
+
+            CreateUserId = terminalId;
+            CreateUserName = IMEI;
+        }
+
         public virtual void Modify()
         {
             ModifyDate = DateTime.Now;

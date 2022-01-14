@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PM.CloudPlatform.ForkliftManager.Apis.Data;
@@ -9,9 +10,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    partial class ForkliftManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220114020400_init_db_04")]
+    partial class init_db_04
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,49 +116,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.HasIndex("RentalRecordId");
 
                     b.ToTable("Car");
-                });
-
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.CarMaintenanceRecord", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CarId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("CreateUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CreateUserName")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("DeleteMark")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("EnableMark")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("MaintenanceTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime?>("ModifyDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("ModifyUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ModifyUserName")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarId");
-
-                    b.ToTable("CarMaintenanceRecord");
                 });
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.CarType", b =>
@@ -281,7 +240,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<bool>("EnableMark")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("EorWLon")
+                    b.Property<int?>("EorWLon")
                         .HasColumnType("integer");
 
                     b.Property<int?>("GpsInfoLength")
@@ -329,7 +288,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
-                    b.Property<int>("SorNLat")
+                    b.Property<int?>("SorNLat")
                         .HasColumnType("integer");
 
                     b.Property<byte>("Speed")
@@ -832,17 +791,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasForeignKey("RentalRecordId");
 
                     b.Navigation("CarType");
-                });
-
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.CarMaintenanceRecord", b =>
-                {
-                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence", b =>

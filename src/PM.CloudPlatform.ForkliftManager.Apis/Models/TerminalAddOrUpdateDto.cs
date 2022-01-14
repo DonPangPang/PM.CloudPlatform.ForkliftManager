@@ -17,6 +17,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 
         public Guid? CarId { get; set; }
 
-        public Car? Car { get; set; }
+        //public Car? Car { get; set; }
     }
 }

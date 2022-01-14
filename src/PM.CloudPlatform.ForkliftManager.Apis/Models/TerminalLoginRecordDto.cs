@@ -17,6 +17,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 终端
         /// </summary>
-        public Terminal Terminal { get; set; }
+        public Terminal? Terminal { get; set; }
     }
 }

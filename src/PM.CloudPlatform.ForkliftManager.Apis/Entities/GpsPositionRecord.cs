@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.MessageBody;
@@ -18,11 +19,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
     {
         public System.DateTime? DateTime { get; set; }
 
-        [NotMapped]
-        public GpsSatelliteInfo0X22 GpsSatelliteInfo { get; set; }
+        public int? GpsInfoLength { get; set; }
 
-        public int GpsInfoLength => GpsSatelliteInfo.GpsInfoLength;
-        public int GpsSatelliteCount => GpsSatelliteInfo.GpsSatelliteCount;
+        public int? GpsSatelliteCount { get; set; }
 
         public Decimal Lon { get; set; }
 
@@ -30,22 +29,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
 
         public byte Speed { get; set; }
 
-        [NotMapped]
-        public HeadingAndStatus HeadingAndStatus { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PackageEnums0X22.GpsLocatedFunc? GpsLocatedFunc { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public PackageEnums0X22.GpsLocatedFunc GpsLocatedFunc => HeadingAndStatus.GpsLocatedFunc;
+        public PackageEnums0X22.IsGpsLocated? IsGpsLocated { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public PackageEnums0X22.IsGpsLocated IsGpsLocated => HeadingAndStatus.IsGpsLocated;
+        public PackageEnums0X22.EorWLon EorWLon { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public PackageEnums0X22.EorWLon EorWLon => HeadingAndStatus.EorWLon;
+        public PackageEnums0X22.SorNLat SorNLat { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        public PackageEnums0X22.SorNLat SorNLat => HeadingAndStatus.SorNLat;
-
-        public int Heading => HeadingAndStatus.Heading;
+        public int? Heading { get; set; }
 
         public ushort MCC { get; set; }
 
@@ -56,13 +52,158 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public int CellId { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public AccState AccState { get; set; }
+        public AccState? AccState { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public DataReportingMode DataReportingMode { get; set; }
+        public DataReportingMode? DataReportingMode { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public PackageEnums0X22.GpsRealTimeHeadIn GpsRealTimeHeadIn { get; set; }
+        public PackageEnums0X22.GpsRealTimeHeadIn? GpsRealTimeHeadIn { get; set; }
+
+        public uint? Mileage { get; set; }
+    }
+
+    [AutoMap(typeof(Nbazh0X22), ReverseMap = true)]
+    [AutoMap(typeof(GpsPositionRecord), ReverseMap = true)]
+    public class GpsPositionRecordTemp
+    {
+        public System.DateTime? DateTime { get; set; }
+
+        [NotMapped]
+        public GpsSatelliteInfo0X22? GpsSatelliteInfo { get; set; }
+
+        public int? GpsInfoLength
+        {
+            get
+            {
+                if (GpsSatelliteInfo is not null)
+                {
+                    return GpsSatelliteInfo.GpsInfoLength;
+                }
+                else
+                {
+                    return GpsInfoLength;
+                }
+            }
+            set => GpsInfoLength = value ?? default;
+        }
+
+        public int? GpsSatelliteCount
+        {
+            get
+            {
+                if (GpsSatelliteInfo != null)
+                    return GpsSatelliteInfo.GpsSatelliteCount;
+                else
+                    return GpsSatelliteCount;
+            }
+
+            set => GpsSatelliteCount = value ?? default;
+        }
+
+        public Decimal Lon { get; set; }
+
+        public Decimal Lat { get; set; }
+
+        public byte Speed { get; set; }
+
+        [NotMapped]
+        public HeadingAndStatus? HeadingAndStatus { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PackageEnums0X22.GpsLocatedFunc? GpsLocatedFunc
+        {
+            get
+            {
+                if (HeadingAndStatus != null)
+                    return HeadingAndStatus.GpsLocatedFunc;
+                else
+                {
+                    return GpsLocatedFunc;
+                }
+            }
+
+            set => GpsLocatedFunc = value ?? default;
+        }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PackageEnums0X22.IsGpsLocated? IsGpsLocated
+        {
+            get
+            {
+                if (HeadingAndStatus != null)
+                    return HeadingAndStatus.IsGpsLocated;
+                else
+                {
+                    return IsGpsLocated;
+                }
+            }
+
+            set => IsGpsLocated = value ?? default;
+        }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PackageEnums0X22.EorWLon EorWLon
+        {
+            get
+            {
+                if (HeadingAndStatus != null)
+                    return HeadingAndStatus.EorWLon;
+                else
+                {
+                    return EorWLon;
+                }
+            }
+            set => EorWLon = value;
+        }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PackageEnums0X22.SorNLat SorNLat
+        {
+            get
+            {
+                if (HeadingAndStatus != null)
+                    return HeadingAndStatus.SorNLat;
+                else
+                {
+                    return SorNLat;
+                }
+            }
+
+            set => SorNLat = value;
+        }
+
+        public int? Heading
+        {
+            get
+            {
+                if (HeadingAndStatus != null)
+                    return HeadingAndStatus.Heading;
+                else
+                {
+                    return Heading;
+                }
+            }
+
+            set => Heading = value ?? default;
+        }
+
+        public ushort MCC { get; set; }
+
+        public byte MNC { get; set; }
+
+        public ushort LAC { get; set; }
+
+        public int CellId { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AccState? AccState { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DataReportingMode? DataReportingMode { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public PackageEnums0X22.GpsRealTimeHeadIn? GpsRealTimeHeadIn { get; set; }
 
         public uint? Mileage { get; set; }
     }

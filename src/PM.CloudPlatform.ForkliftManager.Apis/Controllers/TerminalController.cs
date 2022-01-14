@@ -28,7 +28,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     {
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
 
-        public TerminalController(RepositoryBase<Terminal> repository, IMapper mapper, TerminalSessionManager gpsTrackerSessionManager) : base(repository, mapper)
+        public TerminalController(TerminalRepository repository, IMapper mapper, TerminalSessionManager gpsTrackerSessionManager) : base(repository, mapper)
         {
             _gpsTrackerSessionManager = gpsTrackerSessionManager;
         }

@@ -29,7 +29,5 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// 父级Id
         /// </summary>
         public Guid? ParentId { get; set; }
-
-        public ModuleDto? ParentModule { get; set; }
     }
 }

@@ -121,7 +121,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Handlers
         {
             return new EV26Response(NbazhGpsMessageIds.校时包.Create(request.Package.Header.MsgNum, new Nbazh0X8A()
             {
-                DateTime = DateTime.Now
+                DateTime = DateTime.UtcNow
             }));
         }
     }
