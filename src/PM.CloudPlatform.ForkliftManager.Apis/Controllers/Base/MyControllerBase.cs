@@ -35,7 +35,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         /// </summary>
         /// <param name="repository"> 配置仓储 </param>
         /// <param name="mapper">     映射器 </param>
-        public MyControllerBase(RepositoryBase<TEntity> repository, IMapper mapper)
+        public MyControllerBase(TRepository repository, IMapper mapper)
         {
             _repository = (TRepository)(repository ?? throw new ArgumentNullException(nameof(repository)));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -288,6 +288,29 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         }
 
         /// <summary>
+        /// 虚拟删除一条数据
+        /// </summary>
+        /// <param name="id"> 要删除的数据的Id </param>
+        /// <returns> 删除的数据 </returns>
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteEntityVirtualAsync(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return Fail("请求参数错误");
+            }
+
+            if (!await _repository.EntityExistByIdAsync(id))
+            {
+                return Fail("删除的数据不存在");
+            }
+
+            await _repository.DeleteEntityVirtualAsync(id);
+            await _repository.SaveAsync();
+            return Success("删除成功");
+        }
+
+        /// <summary>
         /// 删除很多条数据
         /// </summary>
         /// <param name="ids"> id集合 </param>
@@ -311,6 +334,37 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
             }
 
             await _repository.DeleteEntitiesByIdsAsync(ids);
+            await _repository.SaveAsync();
+            return Success("删除成功", new
+            {
+                MissingIds = returnDto
+            });
+        }
+
+        /// <summary>
+        /// 虚拟删除很多条数据
+        /// </summary>
+        /// <param name="ids"> id集合 </param>
+        /// <returns> 204 </returns>
+        [HttpDelete("{ids}")]
+        public async Task<IActionResult> DeleteEntitiesVirtualAsync(IEnumerable<Guid> ids)
+        {
+            if (ids is null)
+            {
+                throw new ArgumentNullException(nameof(ids));
+            }
+
+            var returnDto = new List<Guid>();
+
+            foreach (var id in ids)
+            {
+                if (!await _repository.EntityExistByIdAsync(id))
+                {
+                    returnDto.Add(id);
+                }
+            }
+
+            await _repository.DeleteEntityVirtualAsync(ids);
             await _repository.SaveAsync();
             return Success("删除成功", new
             {

@@ -105,6 +105,28 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                      {
                          // Session管理
                          await _gpsTrackerSessionManager.TryRemoveBySessionId(s.SessionID);
+
+                         if (!string.IsNullOrEmpty(s["TerminalId"].ToString()))
+                         {
+                             var terminal =
+                                 await _generalRepository.FindAsync<Terminal>(x =>
+                                     x.IMEI.Equals(s["TerminalId"].ToString()));
+
+                             if (terminal.CarId is null)
+                             {
+                                 return;
+                             }
+
+                             var record = new UseRecord()
+                             {
+                                 CarId = (Guid)terminal.CarId!,
+                                 StartTime = s.StartTime.DateTime,
+                                 EndTime = DateTime.Now,
+                                 LengthOfTime = s.StartTime.DateTime.HourDiff(DateTime.Now)
+                             };
+                             record.Create();
+                             await _generalRepository.InsertAsync(record);
+                         }
                      }
                      catch
                      {
@@ -135,6 +157,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                             {
                                 await s.CloseAsync(CloseReason.ProtocolError);
                             }
+
+                            var terminalLoginRecord = new TerminalLoginRecord()
+                            {
+                                TerminalId = terminal.Id
+                            };
+                            terminalLoginRecord.Create();
+                            await _generalRepository.InsertAsync(terminalLoginRecord);
                         }
 
                         if (p.Header.MsgId.Equals(NbazhGpsMessageIds.Gps定位包.ToByteValue()))

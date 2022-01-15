@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.VisualBasic;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
 {
@@ -13,6 +14,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
 
             DateTime.TryParse(obj.ToString(), out var result);
             return result;
+        }
+
+        public static int HourDiff(this DateTime d1, DateTime d2)
+        {
+            TimeSpan ts = d2 - d1;
+            return ts.Hours;
         }
     }
 }

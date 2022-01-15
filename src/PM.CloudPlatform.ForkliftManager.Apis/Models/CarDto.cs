@@ -1,6 +1,10 @@
 ﻿using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Enums;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
@@ -32,7 +36,18 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 车辆类型
         /// </summary>
+        public Guid CarTypeId { get; set; }
+
+        /// <summary>
+        /// 车辆类型
+        /// </summary>
+        [JsonIgnore]
         public CarTypeDto? CarType { get; set; }
+
+        /// <summary>
+        /// 车辆类型
+        /// </summary>
+        public string? CarTypeName => CarType is null ? "" : CarType.Name;
 
         /// <summary>
         /// 购买时间
@@ -58,5 +73,26 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// 最后一次保养时使用的时间
         /// </summary>
         public int LastLengthOfUse { get; set; }
+
+        /// <summary>
+        /// 使用记录
+        /// </summary>
+        public ICollection<UseRecord>? UseRecords { get; set; }
+
+        /// <summary>
+        /// 租借记录
+        /// </summary>
+        public ICollection<RentalRecord>? RentalRecords { get; set; }
+
+        /// <summary>
+        /// 车辆维护记录
+        /// </summary>
+        public ICollection<CarMaintenanceRecord>? CarMaintenanceRecords { get; set; }
+
+        /// <summary>
+        /// 车辆状态
+        /// </summary>
+        public CarStates CarStates =>
+            RentalRecords!.FirstOrDefault(x => !x.IsReturn) is null ? CarStates.空闲 : CarStates.租赁;
     }
 }

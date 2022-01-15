@@ -1,5 +1,8 @@
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using PM.CloudPlatform.ForkliftManager.Apis.Enums;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
 {
@@ -59,5 +62,20 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// 最后一次保养时使用的时间
         /// </summary>
         public int? LastLengthOfUse { get; set; }
+
+        /// <summary>
+        /// 使用记录
+        /// </summary>
+        public ICollection<UseRecord>? UseRecords { get; set; }
+
+        /// <summary>
+        /// 租借记录
+        /// </summary>
+        public ICollection<RentalRecord>? RentalRecords { get; set; }
+
+        /// <summary>
+        /// 车辆维护记录
+        /// </summary>
+        public ICollection<CarMaintenanceRecord>? CarMaintenanceRecords { get; set; }
     }
 }

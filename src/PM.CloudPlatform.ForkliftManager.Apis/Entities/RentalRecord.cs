@@ -22,17 +22,17 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 租借处理人电话
         /// </summary>
-        public string RentalEmployeeTel { get; set; } = null!;
+        public string? RentalEmployeeTel { get; set; } = null!;
 
         /// <summary>
         /// 租借开始时间
         /// </summary>
-        public DateTime RentalStartTime { get; set; }
+        public DateTime? RentalStartTime { get; set; }
 
         /// <summary>
         /// 租借结束时间
         /// </summary>
-        public DateTime RentalEndTime { get; set; }
+        public DateTime? RentalEndTime { get; set; }
 
         /// <summary>
         /// 是否归还
@@ -42,7 +42,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 归还时间
         /// </summary>
-        public DateTime ReturnTime { get; set; }
+        public DateTime? ReturnTime { get; set; }
 
         /// <summary>
         /// 归还确认人姓名

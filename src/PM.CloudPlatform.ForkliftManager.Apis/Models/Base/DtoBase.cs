@@ -13,6 +13,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models.Base
         public Guid Id { get; set; }
 
         /// <summary>
+        /// 名称
+        /// </summary>
+        public string Name { get; set; } = null!;
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime? CreateDate { get; set; }

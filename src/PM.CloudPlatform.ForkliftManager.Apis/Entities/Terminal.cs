@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
@@ -16,5 +17,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public Guid? CarId { get; set; }
 
         public Car? Car { get; set; }
+
+        public ICollection<GpsPositionRecord>? GpsPositionRecords { get; set; }
     }
 }

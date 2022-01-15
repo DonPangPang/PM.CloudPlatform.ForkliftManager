@@ -17,6 +17,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
     [AutoMap(typeof(Nbazh0X22), ReverseMap = true)]
     public class GpsPositionRecord : EntityBase
     {
+        /// <summary>
+        /// 终端Id
+        /// </summary>
+        public Guid? TerminalId { get; set; }
+
+        /// <summary>
+        /// 终端
+        /// </summary>
+        public Terminal? Terminal { get; set; }
+
         public System.DateTime? DateTime { get; set; }
 
         public int? GpsInfoLength { get; set; }
@@ -61,6 +71,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public PackageEnums0X22.GpsRealTimeHeadIn? GpsRealTimeHeadIn { get; set; }
 
         public uint? Mileage { get; set; }
+
+        public override void Create(Guid terminalId, string IMEI)
+        {
+            TerminalId = terminalId;
+            CreateUserName = IMEI;
+            base.Create();
+        }
     }
 
     [AutoMap(typeof(Nbazh0X22), ReverseMap = true)]

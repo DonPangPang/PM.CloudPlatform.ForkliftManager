@@ -1,22 +1,14 @@
 ﻿using System;
-using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 
-namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
+namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
-    /// <summary>
-    /// 车辆维护记录
-    /// </summary>
-    public class CarMaintenanceRecord : EntityBase
+    public class CarMaintenanceRecordAddOrUpdateDto
     {
         /// <summary>
         /// 车辆Id
         /// </summary>
         public Guid CarId { get; set; }
-
-        /// <summary>
-        /// 车辆
-        /// </summary>
-        public Car? Car { get; set; }
 
         /// <summary>
         /// 维护人
@@ -43,9 +35,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// </summary>
         public DateTime MaintenanceTime { get; set; }
 
-        /// <summary>
-        /// 维护时长
-        /// </summary>
-        public int MaintenanceDateLength { get; set; }
+        ///// <summary>
+        ///// 维护时长
+        ///// </summary>
+        //public int MaintenanceDateLength { get; set; }
     }
 }

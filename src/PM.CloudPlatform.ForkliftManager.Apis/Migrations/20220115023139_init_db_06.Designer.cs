@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PM.CloudPlatform.ForkliftManager.Apis.Data;
@@ -9,9 +10,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    partial class ForkliftManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220115023139_init_db_06")]
+    partial class init_db_06
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -106,9 +108,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
                     b.Property<int?>("NumberOfMaintenance")
                         .HasColumnType("integer");
 
@@ -153,15 +152,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<bool>("EnableMark")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("Maintainer")
-                        .HasColumnType("text");
-
-                    b.Property<string>("MaintainerContent")
-                        .HasColumnType("text");
-
-                    b.Property<string>("MaintainerTel")
-                        .HasColumnType("text");
-
                     b.Property<int>("MaintenanceDateLength")
                         .HasColumnType("integer");
 
@@ -175,12 +165,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Remarks")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -220,7 +204,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -357,9 +342,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.Property<int>("SorNLat")
@@ -515,9 +497,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
                     b.Property<Guid>("RentalCompanyId")
                         .HasColumnType("uuid");
 
@@ -626,9 +605,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
@@ -672,9 +648,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.Property<string>("ModifyUserName")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
                     b.Property<Guid>("TerminalId")
                         .HasColumnType("uuid");
 
@@ -715,9 +688,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.Property<Guid>("TerminalId")
@@ -767,9 +737,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("ModifyUserName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("StartTime")

@@ -13,6 +13,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
     [AutoMap(typeof(GpsPositionRecord), ReverseMap = true)]
     public class GpsPositionRecordDto : DtoBase
     {
+        public Guid TerminalId { get; set; }
+
+        [JsonIgnore]
+        public Terminal? Terminal { get; set; }
+
+        public string IMEI => Terminal is null ? "" : Terminal.IMEI;
+
         public System.DateTime? DateTime { get; set; }
 
         public int GpsInfoLength { get; set; }

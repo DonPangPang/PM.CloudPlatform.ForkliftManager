@@ -23,11 +23,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base
         private const int MaxPageSize = 30;
 
         /// <summary>
-        /// 名称
-        /// </summary>
-        public string? Name { get; set; }
-
-        /// <summary>
+        /// 模糊搜索
         /// </summary>
         public string? SearchTerm { get; set; }
 
@@ -43,19 +39,18 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base
         /// <summary>
         /// 排序
         /// </summary>
-        public string? OrderBy { get; set; }
+        public string? OrderBy { get; set; } = "Name";
 
-        /// <summary>
-        /// 排序字段
-        /// </summary>
-        public string? Fields { get; set; }
+        ///// <summary>
+        ///// </summary>
+        //public string? Fields { get; set; }
 
         /// <summary>
         /// 页面大小
         /// </summary>
         public int PageSize
         {
-            get => _pageSize = 5;
+            get => _pageSize > 5 ? _pageSize : 5;
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
     }

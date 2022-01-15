@@ -12,6 +12,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 车辆类型
         /// </summary>
-        public string Type { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

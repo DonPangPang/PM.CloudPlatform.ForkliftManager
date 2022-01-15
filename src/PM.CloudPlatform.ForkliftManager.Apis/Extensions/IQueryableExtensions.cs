@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading.Tasks;
+using PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.Helper;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
 {
@@ -9,25 +13,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
     public static class IQueryableExtensions
     {
         public static IQueryable<T> ApplySort<T>(
-            this IQueryable<T> source, string ordeBy,
-            Dictionary<string, PropertyMappingValue> mappingDictionary)
+            this IQueryable<T> source, string orderBy)
         {
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
 
-            if (mappingDictionary == null)
-            {
-                throw new ArgumentNullException(nameof(mappingDictionary));
-            }
-
-            if (string.IsNullOrWhiteSpace(ordeBy))
+            if (string.IsNullOrWhiteSpace(orderBy))
             {
                 return source;
             }
 
-            var orderByAfterSplit = ordeBy.Split(",");
+            var orderByAfterSplit = orderBy.Split(",");
 
             foreach (var orderByClause in orderByAfterSplit.Reverse())
             {
@@ -41,30 +39,45 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
                     ? trimedOrderByClause
                     : trimedOrderByClause.Remove(indexOfFirstSpace);
 
-                if (!mappingDictionary.ContainsKey(propertyName))
-                {
-                    throw new ArgumentNullException($"没有找到Key为{propertyName}的映射");
-                }
-
-                var propertyMappingValue = mappingDictionary[propertyName];
-                if (propertyMappingValue == null)
-                {
-                    throw new ArgumentNullException(nameof(propertyMappingValue));
-                }
-
-                foreach (var destinationProperty in propertyMappingValue.DestinationProperties.Reverse())
-                {
-                    if (propertyMappingValue.Revert)
-                    {
-                        orderDescending = !orderDescending;
-                    }
-
-                    source = source.OrderBy(destinationProperty
-                                            + (orderDescending ? " descending" : " ascending"));
-                }
+                source = source.OrderBy(propertyName
+                                        + (orderDescending ? " descending" : " ascending"));
             }
 
             return source;
+        }
+
+        public static async Task<IEnumerable<T>> ApplyPaged<T>(this IQueryable<T> queryable, DtoParametersBase parameters)
+            where T : EntityBase
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            var queryExpression = queryable;
+
+            if (parameters.StartTime is not null && parameters.EndTime is not null)
+            {
+                queryExpression = queryExpression.Where(x =>
+                    x.CreateDate >= parameters.StartTime && x.CreateDate <= parameters.EndTime);
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+            {
+                parameters.SearchTerm = parameters.SearchTerm.Trim();
+
+                queryExpression = queryExpression.Where(x =>
+                    x.Name!.Contains(parameters.SearchTerm) ||
+                    x.CreateUserName!.Contains(parameters.SearchTerm) ||
+                    x.ModifyUserName!.Contains(parameters.SearchTerm));
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                queryExpression = queryExpression.ApplySort(parameters.OrderBy);
+            }
+
+            return await PagedList<T>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

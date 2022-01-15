@@ -1,4 +1,5 @@
-﻿using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
+﻿using System.Collections.Generic;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
 {
@@ -7,9 +8,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
     /// </summary>
     public class CarType : EntityBase
     {
-        /// <summary>
-        /// 车辆类型
-        /// </summary>
-        public string Type { get; set; } = null!;
+        public ICollection<Car>? Cars { get; set; }
     }
 }

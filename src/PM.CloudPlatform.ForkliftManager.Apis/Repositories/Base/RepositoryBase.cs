@@ -6,8 +6,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using AutoMapper;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
 {
@@ -195,6 +197,27 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
 
             var queryExpression = DbSet as IQueryable<T>;
 
+            if (parameters.StartTime is not null && parameters.EndTime is not null)
+            {
+                queryExpression = queryExpression.Where(x =>
+                    x.CreateDate >= parameters.StartTime && x.CreateDate <= parameters.EndTime);
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+            {
+                parameters.SearchTerm = parameters.SearchTerm.Trim();
+
+                queryExpression = queryExpression.Where(x =>
+                                                             x.Name!.Contains(parameters.SearchTerm) ||
+                                                             x.CreateUserName!.Contains(parameters.SearchTerm) ||
+                                                             x.ModifyUserName!.Contains(parameters.SearchTerm));
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                queryExpression = queryExpression.ApplySort(parameters.OrderBy);
+            }
+
             //if (!string.IsNullOrWhiteSpace(parameters.Name))
             //{
             //    parameters.Name = parameters.Name.Trim();
@@ -217,14 +240,25 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
 
             var queryExpression = DbSet as IQueryable<T>;
 
-            //if (!string.IsNullOrWhiteSpace(parameters.Name))
-            //{
-            //    parameters.Name = parameters.Name.Trim();
-            //}
-
             if (parameters.StartTime is not null && parameters.EndTime is not null)
             {
-                queryExpression.Where(x => x.CreateDate > parameters.StartTime && x.CreateDate < parameters.EndTime);
+                queryExpression = queryExpression.Where(x =>
+                    x.CreateDate >= parameters.StartTime && x.CreateDate <= parameters.EndTime);
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+            {
+                parameters.SearchTerm = parameters.SearchTerm.Trim();
+
+                queryExpression = queryExpression.Where(x =>
+                    x.Name!.Contains(parameters.SearchTerm) ||
+                    x.CreateUserName!.Contains(parameters.SearchTerm) ||
+                    x.ModifyUserName!.Contains(parameters.SearchTerm));
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                queryExpression = queryExpression.ApplySort(parameters.OrderBy);
             }
 
             return await PagedList<T>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize);
@@ -415,6 +449,62 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
             foreach (var id in ids)
             {
                 await DeleteEntityByIdAsync(id);
+            }
+        }
+
+        /// <summary>
+        /// 虚拟删除
+        /// </summary>
+        /// <param name="id"> </param>
+        /// <returns> </returns>
+        public async Task DeleteEntityVirtualAsync(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var entity = await GetEntityByIdAsync(id);
+            entity.EnableMark = false;
+            entity.DeleteMark = true;
+            entity.Modify();
+
+            await UpdateEntityAsync(entity);
+        }
+
+        /// <summary>
+        /// 虚拟删除
+        /// </summary>
+        /// <param name="entity"> </param>
+        /// <returns> </returns>
+        public async Task DeleteEntityVirtualAsync(T entity)
+        {
+            await DeleteEntityVirtualAsync(entity.Id);
+        }
+
+        /// <summary>
+        /// 虚拟删除
+        /// </summary>
+        /// <param name="ids"> </param>
+        /// <returns> </returns>
+        public async Task DeleteEntityVirtualAsync(IEnumerable<Guid> ids)
+        {
+            foreach (var id in ids)
+            {
+                await DeleteEntityVirtualAsync(id);
+            }
+        }
+
+        /// <summary>
+        /// 虚拟删除
+        /// </summary>
+        /// <param name="entities"> </param>
+        /// <returns> </returns>
+        public async Task DeleteEntityVirtualAsync(IEnumerable<T> entities)
+        {
+            foreach (var item in entities)
+            {
+                await DeleteEntityVirtualAsync(item);
             }
         }
 

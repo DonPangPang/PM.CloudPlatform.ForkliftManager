@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PM.CloudPlatform.ForkliftManager.Apis.Data;
@@ -9,9 +10,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    partial class ForkliftManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220115073311_init_db_07")]
+    partial class init_db_07
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,6 +223,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

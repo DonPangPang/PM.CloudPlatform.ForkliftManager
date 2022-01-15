@@ -1,12 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Confluent.Kafka;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
@@ -34,9 +39,27 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// </summary>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> GetGpsPositionRecords()
+        public async Task<IActionResult> GetGpsPositionRecords([FromQuery] DtoParametersBase parameters)
         {
-            var data = await _generalRepository.FindAsync<GpsPositionRecord>();
+            var data = await _generalRepository.GetQueryable<GpsPositionRecord>()
+                .Include(x => x.Terminal)
+                .ApplyPaged(parameters);
+
+            var res = data.MapTo<GpsPositionRecordDto>();
+
+            return Success(res);
+        }
+
+        /// <summary>
+        /// 获取指定设备的定位数据
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetGpsPositionRecordsByTerminal(Guid terminalId, [FromQuery] DtoParametersBase parameters)
+        {
+            var data = await _generalRepository.GetQueryable<GpsPositionRecord>()
+                .Include(x => x.Terminal)
+                .Where(x => x.TerminalId.Equals(terminalId)).ApplyPaged(parameters);
 
             var res = data.MapTo<GpsPositionRecordDto>();
 
