@@ -211,6 +211,30 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         }
 
         /// <summary>
+        /// 更新一条实体的数据启用状态
+        /// </summary>
+        /// <param name="id">         </param>
+        /// <param name="enableMark"> </param>
+        /// <returns> 更新后的数据 </returns>
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateEntityEnableAsync(Guid id, bool enableMark = false)
+        {
+            if (!await _repository.EntityExistByIdAsync(id))
+            {
+                return Fail("数据不存在");
+            }
+
+            var oldEntity = await _repository.GetEntityByIdAsync(id);
+
+            oldEntity.EnableMark = enableMark;
+
+            await _repository.UpdateEntityAsync(oldEntity);
+            await _repository.SaveAsync();
+
+            return Success("更新状态成功");
+        }
+
+        /// <summary>
         /// 更新多条实体数据
         /// </summary>
         /// <param name="models"> 实体数据的集合 </param>

@@ -104,7 +104,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     .SelectMany(t => t.Modules!).ToListAsync();
                 var returnDto = modules.MapTo<ModuleDto>();
 
-                //var res = await Users.SelectMany(u => u.Roles!.Select(r => new { u, r })).ToListAsync();
+                //var res = await Users.SelectMany(u => u.Roles!.SelectMany(r => r.Modules!.Select(m => new
+                //    {
+                //        u,
+                //        r,
+                //        m
+                //    }))).ToListAsync();
 
                 return Success(returnDto);
             }

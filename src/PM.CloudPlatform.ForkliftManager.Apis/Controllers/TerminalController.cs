@@ -5,12 +5,14 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NbazhGPS.Protocol;
 using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.Extensions;
 using NbazhGPS.Protocol.MessageBody;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Managers;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
@@ -20,6 +22,9 @@ using SuperSocket;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 {
+    /// <summary>
+    /// 终端管理
+    /// </summary>
     [ApiController]
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
@@ -27,23 +32,92 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     public class TerminalController : MyControllerBase<TerminalRepository, Terminal, TerminalDto, TerminalAddOrUpdateDto>
     {
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
+        private readonly IGeneralRepository _generalRepository;
 
-        public TerminalController(TerminalRepository repository, IMapper mapper, TerminalSessionManager gpsTrackerSessionManager) : base(repository, mapper)
+        public TerminalController(TerminalRepository repository, IMapper mapper, TerminalSessionManager gpsTrackerSessionManager, IGeneralRepository generalRepository) : base(repository, mapper)
         {
             _gpsTrackerSessionManager = gpsTrackerSessionManager;
+            _generalRepository = generalRepository;
         }
 
+        /// <summary>
+        /// 获取所有在线终端
+        /// </summary>
+        /// <returns> </returns>
         [HttpGet]
-        public IActionResult GetTerminals()
+        public IActionResult GetOnlineTerminals()
         {
-            var terminals = _gpsTrackerSessionManager.GetAllSessions().Select(x => new { x.Key, x.Value.State });
+            var terminals = _gpsTrackerSessionManager.GetAllSessions().Where(x => x.Value.State == SessionState.Connected).Select(x => new { x.Key, x.Value.State });
             return Success(terminals);
         }
 
+        /// <summary>
+        /// 获取所有终端及状态
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetTerminals()
+        {
+            var onlineTerminals = _gpsTrackerSessionManager.GetAllSessions().Values
+                .Select(x => x["TerminalId"].ToString());
+
+            var allTerminals = await _generalRepository.GetQueryable<Terminal>()
+                .Where(x => onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, IsOnline = true }).ToListAsync();
+
+            var offlineTerminals = await _generalRepository.GetQueryable<Terminal>()
+                .Where(x => !onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, IsOnline = false }).ToListAsync();
+
+            if (allTerminals is null)
+            {
+                return Success(offlineTerminals);
+            }
+
+            allTerminals.AddRange(offlineTerminals);
+
+            return Success(allTerminals);
+        }
+
+        /// <summary>
+        /// 获取所有终端及车辆信息
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetTerminalsIncludeCars()
+        {
+            var onlineTerminals = _gpsTrackerSessionManager.GetAllSessions().Values
+                .Select(x => x["TerminalId"].ToString());
+
+            var allTerminals = await _generalRepository.GetQueryable<Terminal>().Include(t => t.Car)
+                .Where(x => onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, CarInfo = x.Car, IsOnline = true }).ToListAsync();
+
+            var offlineTerminals = await _generalRepository.GetQueryable<Terminal>()
+                .Where(x => !onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, CarInfo = x.Car, IsOnline = false }).ToListAsync();
+
+            if (allTerminals is null)
+            {
+                return Success(offlineTerminals);
+            }
+
+            allTerminals.AddRange(offlineTerminals);
+
+            return Success(allTerminals);
+        }
+
+        /// <summary>
+        /// 发送终端控制指令
+        /// </summary>
+        /// <param name="emei">    </param>
+        /// <param name="command"> </param>
+        /// <returns> </returns>
         [HttpGet]
         public async Task<IActionResult> SendCommand(string emei, string command)
         {
             var session = _gpsTrackerSessionManager.Sessions.Values.FirstOrDefault(x => x["TerminalId"].Equals(emei));
+
+            if (session is null)
+            {
+                return Fail("设备不存在或不在线.");
+            }
 
             var packet = NbazhGpsMessageIds.在线指令.Create(new Nbazh0X80()
             {

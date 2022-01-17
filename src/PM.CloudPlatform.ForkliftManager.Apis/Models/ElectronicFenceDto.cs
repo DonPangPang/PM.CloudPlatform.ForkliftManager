@@ -1,4 +1,5 @@
-﻿using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
+﻿using Newtonsoft.Json;
+using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 using System.Collections.Generic;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
@@ -26,11 +27,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 租借公司
         /// </summary>
+        [JsonIgnore]
         public RentalCompanyDto? RentalCompany { get; set; }
 
         /// <summary>
         /// 围栏内的车辆
         /// </summary>
+        [JsonIgnore]
         public ICollection<CarDto>? Cars { get; set; } = new List<CarDto>();
     }
 }

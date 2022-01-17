@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -62,6 +63,56 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var returnDto = data.MapTo<CarDto>();
 
             return Success(returnDto);
+        }
+
+        /// <summary>
+        /// 获取车辆和终端的信息
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetCarTerminals()
+        {
+            var data = await _generalRepository.GetQueryable<Car>().Include(x => x.Terminal)
+                .Select(x => new
+                {
+                    // 可以往里面填写自己需要的数据
+                    CarId = x.Id,
+                    CarTypeName = x.CarType!.ToString(),
+                    IMEI = x.Terminal!.IMEI
+                })
+                .ToListAsync();
+
+            return Success(data);
+        }
+
+        /// <summary>
+        /// 给车辆绑定终端信息
+        /// </summary>
+        /// <param name="carId">       车辆Id </param>
+        /// <param name="terminalId">  终端Id </param>
+        /// <param name="description"> 描述 </param>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> SetCarTerminal(Guid carId, Guid terminalId, string description)
+        {
+            var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(carId));
+
+            car.TerminalId = terminalId;
+
+            var bindRecord = new TerminalBindRecord()
+            {
+                CarId = carId,
+                TerminalId = terminalId,
+                Description = description
+            };
+
+            bindRecord.Create();
+
+            await _generalRepository.InsertAsync(bindRecord);
+            await _generalRepository.UpdateAsync(car);
+            await _generalRepository.SaveAsync();
+
+            return Success("保存成功");
         }
     }
 }

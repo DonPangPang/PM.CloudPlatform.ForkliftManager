@@ -64,6 +64,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public int? LastLengthOfUse { get; set; }
 
         /// <summary>
+        /// 终端
+        /// </summary>
+        public Guid? TerminalId { get; set; }
+
+        /// <summary>
+        /// 终端
+        /// </summary>
+        public Terminal? Terminal { get; set; }
+
+        /// <summary>
         /// 使用记录
         /// </summary>
         public ICollection<UseRecord>? UseRecords { get; set; }
@@ -77,5 +87,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// 车辆维护记录
         /// </summary>
         public ICollection<CarMaintenanceRecord>? CarMaintenanceRecords { get; set; }
+
+        /// <summary>
+        /// 终端绑定记录
+        /// </summary>
+        public ICollection<TerminalBindRecord>? TerminalBindRecords { get; set; }
     }
 }

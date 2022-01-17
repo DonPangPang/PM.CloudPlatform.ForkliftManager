@@ -15,7 +15,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.General
     {
         private readonly ForkliftManagerDbContext _forkliftManagerDbContext;
 
-        public DatabaseFacade Database;
+        public DatabaseFacade Database { get; }
 
         public GeneralRepository(ForkliftManagerDbContext forkliftManagerDbContext)
         {

@@ -12,6 +12,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
     // ReSharper disable once InconsistentNaming
     public static class IQueryableExtensions
     {
+        /// <summary>
+        /// 进行排序
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="source">  </param>
+        /// <param name="orderBy"> </param>
+        /// <returns> </returns>
         public static IQueryable<T> ApplySort<T>(
             this IQueryable<T> source, string orderBy)
         {
@@ -46,6 +53,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
             return source;
         }
 
+        /// <summary>
+        /// 进行分页以及排序, 模糊查询等
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="queryable">  </param>
+        /// <param name="parameters"> </param>
+        /// <returns> </returns>
         public static async Task<IEnumerable<T>> ApplyPaged<T>(this IQueryable<T> queryable, DtoParametersBase parameters)
             where T : EntityBase
         {

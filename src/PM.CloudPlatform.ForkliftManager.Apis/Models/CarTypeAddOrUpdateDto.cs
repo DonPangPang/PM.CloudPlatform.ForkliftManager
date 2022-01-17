@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models

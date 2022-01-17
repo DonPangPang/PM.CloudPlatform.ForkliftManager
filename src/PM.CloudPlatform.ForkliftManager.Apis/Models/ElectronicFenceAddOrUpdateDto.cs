@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System;
 using System.Collections.Generic;
 using AutoMapper;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
@@ -26,15 +27,5 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// 坐标集合
         /// </summary>
         public string LngLats { get; set; }
-
-        /// <summary>
-        /// 租借公司
-        /// </summary>
-        public RentalCompanyDto? RentalCompany { get; set; }
-
-        /// <summary>
-        /// 围栏内的车辆
-        /// </summary>
-        public ICollection<CarDto>? Cars { get; set; }
     }
 }

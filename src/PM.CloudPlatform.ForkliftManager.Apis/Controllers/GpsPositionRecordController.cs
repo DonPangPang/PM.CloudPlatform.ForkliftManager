@@ -41,9 +41,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetGpsPositionRecords([FromQuery] DtoParametersBase parameters)
         {
-            var data = await _generalRepository.GetQueryable<GpsPositionRecord>()
-                .Include(x => x.Terminal)
-                .ApplyPaged(parameters);
+            var data = await _generalRepository
+                                                            .GetQueryable<GpsPositionRecord>()
+                                                            .Include(x => x.Terminal)
+                                                            .ApplyPaged(parameters);
 
             var res = data.MapTo<GpsPositionRecordDto>();
 
