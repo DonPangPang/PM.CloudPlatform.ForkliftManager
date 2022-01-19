@@ -15,17 +15,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 租借公司ID
         /// </summary>
-        public RentalCompanyDto RentalCompany { get; set; }
+        public Guid RentalCompanyId { get; set; }
+
+        /// <summary>
+        /// 租借公司
+        /// </summary>
+        public RentalCompanyDto? RentalCompany { get; set; }
 
         /// <summary>
         /// 租借处理人姓名
         /// </summary>
-        public string RentalEmployeeName { get; set; }
+        public string RentalEmployeeName { get; set; } = null!;
 
         /// <summary>
         /// 租借处理人电话
         /// </summary>
-        public string RentalEmployeeTel { get; set; }
+        public string RentalEmployeeTel { get; set; } = null!;
 
         /// <summary>
         /// 租借开始时间
@@ -60,6 +65,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 租借的车辆
         /// </summary>
-        public ICollection<CarDto>? Cars { get; set; }
+        public CarDto? Car { get; set; }
     }
 }

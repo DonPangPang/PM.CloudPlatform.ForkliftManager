@@ -57,7 +57,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 租借的车辆
         /// </summary>
-        public ICollection<Car>? Cars { get; set; }
+        public Car? Car { get; set; }
 
         /// <summary>
         /// 租借的公司

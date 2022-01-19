@@ -1,6 +1,7 @@
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using PM.CloudPlatform.ForkliftManager.Apis.Enums;
 
@@ -66,6 +67,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 终端
         /// </summary>
+        [ForeignKey(nameof(Terminal))]
         public Guid? TerminalId { get; set; }
 
         /// <summary>

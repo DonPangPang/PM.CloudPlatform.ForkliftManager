@@ -57,10 +57,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
         /// 进行分页以及排序, 模糊查询等
         /// </summary>
         /// <typeparam name="T"> </typeparam>
-        /// <param name="queryable">  </param>
-        /// <param name="parameters"> </param>
+        /// <param name="queryable">      </param>
+        /// <param name="parameters">     </param>
+        /// <param name="isAsIQueryable"> </param>
         /// <returns> </returns>
-        public static async Task<IEnumerable<T>> ApplyPaged<T>(this IQueryable<T> queryable, DtoParametersBase parameters)
+        public static async Task<IEnumerable<T>> ToPagedAsync<T>(this IQueryable<T> queryable, DtoParametersBase parameters, bool isAsIQueryable = false)
             where T : EntityBase
         {
             if (parameters is null)
@@ -92,6 +93,48 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
             }
 
             return await PagedList<T>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize);
+        }
+
+        /// <summary>
+        /// 进行分页以及排序, 模糊查询等
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="queryable">      </param>
+        /// <param name="parameters">     </param>
+        /// <param name="isAsIQueryable"> </param>
+        /// <returns> </returns>
+        public static IQueryable<T> ApplyPaged<T>(this IQueryable<T> queryable, DtoParametersBase parameters, bool isAsIQueryable = false)
+            where T : EntityBase
+        {
+            if (parameters is null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
+            var queryExpression = queryable;
+
+            if (parameters.StartTime is not null && parameters.EndTime is not null)
+            {
+                queryExpression = queryExpression.Where(x =>
+                    x.CreateDate >= parameters.StartTime && x.CreateDate <= parameters.EndTime);
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))
+            {
+                parameters.SearchTerm = parameters.SearchTerm.Trim();
+
+                queryExpression = queryExpression.Where(x =>
+                    x.Name!.Contains(parameters.SearchTerm) ||
+                    x.CreateUserName!.Contains(parameters.SearchTerm) ||
+                    x.ModifyUserName!.Contains(parameters.SearchTerm));
+            }
+
+            if (!string.IsNullOrWhiteSpace(parameters.OrderBy))
+            {
+                queryExpression = queryExpression.ApplySort(parameters.OrderBy);
+            }
+
+            return PagedList<T>.ApplyPaged(queryExpression, parameters.PageNumber, parameters.PageSize);
         }
     }
 }

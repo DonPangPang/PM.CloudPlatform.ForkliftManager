@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,8 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Enums;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
@@ -45,11 +48,78 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         }
 
         /// <summary>
+        /// 获取车辆档案
+        /// </summary>
+        /// <param name="ids">        </param>
+        /// <param name="parameters"> </param>
+        /// <returns>
+        /// <para> CarId: 车辆Id </para>
+        /// <para> LicensePlateNumber: 车牌号 </para>
+        /// <para> Brand: 品牌 </para>
+        /// <para> SerialNumber: 编号 </para>
+        /// <para> BuyTime: 购买时间 </para>
+        /// <para> LengthOfUse: 使用时长 </para>
+        /// <para> MaintenanceTimes: 保养次数 </para>
+        /// <para> LastOfMaintenanceTime: 上次保养时间 </para>
+        /// </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetCars([FromQuery] IEnumerable<Guid> ids, [FromQuery] DtoParametersBase parameters)
+        {
+            if (ids.Any())
+            {
+                var data = await _generalRepository.GetQueryable<Car>()
+                    .Include(x => x.CarType)
+                    .Include(x => x.UseRecords)
+                    .Include(x => x.CarMaintenanceRecords)
+                    .Where(x => ids!.Contains(x.Id))
+                    .Select(x => new
+                    {
+                        Source = x.MapTo<CarDto>(),
+                        CarId = x.Id,
+                        LicensePlateNumber = x.LicensePlateNumber,
+                        Brand = x.Brand,
+                        SerialNumber = x.SerialNumber,
+                        BuyTime = x.BuyTime,
+                        LengthOfUse = x.UseRecords!.Sum(t => t.LengthOfTime) + x.LengthOfUse,
+                        MaintenanceTimes = x.CarMaintenanceRecords!.Count,
+                        LastOfMaintenanceTime = x.CarMaintenanceRecords.Max(t => t.CreateDate)
+                    })
+                    .AsSplitQuery()
+                    .ToListAsync();
+                return Success(data);
+            }
+            else
+            {
+                var data = await _generalRepository.GetQueryable<Car>()
+                    .Include(x => x.CarType)
+                    .Include(x => x.UseRecords)
+                    .Include(x => x.CarMaintenanceRecords)
+                    .ApplyPaged(parameters)
+                    .Select(x => new
+                    {
+                        Source = x.MapTo<CarDto>(),
+                        CarId = x.Id,
+                        LicensePlateNumber = x.LicensePlateNumber,
+                        Brand = x.Brand,
+                        SerialNumber = x.SerialNumber,
+                        BuyTime = x.BuyTime,
+                        LengthOfUse = x.UseRecords!.Sum(t => t.LengthOfTime) + x.LengthOfUse,
+                        MaintenanceTimes = x.CarMaintenanceRecords!.Count,
+                        //.OrderByDescending(t => t.CreateDate).FirstOrDefault()!.CreateDate
+                        LastOfMaintenanceTime = x.CarMaintenanceRecords.Max(t => t.CreateDate)
+                    })
+                    .AsSplitQuery()
+                    .ToListAsync();
+                return Success(data);
+            }
+        }
+
+        /// <summary>
         /// 获取车辆状态
         /// </summary>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> GetCarArchives()
+        public async Task<IActionResult> GetCarArchives([FromQuery] DtoParametersBase parameters)
         {
             //var res = await Users.SelectMany(u => u.Roles!.Select(r => new { u, r })).ToListAsync();
 
@@ -57,12 +127,26 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //    x.RentalRecords!.Select(r => new { x, r }).Where(t => t.r.IsReturn || t.x.RentalRecords!.Count <= 0)).ToListAsync();
 
             var data = await Cars.Include(x => x.CarType)
+                .Include(x => x.UseRecords)
                 .Include(x => x.RentalRecords!.Where(t => !t.IsReturn))
+                .ApplyPaged(parameters)
+                .Select(x => new
+                {
+                    Source = x.MapTo<CarDto>(),
+                    CarId = x.Id,
+                    LicensePlateNumber = x.LicensePlateNumber,
+                    Brand = x.Brand,
+                    SerialNumber = x.SerialNumber,
+                    BuyTime = x.BuyTime,
+                    IsReturn = !x.RentalRecords!.Any(),
+                    LengthOfUse = x.UseRecords!.Sum(t => t.LengthOfTime) + x.LengthOfUse,
+                })
+                .AsSplitQuery()
                 .ToListAsync();
 
-            var returnDto = data.MapTo<CarDto>();
+            //var returnDto = data.MapTo<CarDto>();
 
-            return Success(returnDto);
+            return Success(data);
         }
 
         /// <summary>
@@ -70,13 +154,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// </summary>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> GetCarTerminals()
+        public async Task<IActionResult> GetCarTerminals([FromQuery] DtoParametersBase parameters)
         {
-            var data = await _generalRepository.GetQueryable<Car>().Include(x => x.Terminal)
+            var data = await _generalRepository.GetQueryable<Car>()
+                .Include(x => x.Terminal)
+                .ApplyPaged(parameters)
                 .Select(x => new
                 {
+                    Source = x.MapTo<CarDto>(),
                     // 可以往里面填写自己需要的数据
                     CarId = x.Id,
+                    LicensePlateNumber = x.LicensePlateNumber,
+                    Brand = x.Brand,
+                    SerialNumber = x.SerialNumber,
                     CarTypeName = x.CarType!.ToString(),
                     IMEI = x.Terminal!.IMEI
                 })

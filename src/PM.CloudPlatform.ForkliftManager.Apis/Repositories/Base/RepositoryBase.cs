@@ -114,7 +114,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 throw new ArgumentNullException(nameof(id));
             }
 
-            return DbSet.FirstOrDefault(x => x.Id == id);
+            return DbSet.FirstOrDefault(x => x.Id == id)!;
         }
 
         /// <summary>

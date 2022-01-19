@@ -16,7 +16,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 围栏名称
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary>
         /// 描述
@@ -26,6 +26,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 坐标集合
         /// </summary>
-        public string LngLats { get; set; }
+        public string LngLats { get; set; } = null!;
     }
 }

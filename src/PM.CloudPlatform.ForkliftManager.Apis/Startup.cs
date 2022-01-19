@@ -13,7 +13,6 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Pang.AutoMapperMiddleware;
@@ -21,7 +20,6 @@ using PM.CloudPlatform.ForkliftManager.Apis.Authorization;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Services;
-using PM.CloudPlatform.ForkliftManager.Apis.Validations;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis
 {

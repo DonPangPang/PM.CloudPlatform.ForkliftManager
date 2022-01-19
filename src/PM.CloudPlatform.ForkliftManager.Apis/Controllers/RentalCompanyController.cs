@@ -45,10 +45,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="parameters"> </param>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> GetRentalCompanyIncludeElectronicFencePaged([FromQuery]DtoParametersBase parameters)
+        public async Task<IActionResult> GetRentalCompanyIncludeElectronicFencePaged([FromQuery] DtoParametersBase parameters)
         {
             var data = await _generalRepository.GetQueryable<RentalCompany>().Include(x => x.ElectronicFences)
-                .ApplyPaged(parameters);
+                .ToPagedAsync(parameters);
 
             var returnDto = data.MapTo<RentalCompanyDto>();
 

@@ -44,7 +44,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var data = await _generalRepository
                                                             .GetQueryable<GpsPositionRecord>()
                                                             .Include(x => x.Terminal)
-                                                            .ApplyPaged(parameters);
+                                                            .ToPagedAsync(parameters);
 
             var res = data.MapTo<GpsPositionRecordDto>();
 
@@ -60,7 +60,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         {
             var data = await _generalRepository.GetQueryable<GpsPositionRecord>()
                 .Include(x => x.Terminal)
-                .Where(x => x.TerminalId.Equals(terminalId)).ApplyPaged(parameters);
+                .Where(x => x.TerminalId.Equals(terminalId)).ToPagedAsync(parameters);
 
             var res = data.MapTo<GpsPositionRecordDto>();
 

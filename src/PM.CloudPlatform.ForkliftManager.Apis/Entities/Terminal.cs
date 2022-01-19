@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities

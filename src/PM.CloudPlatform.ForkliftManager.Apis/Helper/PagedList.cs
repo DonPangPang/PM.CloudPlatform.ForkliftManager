@@ -9,7 +9,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Helper
     /// <summary>
     /// 分页
     /// </summary>
-    /// <typeparam name="T">每页数据的类型</typeparam>
+    /// <typeparam name="T"> 每页数据的类型 </typeparam>
     public class PagedList<T> : List<T>
     {
         /// <summary>
@@ -43,12 +43,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Helper
         public bool HasNext => CurrentPage < TotalPages;
 
         /// <summary>
-        ///
         /// </summary>
-        /// <param name="items"></param>
-        /// <param name="count"></param>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
+        /// <param name="items">      </param>
+        /// <param name="count">      </param>
+        /// <param name="pageNumber"> </param>
+        /// <param name="pageSize">   </param>
         public PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {
             TotalPages = count;
@@ -60,17 +59,38 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Helper
         }
 
         /// <summary>
-        ///
         /// </summary>
-        /// <param name="sourse"></param>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
-        public static async Task<PagedList<T>> CreateAsync(IQueryable<T> sourse, int pageNumber, int pageSize)
+        /// <param name="source">     </param>
+        /// <param name="pageNumber"> </param>
+        /// <param name="pageSize">   </param>
+        /// <returns> </returns>
+        public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
         {
-            var count = await sourse.CountAsync();
-            var items = await sourse.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            var count = await source.CountAsync();
+            var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
             return new PagedList<T>(items, count, pageNumber, pageSize);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="source">     </param>
+        /// <param name="pageNumber"> </param>
+        /// <param name="pageSize">   </param>
+        /// <returns> </returns>
+        public static async Task<IQueryable<T>> ApplyPagedAsync(IQueryable<T> source, int pageNumber, int pageSize)
+        {
+            var count = await source.CountAsync();
+            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+            return items;
+        }
+
+        public static IQueryable<T> ApplyPaged(IQueryable<T> source, int pageNumber, int pageSize)
+        {
+            var count = source.Count();
+            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+            return items;
         }
     }
 }
