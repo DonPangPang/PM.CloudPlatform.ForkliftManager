@@ -1,6 +1,7 @@
 ﻿using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 using System;
 using System.Collections.Generic;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
@@ -54,8 +55,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         public string? ReturnAckEmployeeTel { get; set; }
 
         /// <summary>
+        /// </summary>
+        public Guid CarId { get; set; }
+
+        /// <summary>
         /// 租借的车辆
         /// </summary>
         public CarDto? Car { get; set; }
+
+        /// <summary>
+        /// 电子围栏Id
+        /// </summary>
+        public Guid? ElectronicFenceId { get; set; }
+
+        /// <summary>
+        /// 电子围栏
+        /// </summary>
+        public ElectronicFence? ElectronicFence { get; set; }
     }
 }

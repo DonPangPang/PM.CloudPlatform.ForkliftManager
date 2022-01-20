@@ -1,5 +1,6 @@
 ﻿using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 using System;
+using Newtonsoft.Json;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
 {
@@ -8,10 +9,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
     /// </summary>
     public class UseRecord : EntityBase
     {
+        public Guid TerminalId { get; set; }
+
+        public Terminal? Terminal { get; set; }
+
         /// <summary>
         /// 车辆ID
         /// </summary>
         public Guid CarId { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonIgnore]
+        public Car? Car { get; set; }
 
         /// <summary>
         /// 开始使用时间
@@ -27,9 +37,5 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// 使用时长
         /// </summary>
         public int LengthOfTime { get; set; }
-
-        /// <summary>
-        /// </summary>
-        public Car? Car { get; set; }
     }
 }

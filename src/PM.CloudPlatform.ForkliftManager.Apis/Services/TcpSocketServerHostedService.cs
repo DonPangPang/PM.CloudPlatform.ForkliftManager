@@ -112,14 +112,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                  await _generalRepository.FindAsync<Terminal>(x =>
                                      x.IMEI.Equals(s["TerminalId"].ToString()));
 
-                             if (terminal.CarId is null)
-                             {
-                                 return;
-                             }
-
                              var record = new UseRecord()
                              {
-                                 CarId = (Guid)terminal.CarId!,
+                                 TerminalId = (Guid)terminal.Id!,
                                  StartTime = s.StartTime.DateTime,
                                  EndTime = DateTime.Now,
                                  LengthOfTime = s.StartTime.DateTime.HourDiff(DateTime.Now)

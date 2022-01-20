@@ -87,11 +87,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var onlineTerminals = _gpsTrackerSessionManager.GetAllSessions().Values
                 .Select(x => x["TerminalId"].ToString());
 
-            var allTerminals = await _generalRepository.GetQueryable<Terminal>().Include(t => t.Car)
-                .Where(x => onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, CarInfo = x.Car, IsOnline = true }).ToListAsync();
+            var allTerminals = await _generalRepository.GetQueryable<Terminal>()
+                .Include(t => t.TerminalBindRecords)
+                .ThenInclude(x => x.Terminal)
+                .Where(x => onlineTerminals.Contains(x.IMEI))
+                .Select(x => new { IMEI = x.IMEI, CarInfo = x.TerminalBindRecords!.OrderByDescending(t => t.CreateDate).FirstOrDefault()!.Car, IsOnline = true })
+                .ToListAsync();
 
             var offlineTerminals = await _generalRepository.GetQueryable<Terminal>()
-                .Where(x => !onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, CarInfo = x.Car, IsOnline = false }).ToListAsync();
+                .Include(t => t.TerminalBindRecords)
+                .ThenInclude(x => x.Terminal)
+                .Where(x => !onlineTerminals.Contains(x.IMEI))
+                .Select(x => new { IMEI = x.IMEI, CarInfo = x.TerminalBindRecords!.OrderByDescending(t => t.CreateDate).FirstOrDefault()!.Car, IsOnline = true })
+                .ToListAsync();
 
             if (allTerminals is null)
             {

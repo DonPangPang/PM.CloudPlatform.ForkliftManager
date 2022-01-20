@@ -18,6 +18,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// </summary>
         public Guid CarId { get; set; }
 
+        public string IMEI { get; set; }
+
         /// <summary>
         /// 描述
         /// </summary>

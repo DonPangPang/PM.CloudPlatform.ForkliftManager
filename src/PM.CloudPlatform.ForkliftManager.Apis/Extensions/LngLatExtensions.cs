@@ -10,41 +10,37 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
     public static class LngLatExtensions
     {
         /// <summary>
-        ///
         /// </summary>
-        /// <param name="locations"></param>
-        /// <returns></returns>
+        /// <param name="locations"> </param>
+        /// <returns> </returns>
         public static string LngLatListToJsonString(this List<Location> locations)
         {
             return JsonConvert.SerializeObject(locations);
         }
 
         /// <summary>
-        ///
         /// </summary>
-        /// <param name="locations"></param>
-        /// <returns></returns>
+        /// <param name="locations"> </param>
+        /// <returns> </returns>
         public static string LngLatListToJsonString(this IEnumerable<Location> locations)
         {
             return JsonConvert.SerializeObject(locations);
         }
 
         /// <summary>
-        ///
         /// </summary>
-        /// <param name="lnglats"></param>
-        /// <returns></returns>
-        public static List<Location> JsonToLngLatList(this string lnglats)
+        /// <param name="lnglats"> </param>
+        /// <returns> </returns>
+        public static List<Location>? JsonToLngLatList(this string lnglats)
         {
             return JsonConvert.DeserializeObject<List<Location>>(lnglats);
         }
 
         /// <summary>
-        ///
         /// </summary>
-        /// <param name="lnglats"></param>
-        /// <returns></returns>
-        public static IEnumerable<Location> JsonToLngLatListAsEnumerable(this string lnglats)
+        /// <param name="lnglats"> </param>
+        /// <returns> </returns>
+        public static IEnumerable<Location>? JsonToLngLatListAsEnumerable(this string lnglats)
         {
             return JsonConvert.DeserializeObject<IEnumerable<Location>>(lnglats);
         }

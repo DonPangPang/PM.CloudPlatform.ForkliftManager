@@ -9,19 +9,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Options
     public class ServerOption : IOptions<ServerOption>
     {
         /// <summary>
-        ///
         /// </summary>
         public ServerOption Value => this;
 
         /// <summary>
-        ///
         /// </summary>
-        public List<Listener> TcpListeners { get; set; }
+        public List<Listener> TcpListeners { get; set; } = null!;
 
         /// <summary>
-        ///
         /// </summary>
-        public List<Listener> WsListeners { get; set; }
+        public List<Listener> WsListeners { get; set; } = null!;
     }
 
     /// <summary>

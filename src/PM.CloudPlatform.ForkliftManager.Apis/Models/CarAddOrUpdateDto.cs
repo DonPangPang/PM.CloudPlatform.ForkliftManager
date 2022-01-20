@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 
@@ -13,7 +14,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 车牌号
         /// </summary>
-        public string LicensePlateNumber { get; set; }
+        public string LicensePlateNumber { get; set; } = null!;
 
         /// <summary>
         /// 品牌
@@ -23,12 +24,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 编号
         /// </summary>
-        public string SerialNumber { get; set; }
+        public string SerialNumber { get; set; } = null!;
 
         /// <summary>
         /// 车辆型号
         /// </summary>
-        public string CarModel { get; set; }
+        public string CarModel { get; set; } = null!;
 
         /// <summary>
         /// 车辆类型

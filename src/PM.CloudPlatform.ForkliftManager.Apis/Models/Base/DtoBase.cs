@@ -15,7 +15,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models.Base
         /// <summary>
         /// 名称
         /// </summary>
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; }
 
         /// <summary>
         /// 创建时间

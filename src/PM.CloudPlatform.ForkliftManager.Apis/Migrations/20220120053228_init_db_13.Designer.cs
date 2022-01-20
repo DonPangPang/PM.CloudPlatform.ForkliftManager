@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PM.CloudPlatform.ForkliftManager.Apis.Data;
@@ -9,9 +10,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    partial class ForkliftManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220120053228_init_db_13")]
+    partial class init_db_13
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -479,7 +481,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CarId")
+                    b.Property<Guid?>("CarId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("CreateDate")
@@ -661,10 +663,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 
                     b.Property<bool>("EnableMark")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("IMEI")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("timestamp without time zone");
@@ -944,9 +942,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                 {
                     b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", "Car")
                         .WithMany("RentalRecords")
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CarId");
 
                     b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence", "ElectronicFence")
                         .WithMany()

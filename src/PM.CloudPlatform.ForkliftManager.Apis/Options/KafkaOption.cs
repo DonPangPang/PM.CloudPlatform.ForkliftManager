@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 
+#nullable disable
+
 namespace PM.CloudPlatform.ForkliftManager.Apis.Options
 {
     /// <summary>
@@ -38,8 +40,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Options
         public string EV26SessionConsumerGroup { get; set; }
 
         /// <summary>
-        /// Kafka Ip和端口
-        /// <remarks>Ip:Port</remarks>
+        /// Kafka Ip和端口 <remarks> Ip:Port </remarks>
         /// </summary>
         public string KafkaConfig { get; set; }
     }

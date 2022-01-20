@@ -8,7 +8,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Config
     public class DbSettings
     {
         /// <summary>
-        ///
         /// </summary>
         public List<DbSetting> Settings { get; set; }
     }
@@ -21,7 +20,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Config
         /// <summary>
         /// 数据库名
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         /// <summary>
         /// 是否使用该数据库
@@ -31,6 +30,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Config
         /// <summary>
         /// 数据库连接字符串
         /// </summary>
-        public string ConnectionString { get; set; }
+        public string ConnectionString { get; set; } = null!;
     }
 }

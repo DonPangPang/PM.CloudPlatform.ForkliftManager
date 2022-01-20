@@ -55,6 +55,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public string? ReturnAckEmployeeTel { get; set; } = null!;
 
         /// <summary>
+        /// Car Id
+        /// </summary>
+        public Guid CarId { get; set; }
+
+        /// <summary>
         /// 租借的车辆
         /// </summary>
         public Car? Car { get; set; }
@@ -63,5 +68,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// 租借的公司
         /// </summary>
         public RentalCompany? RentalCompany { get; set; }
+
+        /// <summary>
+        /// 电子围栏Id
+        /// </summary>
+        public Guid? ElectronicFenceId { get; set; }
+
+        /// <summary>
+        /// 电子围栏
+        /// </summary>
+        public ElectronicFence? ElectronicFence { get; set; }
     }
 }

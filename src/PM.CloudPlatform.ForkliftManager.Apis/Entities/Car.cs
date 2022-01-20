@@ -76,6 +76,27 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public Terminal? Terminal { get; set; }
 
         /// <summary>
+        /// 电子围栏Id
+        /// </summary>
+        public Guid? ElectronicFenceId { get; set; }
+
+        /// <summary>
+        /// 电子围栏
+        /// </summary>
+        public ElectronicFence? ElectronicFence { get; set; }
+
+        /// <summary>
+        /// 租赁公司Id
+        /// </summary>
+        public Guid? RentalCompanyId { get; set; }
+
+        /// <summary>
+        /// 租赁公司
+        /// </summary>
+
+        public RentalCompany? RentalCompany { get; set; }
+
+        /// <summary>
         /// 使用记录
         /// </summary>
         public ICollection<UseRecord>? UseRecords { get; set; }

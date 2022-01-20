@@ -74,8 +74,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     .Where(x => ids!.Contains(x.Id))
                     .Select(x => new
                     {
-                        Source = x.MapTo<CarDto>(),
+                        //Source = x.MapTo<CarDto>(),
                         CarId = x.Id,
+                        CarTypeId = x.CarType!.Id,
+                        CarTypeName = x.CarType!.Name,
+                        CarModel = x.CarModel,
                         LicensePlateNumber = x.LicensePlateNumber,
                         Brand = x.Brand,
                         SerialNumber = x.SerialNumber,
@@ -97,8 +100,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     .ApplyPaged(parameters)
                     .Select(x => new
                     {
-                        Source = x.MapTo<CarDto>(),
+                        //Source = x.MapTo<CarDto>(),
                         CarId = x.Id,
+                        CarTypeId = x.CarType!.Id,
+                        CarTypeName = x.CarType!.Name,
+                        CarModel = x.CarModel,
                         LicensePlateNumber = x.LicensePlateNumber,
                         Brand = x.Brand,
                         SerialNumber = x.SerialNumber,
@@ -132,8 +138,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
-                    Source = x.MapTo<CarDto>(),
+                    //Source = x.MapTo<CarDto>(),
                     CarId = x.Id,
+                    CarTypeId = x.CarType!.Id,
+                    CarTypeName = x.CarType!.Name,
+                    CarModel = x.CarModel,
                     LicensePlateNumber = x.LicensePlateNumber,
                     Brand = x.Brand,
                     SerialNumber = x.SerialNumber,
@@ -157,18 +166,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> GetCarTerminals([FromQuery] DtoParametersBase parameters)
         {
             var data = await _generalRepository.GetQueryable<Car>()
-                .Include(x => x.Terminal)
+                .Include(x => x.CarType)
+                .Include(x => x.TerminalBindRecords)
+                .ThenInclude(t => t.Terminal)
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
-                    Source = x.MapTo<CarDto>(),
+                    //Source = x.MapTo<CarDto>(),
                     // 可以往里面填写自己需要的数据
                     CarId = x.Id,
+                    CarTypeId = x.CarType!.Id,
+                    CarModel = x.CarModel,
                     LicensePlateNumber = x.LicensePlateNumber,
                     Brand = x.Brand,
                     SerialNumber = x.SerialNumber,
-                    CarTypeName = x.CarType!.ToString(),
-                    IMEI = x.Terminal!.IMEI
+                    CarTypeName = x.CarType!.Name,
+                    IMEI = x.TerminalBindRecords!.OrderByDescending(x => x.CreateDate).FirstOrDefault()!.Terminal!.IMEI
                 })
                 .ToListAsync();
 
@@ -186,20 +199,24 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> SetCarTerminal(Guid carId, Guid terminalId, string description)
         {
             var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(carId));
+            var terminal = await _generalRepository.FindAsync<Terminal>(x => x.Id.Equals(terminalId));
 
             car.TerminalId = terminalId;
+            terminal.CarId = carId;
 
             var bindRecord = new TerminalBindRecord()
             {
                 CarId = carId,
                 TerminalId = terminalId,
-                Description = description
+                Description = description,
+                IMEI = terminal.IMEI
             };
 
             bindRecord.Create();
 
             await _generalRepository.InsertAsync(bindRecord);
             await _generalRepository.UpdateAsync(car);
+            await _generalRepository.UpdateAsync(terminal);
             await _generalRepository.SaveAsync();
 
             return Success("保存成功");

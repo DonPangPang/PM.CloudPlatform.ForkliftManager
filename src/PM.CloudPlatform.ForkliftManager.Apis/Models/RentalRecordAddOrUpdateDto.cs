@@ -13,6 +13,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
     public class RentalRecordAddOrUpdateDto
     {
         /// <summary>
+        /// 租借记录Id
+        /// </summary>
+        public Guid RentalRecordId { get; set; }
+
+        /// <summary>
         /// 租借公司ID
         /// </summary>
         public Guid RentalCompanyId { get; set; }
@@ -63,8 +68,23 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         public string? ReturnAckEmployeeTel { get; set; }
 
         /// <summary>
+        /// </summary>
+        /// s
+        public Guid CarId { get; set; }
+
+        /// <summary>
         /// 租借的车辆
         /// </summary>
         public CarDto? Car { get; set; }
+
+        /// <summary>
+        /// 电子围栏Id
+        /// </summary>
+        public Guid? ElectronicFenceId { get; set; }
+
+        /// <summary>
+        /// 电子围栏
+        /// </summary>
+        public ElectronicFence? ElectronicFence { get; set; }
     }
 }

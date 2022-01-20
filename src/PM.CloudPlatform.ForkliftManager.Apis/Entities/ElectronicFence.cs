@@ -1,6 +1,7 @@
 ﻿using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
 {
@@ -32,11 +33,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 租借公司
         /// </summary>
+        [JsonIgnore]
         public RentalCompany? RentalCompany { get; set; }
 
         /// <summary>
         /// 围栏内的车辆
         /// </summary>
+        [JsonIgnore]
         public ICollection<Car>? Cars { get; set; }
     }
 }
