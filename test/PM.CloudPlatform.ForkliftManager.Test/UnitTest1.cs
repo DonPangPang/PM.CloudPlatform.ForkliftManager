@@ -21,7 +21,7 @@ namespace PM.CloudPlatform.ForkliftManager.Test
         [Fact]
         public void GeoJsonTest()
         {
-            string json = "{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}";
+            string json = "{\"type\":\"polygon\",\"coordinates\":[[[113.373481,34.211381],[113.510123,34.244877],[113.547889,34.19264],[113.373481,34.211381]]]}";
 
             var serializer = GeoJsonSerializer.Create();
             using (var reader = new StringReader(json))

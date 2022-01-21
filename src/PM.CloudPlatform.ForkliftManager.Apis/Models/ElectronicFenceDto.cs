@@ -2,6 +2,7 @@
 using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 using System.Collections.Generic;
 using NetTopologySuite.Geometries;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
@@ -26,7 +27,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         public string? LngLats { get; set; }
 
         [JsonIgnore]
-        public Polygon? Border { get; set; }
+        public Polygon? Border => LngLats.ToGeometry<Polygon>();
 
         /// <summary>
         /// 租借公司

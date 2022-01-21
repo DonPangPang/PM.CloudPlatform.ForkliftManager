@@ -58,6 +58,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     //Source = x.MapTo<RentalRecord>(),
                     RentalRecordId = x.Id,
                     CarId = x.Car!.Id,
+                    RentalCompanyName=x.RentalCompany!.Name,
                     LicensePlateNumber = x.Car!.LicensePlateNumber,
                     Brand = x.Car!.Brand,
                     SerialNumber = x.Car!.SerialNumber,
