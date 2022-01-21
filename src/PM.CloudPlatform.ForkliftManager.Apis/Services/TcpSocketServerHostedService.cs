@@ -9,6 +9,7 @@ using PM.CloudPlatform.ForkliftManager.Apis.Sessions;
 using SuperSocket;
 using SuperSocket.ProtoBase;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.Extensions;
 using NbazhGPS.Protocol.MessageBody;
 using Pang.AutoMapperMiddleware;
+using PM.CloudPlatform.ForkliftManager.Apis.CorrPacket;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
@@ -31,6 +33,9 @@ using PM.CloudPlatform.ForkliftManager.Apis.PipelineFilters;
 using PM.CloudPlatform.ForkliftManager.Apis.ProtocolReqResps;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
 using SuperSocket.Channel;
+using PackageType = PM.CloudPlatform.ForkliftManager.Apis.CorrPacket.PackageType;
+
+#nullable disable
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 {
@@ -171,15 +176,54 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                             await Task.Run(async () =>
                             {
+                                var terminal = await _generalRepository.GetQueryable<Terminal>()
+                                    .Include(x => x.Car)
+                                    .Where(x => x.IMEI.Equals(s["TerminalId"].ToString()))
+                                    .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+                                if (terminal.Car is null)
+                                {
+                                    return;
+                                }
+                                var distance = gpsPositionRecord.Point!.ProjectTo(2855)
+                                    .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855));
+                                // 超出围栏计算
+                                var fence = await _generalRepository.GetQueryable<SystemConfig>()
+                                    .OrderByDescending(x => x.CreateDate)
+                                    .Where(x => x.EnableMark)
+                                    .FirstOrDefaultAsync(cancellationToken: cancellationToken) ?? new SystemConfig();
+
+                                if (distance > fence.BeyondFenceDistance)
+                                {
+                                    foreach (var client in _clientSessionManager.Sessions)
+                                    {
+                                        await client.Value.SendAsync(new ClientPackage()
+                                        {
+                                            PackageType = PackageType.Gps,
+                                            Data = new
+                                            {
+                                                Msg = $"{terminal.Car!.LicensePlateNumber}超出围栏{distance}米"
+                                            }
+                                        }.ToJson());
+                                    }
+                                }
+                            }, cancellationToken);
+
+                            await Task.Run(async () =>
+                            {
                                 foreach (var client in _clientSessionManager.Sessions)
                                 {
-                                    await client.Value.SendAsync(new
+                                    await client.Value.SendAsync(new ClientPackage()
                                     {
-                                        TerminalId = s["TerminalId"].ToString(),
-                                        Lon = gpsPositionRecord.Lon,
-                                        Lat = gpsPositionRecord.Lat,
-                                        Heading = gpsPositionRecord.Heading,
-                                        Speed = gpsPositionRecord.Speed
+                                        PackageType = PackageType.Gps,
+                                        Data = new
+                                        {
+                                            TerminalId = s["TerminalId"].ToString(),
+                                            Lon = gpsPositionRecord.Lon,
+                                            Lat = gpsPositionRecord.Lat,
+                                            Heading = gpsPositionRecord.Heading,
+                                            Speed = gpsPositionRecord.Speed
+                                        }
                                     }.ToJson());
                                 }
                             }, cancellationToken);

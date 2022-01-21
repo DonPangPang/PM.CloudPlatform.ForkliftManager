@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+#nullable disable
+
 namespace PM.CloudPlatform.ForkliftManager.Apis.Config
 {
     /// <summary>

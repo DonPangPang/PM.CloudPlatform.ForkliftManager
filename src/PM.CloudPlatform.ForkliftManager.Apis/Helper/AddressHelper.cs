@@ -4,6 +4,8 @@ using System.Net.Http.Json;
 using System.Reflection;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace PM.CloudPlatform.ForkliftManager.Apis.Helper
 {
     [Obsolete("移除", true)]

@@ -1,5 +1,7 @@
 ﻿using NbazhGPS.Protocol;
 
+#nullable disable
+
 namespace PM.CloudPlatform.ForkliftManager.Apis.ProtocolReqResps
 {
     public class EV26Response
@@ -10,7 +12,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.ProtocolReqResps
 
         public EV26Response()
         {
-
         }
 
         public EV26Response(NbazhGpsPackage package, int minBufferSize = 1024)

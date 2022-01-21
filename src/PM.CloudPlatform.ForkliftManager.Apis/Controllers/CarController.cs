@@ -196,7 +196,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="description"> 描述 </param>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> SetCarTerminal(Guid carId, Guid terminalId, string description)
+        public async Task<IActionResult> SetCarTerminalBind(Guid carId, Guid terminalId, string description)
         {
             var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(carId));
             var terminal = await _generalRepository.FindAsync<Terminal>(x => x.Id.Equals(terminalId));
@@ -220,6 +220,30 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             await _generalRepository.SaveAsync();
 
             return Success("保存成功");
+        }
+
+        /// <summary>
+        /// 解除车辆与终端的绑定
+        /// </summary>
+        /// <param name="carId">      </param>
+        /// <param name="terminalId"> </param>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> SetCarTerminalUnBind(Guid carId, Guid terminalId)
+        {
+            var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(carId) && x.TerminalId.Equals(terminalId));
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (car is null)
+            {
+                return Fail("车辆信息获取失败");
+            }
+
+            car.TerminalId = null;
+            await _generalRepository.UpdateAsync(car);
+            await _generalRepository.SaveAsync();
+
+            return Success("接触绑定成功");
         }
     }
 }

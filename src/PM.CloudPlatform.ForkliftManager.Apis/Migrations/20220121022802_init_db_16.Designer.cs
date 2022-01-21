@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -10,9 +11,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    partial class ForkliftManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220121022802_init_db_16")]
+    partial class init_db_16
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -595,50 +597,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Role");
-                });
-
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.SystemConfig", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("BeyondFenceDistance")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("CreateUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CreateUserName")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("DeleteMark")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("EnableMark")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("LengthOfMaintenanceTime")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("ModifyDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("ModifyUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ModifyUserName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SystemConfig");
                 });
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Terminal", b =>

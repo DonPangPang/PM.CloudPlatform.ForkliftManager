@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[5.0.5, )"
             },
+            "Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite": {
+              "target": "Package",
+              "version": "[5.0.13, )"
+            },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[5.0.5, )"
@@ -76,6 +80,10 @@
               "target": "Package",
               "version": "[1.0.9, )"
             },
+            "NetTopologySuite.IO.GeoJSON": {
+              "target": "Package",
+              "version": "[2.0.4, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.1, )"
@@ -84,9 +92,17 @@
               "target": "Package",
               "version": "[5.0.5.1, )"
             },
+            "Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
             "Pang.AutoMapperMiddleware": {
               "target": "Package",
               "version": "[1.0.1, )"
+            },
+            "ProjNet": {
+              "target": "Package",
+              "version": "[2.0.0, )"
             },
             "SuperSocket": {
               "target": "Package",

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.Extensions.Options;
 using PM.CloudPlatform.ForkliftManager.Apis.Options;
 
+#nullable disable
+
 namespace PM.CloudPlatform.ForkliftManager.Apis.Kafka
 {
     public class EV26MsgIdProducer : IEV26Producer, IDisposable

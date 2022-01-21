@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PM.CloudPlatform.ForkliftManager.Apis.Config;
 using PM.CloudPlatform.ForkliftManager.Apis.Data;
 using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
+#nullable disable
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
 {
@@ -56,12 +58,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
                         break;
 
                     case "Npgsql":
-                        opts.UseNpgsql(setting.ConnectionString);
+                        opts.UseNpgsql(setting.ConnectionString, x => x.UseNetTopologySuite());
                         break;
 
                     case "SqlServer":
                     default:
-                        opts.UseSqlite(setting.ConnectionString);
+                        opts.UseSqlServer(setting.ConnectionString, x => x.UseNetTopologySuite());
                         break;
                 }
                 //opts.UseNpgsql("Host=192.168.31.39;Database=forklift;Username=postgres;Password=postgres");

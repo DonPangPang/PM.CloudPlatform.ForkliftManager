@@ -20,7 +20,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base
         /// <summary>
         /// 每页最大项数
         /// </summary>
-        private const int MaxPageSize = 30;
+        private const int MaxPageSize = 50;
 
         /// <summary>
         /// 模糊搜索

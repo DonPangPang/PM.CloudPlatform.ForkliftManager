@@ -5,6 +5,7 @@ using AutoMapper;
 using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.MessageBody;
 using NbazhGPS.Protocol.Models;
+using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
@@ -36,6 +37,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public Decimal Lon { get; set; }
 
         public Decimal Lat { get; set; }
+
+        /// <summary>
+        /// 坐标点
+        /// </summary>
+        public Point? Point { get; set; }
 
         public byte Speed { get; set; }
 
@@ -121,6 +127,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public Decimal Lon { get; set; }
 
         public Decimal Lat { get; set; }
+
+        public Point Point
+        {
+            get => new Point((double)Lon, (double)Lat) { SRID = 4326 };
+        }
 
         public byte Speed { get; set; }
 

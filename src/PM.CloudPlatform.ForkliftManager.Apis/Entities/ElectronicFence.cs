@@ -1,6 +1,7 @@
 ﻿using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 using System;
 using System.Collections.Generic;
+using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
@@ -29,6 +30,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// 坐标集合
         /// </summary>
         public string? LngLats { get; set; }
+
+        public Polygon? Border { get; set; }
 
         /// <summary>
         /// 租借公司

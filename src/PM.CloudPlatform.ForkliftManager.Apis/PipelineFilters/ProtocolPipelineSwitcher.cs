@@ -3,6 +3,8 @@ using System.Buffers;
 using NbazhGPS.Protocol;
 using SuperSocket.ProtoBase;
 
+#nullable disable
+
 namespace PM.CloudPlatform.ForkliftManager.Apis.PipelineFilters
 {
     public class ProtocolPipelineSwitcher : PipelineFilterBase<NbazhGpsPackage>

@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using NetTopologySuite.IO.Converters;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Authorization;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
@@ -80,6 +81,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
                 .AddNewtonsoftJson(setup =>
                 {
                     setup.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    setup.SerializerSettings.Converters.Add(new GeometryConverter());
                 })
                 .AddXmlDataContractSerializerFormatters()
                 .ConfigureApiBehaviorOptions(setup =>

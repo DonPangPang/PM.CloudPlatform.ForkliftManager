@@ -3,7 +3,10 @@
 using System;
 using System.Collections.Generic;
 using AutoMapper;
+using NetTopologySuite.Geometries;
+using Newtonsoft.Json;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
@@ -27,6 +30,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// 坐标集合
         /// </summary>
         public string LngLats { get; set; } = null!;
+
+        [JsonIgnore]
+        public Polygon Border => LngLats.ToGeometry<Polygon>();
 
         /// <summary>
         /// 租借公司

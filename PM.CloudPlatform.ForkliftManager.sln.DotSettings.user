@@ -3,6 +3,7 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::741898D3-D39D-4789-B022-0918FE595F57::net5.0::PM.CloudPlatform.ForkliftManager.Test.SessionManager.SessionManagerTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::741898D3-D39D-4789-B022-0918FE595F57::net5.0::PM.CloudPlatform.ForkliftManager.Test.UnitTest1.Test1&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::741898D3-D39D-4789-B022-0918FE595F57::net5.0::PM.CloudPlatform.ForkliftManager.Test.UnitTest1.GeoJsonTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Resps/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

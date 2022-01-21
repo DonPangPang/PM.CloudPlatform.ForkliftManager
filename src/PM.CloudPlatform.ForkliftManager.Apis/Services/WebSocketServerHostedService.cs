@@ -31,6 +31,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         /// <param name="serverOptions">            </param>
         /// <param name="clientSessionManager">     </param>
         /// <param name="gpsTrackerSessionManager"> </param>
+        /// <param name="factory">                  </param>
         public WebSocketServerHostedService(
             IOptions<ServerOption> serverOptions,
             ClientSessionManagers clientSessionManager,
