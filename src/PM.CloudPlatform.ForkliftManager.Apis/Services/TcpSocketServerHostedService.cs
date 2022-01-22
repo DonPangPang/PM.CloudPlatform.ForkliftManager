@@ -22,6 +22,7 @@ using NbazhGPS.Protocol;
 using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.Extensions;
 using NbazhGPS.Protocol.MessageBody;
+using NetTopologySuite.Geometries;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.CorrPacket;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
@@ -146,10 +147,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                             s["TerminalId"] = terminalId;
                             // TODO: 终端登录
                             var terminal = await _generalRepository.GetQueryable<Terminal>()
+                                .FilterDeleted()
                                 .FirstOrDefaultAsync(x => x.IMEI.Equals(terminalId), cancellationToken: cancellationToken);
 
-                            //if (terminal is not null)
-                            if (true)
+                            if (terminal is not null)
                             {
                                 await _gpsTrackerSessionManager.TryAddOrUpdate(terminalId, (s as GpsTrackerSession)!);
                             }
@@ -160,7 +161,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                             var terminalLoginRecord = new TerminalLoginRecord()
                             {
-                                TerminalId = terminal.Id
+                                TerminalId = terminal!.Id
                             };
                             terminalLoginRecord.Create();
                             await _generalRepository.InsertAsync(terminalLoginRecord);
@@ -169,15 +170,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                         if (p.Header.MsgId.Equals(NbazhGpsMessageIds.Gps定位包.ToByteValue()))
                         {
                             var gpsPositionRecord = (p.Bodies as Nbazh0X22)!.MapTo<GpsPositionRecordTemp>().MapTo<GpsPositionRecord>();
-                            gpsPositionRecord.Create(Guid.NewGuid(), s["TerminalId"].ToString() ?? "Unknown Terminal.");
-
-                            await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
-                            await _generalRepository.SaveAsync();
 
                             await Task.Run(async () =>
                             {
+                                gpsPositionRecord.Create(Guid.NewGuid(), s["TerminalId"].ToString() ?? "Unknown Terminal.");
+
+                                await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
+                                await _generalRepository.SaveAsync();
+
                                 var terminal = await _generalRepository.GetQueryable<Terminal>()
+                                    .FilterDeleted()
+                                    .FilterDisabled()
                                     .Include(x => x.Car)
+                                    .Include(x => x.AlarmRecords.Where(t => !t.IsReturn))
                                     .Where(x => x.IMEI.Equals(s["TerminalId"].ToString()))
                                     .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
@@ -186,20 +191,38 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     return;
                                 }
                                 var distance = gpsPositionRecord.Point!.ProjectTo(2855)
-                                    .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855));
+                                    .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855)).ShapeDistance();
                                 // 超出围栏计算
                                 var fence = await _generalRepository.GetQueryable<SystemConfig>()
+                                    .FilterDeleted()
+                                    .FilterDisabled()
                                     .OrderByDescending(x => x.CreateDate)
                                     .Where(x => x.EnableMark)
                                     .FirstOrDefaultAsync(cancellationToken: cancellationToken) ?? new SystemConfig();
 
                                 if (distance > fence.BeyondFenceDistance)
                                 {
+                                    if (!terminal.AlarmRecords!.Any())
+                                    {
+                                        await Task.Run(async () =>
+                                        {
+                                            var alarm = new AlarmRecord()
+                                            {
+                                                TerminalId = terminal.Id,
+                                                CarId = terminal.CarId,
+                                                ElectronFenceId = terminal.Car.ElectronicFenceId
+                                            };
+                                            alarm.Create();
+                                            await _generalRepository.InsertAsync(alarm);
+                                            await _generalRepository.SaveAsync();
+                                        }, cancellationToken);
+                                    }
+
                                     foreach (var client in _clientSessionManager.Sessions)
                                     {
                                         await client.Value.SendAsync(new ClientPackage()
                                         {
-                                            PackageType = PackageType.Gps,
+                                            PackageType = PackageType.Alarm,
                                             Data = new
                                             {
                                                 Msg = $"{terminal.Car!.LicensePlateNumber}超出围栏{distance}米"
@@ -207,10 +230,29 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                         }.ToJson());
                                     }
                                 }
+                                else
+                                {
+                                    if (terminal.AlarmRecords!.Any())
+                                    {
+                                        await Task.Run(async () =>
+                                        {
+                                            foreach (var item in terminal.AlarmRecords)
+                                            {
+                                                item.IsReturn = true;
+                                                await _generalRepository.UpdateAsync(item);
+                                            }
+
+                                            await _generalRepository.SaveAsync();
+                                        }, cancellationToken);
+                                    }
+                                }
                             }, cancellationToken);
 
                             await Task.Run(async () =>
                             {
+                                var gdPoint = new Point((double)gpsPositionRecord.Lon, (double)gpsPositionRecord.Lat)
+                                    .Transform_WGS84_To_GCJ02();
+
                                 foreach (var client in _clientSessionManager.Sessions)
                                 {
                                     await client.Value.SendAsync(new ClientPackage()
@@ -219,8 +261,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                         Data = new
                                         {
                                             TerminalId = s["TerminalId"].ToString(),
-                                            Lon = gpsPositionRecord.Lon,
-                                            Lat = gpsPositionRecord.Lat,
+                                            Lon = gdPoint.X,
+                                            Lat = gdPoint.Y,
+                                            GdPoint = gdPoint,
                                             Heading = gpsPositionRecord.Heading,
                                             Speed = gpsPositionRecord.Speed
                                         }

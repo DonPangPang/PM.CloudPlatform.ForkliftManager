@@ -28,11 +28,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 终端绑定记录
         /// </summary>
-        public ICollection<TerminalBindRecord>? TerminalBindRecords { get; set; }
+        public ICollection<TerminalBindRecord>? TerminalBindRecords { get; set; } = new List<TerminalBindRecord>();
 
         /// <summary>
         /// 终端GPS定位数据
         /// </summary>
-        public ICollection<GpsPositionRecord>? GpsPositionRecords { get; set; }
+        public ICollection<GpsPositionRecord>? GpsPositionRecords { get; set; } = new List<GpsPositionRecord>();
+
+        /// <summary>
+        /// 报警信息
+        /// </summary>
+        public ICollection<AlarmRecord>? AlarmRecords { get; set; } = new List<AlarmRecord>();
     }
 }

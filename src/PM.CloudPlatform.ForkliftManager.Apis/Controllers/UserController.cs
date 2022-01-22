@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Helper;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
@@ -51,9 +52,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <returns> </returns>
 
         [HttpGet]
-        public async Task<IActionResult> GetLoginUserInfo()
+        public IActionResult GetLoginUserInfo()
         {
-            var userInfo = await Task.Run(() => { return LoginUserInfo.Get<UserDto>(); });
+            var userInfo = LoginUserInfo.Get<User>();
 
             if (userInfo is not null)
             {
@@ -72,7 +73,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLoginUserRoles()
         {
-            var userInfo = LoginUserInfo.Get<UserDto>();
+            var userInfo = LoginUserInfo.Get<User>()?.MapTo<UserDto>();
 
             if (userInfo is not null)
             {
@@ -96,11 +97,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetLoginUserModules()
         {
-            var userInfo = LoginUserInfo.Get<UserDto>();
+            var userInfo = LoginUserInfo.Get<User>()?.MapTo<UserDto>();
 
             if (userInfo is not null)
             {
-                var modules = await Users.Where(user => user.Id.Equals(userInfo.Id)).SelectMany(t => t.Roles!)
+                var modules = await Users
+                    .FilterDeleted()
+                    .Where(user => user.Id.Equals(userInfo.Id))
+                    .SelectMany(t => t.Roles!)
                     .SelectMany(t => t.Modules!).ToListAsync();
                 var returnDto = modules.MapTo<ModuleDto>();
 

@@ -136,5 +136,49 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
 
             return PagedList<T>.ApplyPaged(queryExpression, parameters.PageNumber, parameters.PageSize);
         }
+
+        /// <summary>
+        /// 过滤掉已删除的数据
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="queryable"> </param>
+        /// <returns> </returns>
+        public static IQueryable<T> FilterDeleted<T>(this IQueryable<T> queryable) where T : EntityBase
+        {
+            return queryable.Where(x => !x.DeleteMark);
+        }
+
+        /// <summary>
+        /// 过滤掉未删除的数据
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="queryable"> </param>
+        /// <returns> </returns>
+        public static IQueryable<T> FilterAlive<T>(this IQueryable<T> queryable) where T : EntityBase
+        {
+            return queryable.Where(x => x.DeleteMark);
+        }
+
+        /// <summary>
+        /// 过滤启用的数据
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="queryable"> </param>
+        /// <returns> </returns>
+        public static IQueryable<T> FilterEnabled<T>(this IQueryable<T> queryable) where T : EntityBase
+        {
+            return queryable.Where(x => !x.EnableMark);
+        }
+
+        /// <summary>
+        /// 过滤未启用的数据
+        /// </summary>
+        /// <typeparam name="T"> </typeparam>
+        /// <param name="queryable"> </param>
+        /// <returns> </returns>
+        public static IQueryable<T> FilterDisabled<T>(this IQueryable<T> queryable) where T : EntityBase
+        {
+            return queryable.Where(x => x.EnableMark);
+        }
     }
 }

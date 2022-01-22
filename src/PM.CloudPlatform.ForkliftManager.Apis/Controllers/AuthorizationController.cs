@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -97,9 +98,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var token = GenUserToken(user.Id, request.Username, "admin");
             var refreshToken = "123456";
 
-            LoginUserInfo.Set(user);
+            //LoginUserInfo.Set(user);
 
             return Success(new[] { token, refreshToken });
+        }
+
+        /// <summary>
+        /// 获取登录用户信息
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetUserInfo()
+        {
+            var data = LoginUserInfo.Get<User>();
+
+            return Success(data!);
         }
 
         //生成Token代码

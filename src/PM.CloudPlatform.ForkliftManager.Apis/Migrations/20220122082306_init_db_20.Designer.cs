@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -10,9 +11,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Data;
 namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 {
     [DbContext(typeof(ForkliftManagerDbContext))]
-    partial class ForkliftManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220122082306_init_db_20")]
+    partial class init_db_20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,69 +35,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                     b.HasIndex("RolesId");
 
                     b.ToTable("ModuleRole");
-                });
-
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.AlarmRecord", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CarId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("CreateUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CreateUserName")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("DeleteMark")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid?>("ElectronFenceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ElectronicFenceId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("EnableMark")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("IMEI")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsReturn")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime?>("ModifyDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid?>("ModifyUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("ModifyUserName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("TerminalId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarId");
-
-                    b.HasIndex("ElectronicFenceId");
-
-                    b.HasIndex("TerminalId");
-
-                    b.ToTable("AlarmRecord");
                 });
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", b =>
@@ -988,27 +927,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.AlarmRecord", b =>
-                {
-                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", "Car")
-                        .WithMany("AlarmRecords")
-                        .HasForeignKey("CarId");
-
-                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.ElectronicFence", "ElectronicFence")
-                        .WithMany()
-                        .HasForeignKey("ElectronicFenceId");
-
-                    b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.Terminal", "Terminal")
-                        .WithMany("AlarmRecords")
-                        .HasForeignKey("TerminalId");
-
-                    b.Navigation("Car");
-
-                    b.Navigation("ElectronicFence");
-
-                    b.Navigation("Terminal");
-                });
-
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", b =>
                 {
                     b.HasOne("PM.CloudPlatform.ForkliftManager.Apis.Entities.CarType", "CarType")
@@ -1153,8 +1071,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Car", b =>
                 {
-                    b.Navigation("AlarmRecords");
-
                     b.Navigation("CarMaintenanceRecords");
 
                     b.Navigation("RentalRecords");
@@ -1183,8 +1099,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Migrations
 
             modelBuilder.Entity("PM.CloudPlatform.ForkliftManager.Apis.Entities.Terminal", b =>
                 {
-                    b.Navigation("AlarmRecords");
-
                     b.Navigation("Car");
 
                     b.Navigation("GpsPositionRecords");

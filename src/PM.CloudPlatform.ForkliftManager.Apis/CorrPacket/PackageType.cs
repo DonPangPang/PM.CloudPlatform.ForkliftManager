@@ -5,6 +5,6 @@
         Heart = 0,
         Login = 1,
         Gps = 2,
-        Warning = 3
+        Alarm = 3
     }
 }

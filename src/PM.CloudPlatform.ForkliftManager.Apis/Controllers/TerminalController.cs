@@ -12,6 +12,7 @@ using NbazhGPS.Protocol.Extensions;
 using NbazhGPS.Protocol.MessageBody;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Managers;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
@@ -88,6 +89,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Select(x => x["TerminalId"].ToString());
 
             var allTerminals = await _generalRepository.GetQueryable<Terminal>()
+                .FilterDeleted()
                 .Include(t => t.TerminalBindRecords)
                 .ThenInclude(x => x.Terminal)
                 .Where(x => onlineTerminals.Contains(x.IMEI))

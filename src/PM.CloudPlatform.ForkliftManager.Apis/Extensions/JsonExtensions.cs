@@ -29,7 +29,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
             using var jsonWriter = new JsonTextWriter(writer);
 
             serializer.Serialize(jsonWriter, obj);
-            return jsonWriter.ToString();
+            return writer.ToString();
         }
 
         public static T ToGeometry<T>(this string json) where T : Geometry
@@ -38,6 +38,36 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
             using var reader = new StringReader(json);
             using var jsonReader = new JsonTextReader(reader);
             T res = serializer.Deserialize<T>(jsonReader);
+
+            return res;
+        }
+
+        public static T ToGeometry_Transform_WGS84_To_GCJ02<T>(this string json) where T : Geometry
+        {
+            var serializer = GeoJsonSerializer.Create();
+            using var reader = new StringReader(json);
+            using var jsonReader = new JsonTextReader(reader);
+            T res = serializer.Deserialize<T>(jsonReader);
+
+            for (int i = 0; i < res.Coordinates.Length; i++)
+            {
+                res.Coordinates[i] = res.Coordinates[i].Transform_WGS84_To_GCJ02();
+            }
+
+            return res;
+        }
+
+        public static T ToGeometry_Transform_GCJ02_To_WGS84<T>(this string json) where T : Geometry
+        {
+            var serializer = GeoJsonSerializer.Create();
+            using var reader = new StringReader(json);
+            using var jsonReader = new JsonTextReader(reader);
+            T res = serializer.Deserialize<T>(jsonReader);
+
+            for (int i = 0; i < res.Coordinates.Length; i++)
+            {
+                res.Coordinates[i] = res.Coordinates[i].Transform_GCJ02_To_WGS84();
+            }
 
             return res;
         }

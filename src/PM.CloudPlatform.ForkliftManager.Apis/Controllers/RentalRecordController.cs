@@ -49,6 +49,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> GetRentalCars([FromQuery] DtoParametersBase parameters)
         {
             var data = await _generalRepository.GetQueryable<RentalRecord>()
+                .FilterDeleted()
                 .Include(x => x.RentalCompany)
                 .Include(x => x.Car)
                 .ThenInclude(t => t!.CarType)
@@ -58,7 +59,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     //Source = x.MapTo<RentalRecord>(),
                     RentalRecordId = x.Id,
                     CarId = x.Car!.Id,
-                    RentalCompanyName=x.RentalCompany!.Name,
+                    RentalCompanyName = x.RentalCompany!.Name,
                     LicensePlateNumber = x.Car!.LicensePlateNumber,
                     Brand = x.Car!.Brand,
                     SerialNumber = x.Car!.SerialNumber,
@@ -66,6 +67,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     RentalStartTime = x.RentalStartTime,
                     RentalEndTime = x.RentalEndTime
                 })
+                .AsSplitQuery()
                 .ToListAsync();
 
             return Success(data);

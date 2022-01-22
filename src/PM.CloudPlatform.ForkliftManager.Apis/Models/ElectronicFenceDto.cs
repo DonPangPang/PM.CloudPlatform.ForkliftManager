@@ -27,7 +27,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         public string? LngLats { get; set; }
 
         [JsonIgnore]
-        public Polygon? Border => LngLats.ToGeometry<Polygon>();
+        public Polygon? Border => LngLats.ToGeometry_Transform_GCJ02_To_WGS84<Polygon>();
 
         /// <summary>
         /// 租借公司

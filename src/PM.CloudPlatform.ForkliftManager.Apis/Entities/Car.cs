@@ -115,5 +115,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// 终端绑定记录
         /// </summary>
         public ICollection<TerminalBindRecord>? TerminalBindRecords { get; set; }
+
+        /// <summary>
+        /// 报警信息
+        /// </summary>
+        public ICollection<AlarmRecord>? AlarmRecords { get; set; }
     }
 }

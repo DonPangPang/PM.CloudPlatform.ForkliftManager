@@ -20,6 +20,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         public string Password { get; set; } = null!;
 
         /// <summary>
+        /// 超级管理员
+        /// </summary>
+        public bool IsSuper { get; set; } = false;
+
+        /// <summary>
         /// 姓名
         /// </summary>
         public string Name { get; set; } = null!;
@@ -32,6 +37,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 角色
         /// </summary>
-        public ICollection<Role>? Roles { get; set; }
+        public ICollection<Role>? Roles { get; set; } = new List<Role>();
     }
 }

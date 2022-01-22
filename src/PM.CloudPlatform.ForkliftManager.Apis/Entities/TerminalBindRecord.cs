@@ -11,12 +11,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 终端Id
         /// </summary>
-        public Guid TerminalId { get; set; }
+        public Guid? TerminalId { get; set; }
 
         /// <summary>
         /// 车辆Id
         /// </summary>
-        public Guid CarId { get; set; }
+        public Guid? CarId { get; set; }
 
         public string IMEI { get; set; }
 

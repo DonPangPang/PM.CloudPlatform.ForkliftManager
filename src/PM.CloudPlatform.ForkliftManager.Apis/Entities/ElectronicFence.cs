@@ -14,7 +14,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 公司ID
         /// </summary>
-        public Guid RentalCompanyId { get; set; }
+        public Guid? RentalCompanyId { get; set; }
 
         /// <summary>
         /// 围栏名称

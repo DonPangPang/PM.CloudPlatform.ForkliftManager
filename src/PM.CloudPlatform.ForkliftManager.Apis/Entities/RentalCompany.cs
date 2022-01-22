@@ -1,4 +1,5 @@
-﻿using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
+﻿using System;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 using System.Collections.Generic;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
@@ -37,5 +38,23 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// 电子围栏
         /// </summary>
         public ICollection<ElectronicFence>? ElectronicFences { get; set; }
+
+        public override void Create()
+        {
+            if (ElectronicFences != null)
+                foreach (var item in ElectronicFences)
+                {
+                    if (item.Id == Guid.Empty)
+                    {
+                        item.Create();
+                    }
+                    else
+                    {
+                        item.Modify();
+                    }
+                }
+
+            base.Create();
+        }
     }
 }

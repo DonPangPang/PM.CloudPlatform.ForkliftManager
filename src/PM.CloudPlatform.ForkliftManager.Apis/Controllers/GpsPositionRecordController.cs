@@ -43,6 +43,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         {
             var data = await _generalRepository
                                                             .GetQueryable<GpsPositionRecord>()
+                                                            .FilterDeleted()
                                                             .Include(x => x.Terminal)
                                                             .ToPagedAsync(parameters);
 
@@ -59,6 +60,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> GetGpsPositionRecordsByTerminal(Guid terminalId, [FromQuery] DtoParametersBase parameters)
         {
             var data = await _generalRepository.GetQueryable<GpsPositionRecord>()
+                .FilterDeleted()
                 .Include(x => x.Terminal)
                 .Where(x => x.TerminalId.Equals(terminalId)).ToPagedAsync(parameters);
 

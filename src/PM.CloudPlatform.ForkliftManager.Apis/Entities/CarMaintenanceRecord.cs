@@ -11,7 +11,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 车辆Id
         /// </summary>
-        public Guid CarId { get; set; }
+        public Guid? CarId { get; set; }
 
         /// <summary>
         /// 车辆

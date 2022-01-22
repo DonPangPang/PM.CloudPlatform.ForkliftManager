@@ -68,6 +68,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             if (ids.Any())
             {
                 var data = await _generalRepository.GetQueryable<Car>()
+                    .FilterDeleted()
                     .Include(x => x.CarType)
                     .Include(x => x.UseRecords)
                     .Include(x => x.CarMaintenanceRecords)
@@ -94,6 +95,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             else
             {
                 var data = await _generalRepository.GetQueryable<Car>()
+                    .FilterDeleted()
                     .Include(x => x.CarType)
                     .Include(x => x.UseRecords)
                     .Include(x => x.CarMaintenanceRecords)
@@ -132,7 +134,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //var res = await Cars.SelectMany(x =>
             //    x.RentalRecords!.Select(r => new { x, r }).Where(t => t.r.IsReturn || t.x.RentalRecords!.Count <= 0)).ToListAsync();
 
-            var data = await Cars.Include(x => x.CarType)
+            var data = await Cars.FilterDeleted()
+                .Include(x => x.CarType)
                 .Include(x => x.UseRecords)
                 .Include(x => x.RentalRecords!.Where(t => !t.IsReturn))
                 .ApplyPaged(parameters)
@@ -166,6 +169,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> GetCarTerminals([FromQuery] DtoParametersBase parameters)
         {
             var data = await _generalRepository.GetQueryable<Car>()
+                .FilterDeleted()
                 .Include(x => x.CarType)
                 .Include(x => x.TerminalBindRecords)
                 .ThenInclude(t => t.Terminal)

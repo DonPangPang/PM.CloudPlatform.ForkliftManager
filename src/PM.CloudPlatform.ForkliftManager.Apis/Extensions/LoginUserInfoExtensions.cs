@@ -34,7 +34,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
             app.UseSession();
             var httpContextAccessor =
                 app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
-            LoginUserInfo.Configure(httpContextAccessor);
+
+            var s = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            LoginUserInfo.Configure(httpContextAccessor, s);
 
             return app;
         }
@@ -50,7 +52,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
             app.UseSession();
             var httpContextAccessor =
                 app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
-            LoginUserInfo.Configure(httpContextAccessor);
+            var s = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>();
+            LoginUserInfo.Configure(httpContextAccessor, s);
 
             return app;
         }

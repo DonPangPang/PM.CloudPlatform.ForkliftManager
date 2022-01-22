@@ -12,7 +12,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 租借公司ID
         /// </summary>
-        public Guid RentalCompanyId { get; set; }
+        public Guid? RentalCompanyId { get; set; }
 
         /// <summary>
         /// 租借处理人姓名

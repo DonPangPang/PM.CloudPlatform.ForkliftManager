@@ -6,6 +6,7 @@ using PM.CloudPlatform.ForkliftManager.Apis.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -67,6 +68,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 entity.Id = Guid.NewGuid();
             }
 
+            if (await ExistAsync(x => x.Name!.Equals(entity.Name)))
+            {
+                throw new ArgumentException("名称不能重复");
+            }
+
             await DbSet.AddAsync(entity);
         }
 
@@ -114,7 +120,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 throw new ArgumentNullException(nameof(id));
             }
 
-            return DbSet.FirstOrDefault(x => x.Id == id)!;
+            return DbSet.FilterDeleted().FirstOrDefault(x => x.Id == id)!;
         }
 
         /// <summary>
@@ -128,7 +134,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 throw new ArgumentNullException(nameof(id));
             }
 
-            return await DbSet.FirstOrDefaultAsync(x => x.Id == id);
+            return await DbSet.FilterDeleted().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         /// <summary>
@@ -142,7 +148,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 throw new ArgumentNullException(nameof(ids));
             }
 
-            return DbSet.Where(x => ids.Contains(x.Id)).ToList();
+            return DbSet.Where(x => ids.Contains(x.Id)).FilterDeleted().ToList();
         }
 
         /// <summary>
@@ -156,7 +162,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 throw new ArgumentNullException(nameof(ids));
             }
 
-            return await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
+            return await DbSet.Where(x => ids.Contains(x.Id)).FilterDeleted().ToListAsync();
         }
 
         /// <summary>
@@ -164,7 +170,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
         /// <returns> </returns>
         public IEnumerable<T> GetEntities()
         {
-            return DbSet.ToList();
+            return DbSet.FilterDeleted().ToList();
         }
 
         /// <summary>
@@ -174,7 +180,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
         {
             try
             {
-                return await DbSet.ToListAsync();
+                return await DbSet.FilterDeleted().ToListAsync();
             }
             catch (Exception e)
             {
@@ -195,7 +201,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            var queryExpression = DbSet as IQueryable<T>;
+            var queryExpression = (DbSet as IQueryable<T>).FilterDeleted();
 
             if (parameters.StartTime is not null && parameters.EndTime is not null)
             {
@@ -238,7 +244,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            var queryExpression = DbSet as IQueryable<T>;
+            var queryExpression = (DbSet as IQueryable<T>).FilterDeleted();
 
             if (parameters.StartTime is not null && parameters.EndTime is not null)
             {
@@ -543,6 +549,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
         public bool EntityExist(T entity)
         {
             return EntityExistById(entity.Id);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="expression"> </param>
+        /// <returns> </returns>
+        public async Task<bool> ExistAsync(Expression<Func<T, bool>> expression)
+        {
+            return await DbSet.AnyAsync(expression);
         }
 
         /// <summary>

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
@@ -16,11 +19,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
     public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
     {
         private readonly IGeneralRepository _generalRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PermissionRequirement _tokenParameter;
 
-        public PermissionHandler(IConfiguration config, IGeneralRepository generalRepository)
+        public PermissionHandler(IConfiguration config, IGeneralRepository generalRepository, IHttpContextAccessor httpContextAccessor)
         {
             _generalRepository = generalRepository;
+            _httpContextAccessor = httpContextAccessor;
             _tokenParameter = config.GetSection("TokenParameter").Get<PermissionRequirement>();
         }
 
@@ -49,9 +54,26 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
 
             var id = Guid.Parse(context.User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name))!.Value);
 
-            var urls = await _generalRepository.GetQueryable<User>()
+            var user = await _generalRepository.GetQueryable<User>()
+                .FilterDeleted()
+                .Where(x => x.Id.Equals(id))
                 .Include(x => x.Roles)
-                .ThenInclude(y => y.Modules).Where(x => x.Id.Equals(id)).ToListAsync();
+                .ThenInclude(y => y.Modules)
+                .FirstOrDefaultAsync();
+
+            if (user.IsSuper)
+            {
+                context.Succeed(requirement);
+                await Task.CompletedTask;
+            }
+
+            var questUrl = _httpContextAccessor.HttpContext!.Request.Path.ToString();
+
+            if (!user.Roles!.Any(x => x.Modules!.Any(t => questUrl.Contains(t.Name))))
+            {
+                context.Fail();
+                await Task.CompletedTask;
+            }
 
             context.Succeed(requirement);
             await Task.CompletedTask;

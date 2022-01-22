@@ -69,6 +69,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //    .ToListAsync();
 
             var data = await _generalRepository.GetQueryable<Car>()
+                .FilterDeleted()
                 .Include(x => x.CarType)
                 .Include(x => x.UseRecords)
                 .Include(x => x.CarMaintenanceRecords)
@@ -124,6 +125,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //return Success(data);
 
             var data = await _generalRepository.GetQueryable<Car>()
+                .FilterDeleted()
                 .Include(x => x.CarType)
                 .Include(x => x.UseRecords)
                 .Include(x => x.CarMaintenanceRecords)

@@ -47,7 +47,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRentalCompanyIncludeElectronicFencePaged([FromQuery] DtoParametersBase parameters)
         {
-            var data = await _generalRepository.GetQueryable<RentalCompany>().Include(x => x.ElectronicFences)
+            var data = await _generalRepository.GetQueryable<RentalCompany>()
+                .FilterDeleted()
+                .Include(x => x.ElectronicFences)
                 .ToPagedAsync(parameters);
 
             var returnDto = data.MapTo<RentalCompanyDto>();
@@ -63,7 +65,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRentalCompanyIncludeElectronicFence(Guid id)
         {
-            var data = await _generalRepository.GetQueryable<RentalCompany>().Include(x => x.ElectronicFences)
+            var data = await _generalRepository.GetQueryable<RentalCompany>()
+                .FilterDeleted()
+                .Include(x => x.ElectronicFences)
                 .FirstOrDefaultAsync(x => x.Id.Equals(id));
 
             var returnDto = data.MapTo<RentalCompanyDto>();

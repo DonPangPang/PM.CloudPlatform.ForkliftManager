@@ -11,7 +11,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 终端Id
         /// </summary>
-        public Guid TerminalId { get; set; }
+        public Guid? TerminalId { get; set; }
 
         /// <summary>
         /// 终端

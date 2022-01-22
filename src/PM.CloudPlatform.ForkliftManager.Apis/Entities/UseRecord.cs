@@ -9,14 +9,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
     /// </summary>
     public class UseRecord : EntityBase
     {
-        public Guid TerminalId { get; set; }
+        public Guid? TerminalId { get; set; }
 
         public Terminal? Terminal { get; set; }
 
         /// <summary>
         /// 车辆ID
         /// </summary>
-        public Guid CarId { get; set; }
+        public Guid? CarId { get; set; }
 
         /// <summary>
         /// </summary>
