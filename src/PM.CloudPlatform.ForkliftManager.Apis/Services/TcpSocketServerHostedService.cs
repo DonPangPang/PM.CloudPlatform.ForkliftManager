@@ -1,23 +1,9 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using PM.CloudPlatform.ForkliftManager.Apis.Managers;
-using PM.CloudPlatform.ForkliftManager.Apis.Options;
-using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
-using PM.CloudPlatform.ForkliftManager.Apis.Sessions;
-using SuperSocket;
-using SuperSocket.ProtoBase;
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Confluent.Kafka;
-using Microsoft.AspNetCore.SignalR.Protocol;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using NbazhGPS.Protocol;
 using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.Extensions;
@@ -30,10 +16,17 @@ using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Handlers;
 using PM.CloudPlatform.ForkliftManager.Apis.Kafka;
+using PM.CloudPlatform.ForkliftManager.Apis.Managers;
+using PM.CloudPlatform.ForkliftManager.Apis.Options;
 using PM.CloudPlatform.ForkliftManager.Apis.PipelineFilters;
 using PM.CloudPlatform.ForkliftManager.Apis.ProtocolReqResps;
-using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.Sessions;
+using SuperSocket;
 using SuperSocket.Channel;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using PackageType = PM.CloudPlatform.ForkliftManager.Apis.CorrPacket.PackageType;
 
 #nullable disable
@@ -171,6 +164,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                         {
                             var gpsPositionRecord = (p.Bodies as Nbazh0X22)!.MapTo<GpsPositionRecordTemp>().MapTo<GpsPositionRecord>();
 
+                            // 记录定位, 超出围栏计算
                             await Task.Run(async () =>
                             {
                                 gpsPositionRecord.Create(Guid.NewGuid(), s["TerminalId"].ToString() ?? "Unknown Terminal.");
@@ -225,6 +219,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                             PackageType = PackageType.Alarm,
                                             Data = new
                                             {
+                                                // 终端Id
+                                                TerminalId = s["TerminalId"].ToString(),
+                                                // 车牌号
+                                                LicensePlateNumber = terminal.Car!.LicensePlateNumber,
+                                                // 超出距离
+                                                Distance = distance,
+                                                // 提示信息
                                                 Msg = $"{terminal.Car!.LicensePlateNumber}超出围栏{distance}米"
                                             }
                                         }.ToJson());
@@ -248,6 +249,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                 }
                             }, cancellationToken);
 
+                            // 向客户端发送定位
                             await Task.Run(async () =>
                             {
                                 var gdPoint = new Point((double)gpsPositionRecord.Lon, (double)gpsPositionRecord.Lat)
@@ -260,11 +262,17 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                         PackageType = PackageType.Gps,
                                         Data = new
                                         {
+                                            // 终端Id
                                             TerminalId = s["TerminalId"].ToString(),
+                                            // 纬度
                                             Lon = gdPoint.X,
+                                            // 经度
                                             Lat = gdPoint.Y,
+                                            // 高德经纬度对象
                                             GdPoint = gdPoint,
+                                            // 方向
                                             Heading = gpsPositionRecord.Heading,
+                                            // 速度
                                             Speed = gpsPositionRecord.Speed
                                         }
                                     }.ToJson());
@@ -272,6 +280,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                             }, cancellationToken);
                         }
 
+                        // 应答
                         var handler = new EV26MsgIdTcpCustomHandler(_provider, new NullLoggerFactory(), _gpsTrackerSessionManager, s as IAppSession);
 
                         var receivePacket = handler.HandlerDict[p.Header.MsgId](new EV26Request(p, p.OriginalPackage));

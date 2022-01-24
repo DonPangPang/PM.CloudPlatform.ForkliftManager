@@ -14,6 +14,7 @@ using Newtonsoft.Json.Converters;
 using PM.CloudPlatform.ForkliftManager.Apis.CorrPacket;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
+using SuperSocket.WebSocket;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 {
@@ -75,8 +76,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                     if (package.PackageType == PackageType.Heart)
                     {
-                        var msg = package.ToJson();
-                        await s.SendAsync(msg);
+                        if (package.VerifyCode!.Equals(s["VerifyCode"].ToString()))
+                        {
+                            var packet = new ClientPackage()
+                            {
+                                PackageType = PackageType.Heart,
+                                ClientId = "",
+                            };
+                            var msg = packet.ToJson();
+
+                            await s.SendAsync(msg);
+                        }
+                        else
+                        {
+                            await s.CloseAsync(CloseReason.ProtocolError, "授权码错误");
+                        }
+
                         return;
                     }
 
