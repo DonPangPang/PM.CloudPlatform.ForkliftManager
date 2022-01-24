@@ -249,5 +249,63 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             return Success("接触绑定成功");
         }
+
+        /// <summary>
+        /// 通过终端IMEI获取车辆信息
+        /// </summary>
+        /// <param name="imei"> </param>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetCarInfoByIMEI(string imei)
+        {
+            var terminal = await _generalRepository.GetQueryable<Terminal>()
+                .FilterDeleted()
+                .FilterDisabled()
+                .Include(x => x.Car)
+                .FirstOrDefaultAsync(x => x.IMEI.Equals(imei));
+
+            if (terminal is null)
+            {
+                return Fail("终端未启用或不存在");
+            }
+
+            if (terminal.Car is null)
+            {
+                return Fail("终端未绑定车辆");
+            }
+
+            var returnDto = terminal.Car!.MapTo<CarDto>();
+
+            return Success(returnDto);
+        }
+
+        /// <summary>
+        /// 通过终端Id获取车辆信息
+        /// </summary>
+        /// <param name="id"> </param>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetCarInfoByTerminalId(Guid id)
+        {
+            var terminal = await _generalRepository.GetQueryable<Terminal>()
+                .FilterDeleted()
+                .FilterDisabled()
+                .Include(x => x.Car)
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
+
+            if (terminal is null)
+            {
+                return Fail("终端未启用或不存在");
+            }
+
+            if (terminal.Car is null)
+            {
+                return Fail("终端未绑定车辆");
+            }
+
+            var returnDto = terminal.Car!.MapTo<CarDto>();
+
+            return Success(returnDto);
+        }
     }
 }
