@@ -396,6 +396,58 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
             });
         }
 
+        /// <summary>
+        /// 启用对象
+        /// </summary>
+        /// <param name="id"> </param>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> EnableAsync(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var entity = await _repository.GetEntityByIdAsync(id);
+
+            if (entity is null)
+                return Fail("搜索不到对象");
+
+            entity.EnableMark = true;
+
+            await _repository.UpdateEntityAsync(entity);
+            await _repository.SaveAsync();
+
+            return Success("该对象已启用");
+        }
+
+        /// <summary>
+        /// 禁用对象
+        /// </summary>
+        /// <param name="id"> </param>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> DisableAsync(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(id));
+            }
+
+            var entity = await _repository.GetEntityByIdAsync(id);
+
+            if (entity is null)
+                return Fail("搜索不到对象");
+
+            entity.EnableMark = false;
+
+            await _repository.UpdateEntityAsync(entity);
+            await _repository.SaveAsync();
+
+            return Success("该对象已禁用");
+        }
+
         [NonAction]
         public virtual OkObjectResult Success([ActionResultObjectValue] object value)
         {

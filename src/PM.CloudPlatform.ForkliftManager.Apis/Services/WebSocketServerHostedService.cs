@@ -1,20 +1,22 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+
+using PM.CloudPlatform.ForkliftManager.Apis.CorrPacket;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
+using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Managers;
 using PM.CloudPlatform.ForkliftManager.Apis.Options;
 using PM.CloudPlatform.ForkliftManager.Apis.Sessions;
+
 using SuperSocket;
-using SuperSocket.WebSocket.Server;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using PM.CloudPlatform.ForkliftManager.Apis.CorrPacket;
-using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
-using PM.CloudPlatform.ForkliftManager.Apis.General;
 using SuperSocket.WebSocket;
+using SuperSocket.WebSocket.Server;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 {
@@ -97,7 +99,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                     if (package.PackageType == PackageType.Login)
                     {
+                        // 客户端登录,登录后下发VerifyCode
                         await _clientSessionManager.TryAddOrUpdate(p.Message, (s as ClientSession)!);
+
+                        var client = _generalRepository.FindAsync<User>(x=>x.Id.Equals(Guid.Parse(package.ClientId)));
+
+                        if(client is null)
+                        {
+                            await s.CloseAsync(CloseReason.ProtocolError, "ClientId不存在");
+                        }
+
                         var verifyCode = Guid.NewGuid().ToString();
                         var loginPacket = new ClientPackage()
                         {
