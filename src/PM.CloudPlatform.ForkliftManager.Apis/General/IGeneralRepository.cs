@@ -14,6 +14,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.General
 
         IQueryable<T> GetQueryable<T>() where T : EntityBase;
 
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         Task InsertAsync<T>(T entity) where T : EntityBase;
 
         Task InsertAsync<T>(IEnumerable<T> entities) where T : EntityBase;
