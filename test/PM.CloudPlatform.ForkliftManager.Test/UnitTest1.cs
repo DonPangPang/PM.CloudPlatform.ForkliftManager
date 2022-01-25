@@ -20,11 +20,11 @@ namespace PM.CloudPlatform.ForkliftManager.Test
             _testOutputHelper = testOutputHelper;
         }
 
-        [Fact]
-        public async Task Test1()
-        {
-            //var res = await AddressHelper.GetAddress(116.481488M, 39.990464M);
-        }
+        // [Fact]
+        // public async Task Test1()
+        // {
+        //     //var res = await AddressHelper.GetAddress(116.481488M, 39.990464M);
+        // }
 
         [Fact]
         public void GeoJsonTest()

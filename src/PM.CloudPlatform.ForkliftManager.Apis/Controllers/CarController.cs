@@ -348,13 +348,23 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> GetMonthlyData()
         {
             var rentalRecords = await _generalRepository.GetQueryable<RentalRecord>()
-                .GroupBy(x => x.CreateDate!.Value.ToShortDateString())
-                .Select(t => new LineData { Date = t.Key, Count = t.Count() })
+                .Where(x=>x.CreateDate > x.CreateDate!.Value.AddMonths(-6))
+                .GroupBy(det =>new 
+                {
+                    Year = det.CreateDate!.Value.Year,
+                    Month = det.CreateDate!.Value.Month
+                })
+                .Select(t => new LineData { Date = $"{t.Key.Year}-{t.Key.Month}", Count = t.Count() })
                 .ToListAsync();
 
             var maintenanceRecords = await _generalRepository.GetQueryable<CarMaintenanceRecord>()
-                .GroupBy(x => x.CreateDate!.Value.ToShortDateString())
-                .Select(t => new LineData { Date = t.Key, Count = t.Count() })
+                .Where(x=>x.CreateDate > x.CreateDate!.Value.AddMonths(-6))
+                .GroupBy(det =>new 
+                {
+                    Year = det.CreateDate!.Value.Year,
+                    Month = det.CreateDate!.Value.Month
+                })
+                .Select(t => new LineData { Date = $"{t.Key.Year}-{t.Key.Month}", Count = t.Count() })
                 .ToListAsync();
 
             var carCount = await _generalRepository.GetQueryable<Car>().CountAsync();
