@@ -14,6 +14,7 @@ using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Enums;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
+using PM.CloudPlatform.ForkliftManager.Apis.Managers;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
 
@@ -31,7 +32,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         private readonly CarRepository _repository;
         private readonly IMapper _mapper;
         private readonly IGeneralRepository _generalRepository;
-
+        private readonly TerminalSessionManager gpsTrackerSessionManager;
         private readonly IQueryable<Car> Cars;
 
         /// <summary>
@@ -39,11 +40,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="repository">        </param>
         /// <param name="mapper">            </param>
         /// <param name="generalRepository"> </param>
-        public CarController(CarRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(repository, mapper)
+        /// <param name="gpsTrackerSessionManager"></param>
+        public CarController(CarRepository repository, IMapper mapper, IGeneralRepository generalRepository, TerminalSessionManager gpsTrackerSessionManager) : base(repository, mapper)
         {
             _repository = repository;
             _mapper = mapper;
             _generalRepository = generalRepository;
+            this.gpsTrackerSessionManager = gpsTrackerSessionManager;
             Cars = _generalRepository.GetQueryable<Car>();
         }
 
@@ -306,6 +309,76 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var returnDto = terminal.Car!.MapTo<CarDto>();
 
             return Success(returnDto);
+        }
+
+        /// <summary>
+        /// 获取车辆工作状态
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetCarStatus()
+        {
+
+            var terminalOnlines = gpsTrackerSessionManager.GetAllSessions();
+
+            var onlines = await _generalRepository.GetQueryable<Terminal>()
+                .FilterDeleted()
+                .FilterDisabled()
+                .Include(x => x.Car)
+                .Where(x => terminalOnlines.Keys.Contains(x.IMEI) && x.Car != null)
+                .CountAsync();
+
+            var offlines = await _generalRepository.GetQueryable<Car>().CountAsync();
+
+            var errors = await _generalRepository.GetQueryable<AlarmRecord>().Where(x => !x.IsReturn).CountAsync();
+
+            return Success(new
+            {
+                onlines,
+                offlines,
+                errors
+            });
+        }
+
+        /// <summary>
+        /// 获取月度数据
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetMonthlyData()
+        {
+            var rentalRecords = await _generalRepository.GetQueryable<RentalRecord>()
+                .GroupBy(x => x.CreateDate!.Value.ToShortDateString())
+                .Select(t => new LineData { Date = t.Key, Count = t.Count() })
+                .ToListAsync();
+
+            var maintenanceRecords = await _generalRepository.GetQueryable<CarMaintenanceRecord>()
+                .GroupBy(x => x.CreateDate!.Value.ToShortDateString())
+                .Select(t => new LineData { Date = t.Key, Count = t.Count() })
+                .ToListAsync();
+
+            var carCount = await _generalRepository.GetQueryable<Car>().CountAsync();
+            var carRecords = new List<LineData>();
+            foreach (var item in rentalRecords)
+            {
+                carRecords.Add(new LineData
+                {
+                    Date = item.Date,
+                    Count = carCount - item.Count
+                });
+            }
+            return Success(new
+            {
+                rentalRecords,
+                maintenanceRecords,
+                carRecords
+            });
+        }
+
+        class LineData
+        {
+            public string Date { get; set; }
+            public int Count { get; set; }
         }
     }
 }
