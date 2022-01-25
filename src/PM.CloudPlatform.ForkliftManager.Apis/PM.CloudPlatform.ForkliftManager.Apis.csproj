@@ -1,61 +1,54 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>9f314fd9-a04f-4cc7-be93-9c6cab946863</UserSecretsId>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>F:\LE-workspace\PMPlatform\01Code\0101NET\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\PM.CloudPlatform.ForkliftManager.Apis.xml</DocumentationFile>
-    <NoWarn>1701;1702;1591;8603;8618;0168;0108</NoWarn>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="wwwroot\**" />
-    <Content Remove="wwwroot\**" />
-    <EmbeddedResource Remove="wwwroot\**" />
-    <None Remove="wwwroot\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="forklift.db" />
-    <None Remove="forkliftDb.db-journal" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Confluent.Kafka" Version="1.7.0-RC4" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="5.0.13" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
-    <PackageReference Include="NbazhGPS.Protocol" Version="1.0.9" />
-    <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="2.0.4" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5.1" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="5.0.0" />
-    <PackageReference Include="Pang.AutoMapperMiddleware" Version="1.0.1" />
-    <PackageReference Include="ProjNet" Version="2.0.0" />
-    <PackageReference Include="SuperSocket" Version="2.0.0-beta.8.344" />
-    <PackageReference Include="SuperSocket.Server" Version="2.0.0-beta.8.344" />
-    <PackageReference Include="SuperSocket.WebSocket.Server" Version="2.0.0-beta.8.331" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.15" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Middleware\" />
-  </ItemGroup>
-
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties appsettings_1json__JsonSchema="" />
-    </VisualStudio>
-  </ProjectExtensions>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<UserSecretsId>9f314fd9-a04f-4cc7-be93-9c6cab946863</UserSecretsId>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>F:\LE-workspace\PMPlatform\01Code\0101NET\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\PM.CloudPlatform.ForkliftManager.Apis.xml</DocumentationFile>
+		<NoWarn>1701;1702;1591;8603;8618;0168;0108</NoWarn>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Remove="wwwroot\**" />
+		<Content Remove="wwwroot\**" />
+		<EmbeddedResource Remove="wwwroot\**" />
+		<None Remove="wwwroot\**" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="forklift.db" />
+		<None Remove="forkliftDb.db-journal" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+		<PackageReference Include="Confluent.Kafka" Version="1.7.0-RC4" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.13" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="5.0.13" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Redis" Version="2.2.0" />
+		<PackageReference Include="NbazhGPS.Protocol" Version="1.0.9" />
+		<PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="2.0.4" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5.1" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="5.0.0" />
+		<PackageReference Include="Pang.AutoMapperMiddleware" Version="1.0.1" />
+		<PackageReference Include="ProjNet" Version="2.0.0" />
+		<PackageReference Include="SuperSocket" Version="2.0.0-beta.8.344" />
+		<PackageReference Include="SuperSocket.Server" Version="2.0.0-beta.8.344" />
+		<PackageReference Include="SuperSocket.WebSocket.Server" Version="2.0.0-beta.8.331" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.15" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Middleware\" />
+	</ItemGroup>
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties appsettings_1json__JsonSchema="" />
+		</VisualStudio>
+	</ProjectExtensions>
 </Project>

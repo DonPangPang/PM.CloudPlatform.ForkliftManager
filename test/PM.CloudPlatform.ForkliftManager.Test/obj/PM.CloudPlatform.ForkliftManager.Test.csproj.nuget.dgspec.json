@@ -76,6 +76,10 @@
               "target": "Package",
               "version": "[2.2.0, )"
             },
+            "MiniProfiler.AspNetCore.Mvc": {
+              "target": "Package",
+              "version": "[4.2.22, )"
+            },
             "NbazhGPS.Protocol": {
               "target": "Package",
               "version": "[1.0.9, )"

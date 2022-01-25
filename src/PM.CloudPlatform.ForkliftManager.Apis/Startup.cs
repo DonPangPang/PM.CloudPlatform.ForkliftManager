@@ -213,7 +213,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
             }
             app.UseLoginUserInfo();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PM.CloudPlatform.ForkliftManager.Apis v1"));
+            app.UseSwaggerUI(c => 
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "PM.CloudPlatform.ForkliftManager.Apis v1");
+            });
 
             app.UseStaticFiles();
             // app.UseHttpsRedirection();

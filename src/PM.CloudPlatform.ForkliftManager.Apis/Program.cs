@@ -52,7 +52,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:10808/");
+                    webBuilder.UseUrls("http://localhost:10808/");
                 });
     }
 }

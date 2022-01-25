@@ -17,6 +17,7 @@ using PM.CloudPlatform.ForkliftManager.Apis.Models;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
 
+
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 {
     /// <summary>
@@ -41,11 +42,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetGpsPositionRecords([FromQuery] DtoParametersBase parameters)
         {
-            var data = await _generalRepository
-                                                            .GetQueryable<GpsPositionRecord>()
-                                                            .FilterDeleted()
-                                                            .Include(x => x.Terminal)
-                                                            .ToPagedAsync(parameters);
+            var data = await _generalRepository.GetQueryable<GpsPositionRecord>()
+                                                           .FilterDeleted()
+                                                           .Include(x => x.Terminal)
+                                                           .ToPagedAsync(parameters);
 
             var res = data.MapTo<GpsPositionRecordDto>();
 
