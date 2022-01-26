@@ -159,5 +159,23 @@ namespace PM.CloudPlatform.ForkliftManager.Test
 
             _testOutputHelper.WriteLine(point.ToGeoJson());
         }
+
+        [Fact]
+        public void TestName()
+        {
+            unchecked
+            {
+                // 相当于5个int相加 结果还是int 然后最后转成了long
+                long res1 = 900_000_000 + 900_000_000 + 900_000_000 + 900_000_000 + 900_000_000;
+                // 5个long相加
+                long res2 = 900_000_000L + 900_000_000L + 900_000_000L + 900_000_000L + 900_000_000L;
+                // 5个decmal相加
+                decimal res3 = 900_000_000M + 900_000_000M + 900_000_000M + 900_000_000M + 900_000_000M;
+                _testOutputHelper.WriteLine($"res1 = {res1}");
+                _testOutputHelper.WriteLine($"res2 = {res2}");
+                _testOutputHelper.WriteLine($"res3 = {res3}");
+            }
+            
+        }
     }
 }
