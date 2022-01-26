@@ -68,7 +68,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 entity.Id = Guid.NewGuid();
             }
 
-            if (await ExistAsync(x => x.Name!.Equals(entity.Name)))
+            if (await ExistAsync(x => x.Name != null && x.Name!.Equals(entity.Name)))
             {
                 throw new ArgumentException("名称不能重复");
             }
