@@ -390,5 +390,21 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             public string Date { get; set; }
             public int Count { get; set; }
         }
+
+        /// <summary>
+        /// 获取未绑定终端的车辆
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetNoBindCars()
+        {
+            var cars = await _generalRepository.GetQueryable<Car>()
+                .FilterDeleted()
+                .FilterDisabled()
+                .Where(x=>x.TerminalId == null || x.TerminalId == Guid.Empty)
+                .ToListAsync();
+
+            return Success(cars);
+        }
     }
 }
