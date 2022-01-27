@@ -76,7 +76,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
-                    Source = x.MapTo<CarDto>(),
+                    //Source = x.MapTo<CarDto>(),
                     CarId = x.Id,
                     LicensePlateNumber = x.LicensePlateNumber,
                     Brand = x.Brand,
@@ -132,7 +132,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
-                    Source = x.MapTo<CarDto>(),
+                    //Source = x.MapTo<CarDto>(),
                     CarId = x.Id,
                     LicensePlateNumber = x.LicensePlateNumber,
                     Brand = x.Brand,
