@@ -78,6 +78,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                     if (package.PackageType == PackageType.Heart)
                     {
+                        if(string.IsNullOrEmpty(s["VerifyCode"].ToString()))
+                        {
+                            await s.CloseAsync(CloseReason.ProtocolError, "无法获取授权码");
+                        }
+
                         if (package.VerifyCode!.Equals(s["VerifyCode"].ToString()))
                         {
                             var packet = new ClientPackage()
