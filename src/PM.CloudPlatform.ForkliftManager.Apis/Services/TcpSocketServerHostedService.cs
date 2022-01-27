@@ -269,7 +269,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                             // 经度
                                             Lat = gdPoint.Y,
                                             // 高德经纬度对象
-                                            GdPoint = gdPoint,
+                                            GdPoint = gdPoint.ToGeoJson(),
                                             // 方向
                                             Heading = gpsPositionRecord.Heading,
                                             // 速度

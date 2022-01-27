@@ -86,7 +86,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                     {
                         if(s["VerifyCode"] is null)
                         {
-                            await s.CloseAsync(CloseReason.ProtocolError, "无法验证授权码");
+                            await s.CloseAsync(CloseReason.ProtocolError, "无法验证授权码[Server]");
+                        }
+
+                        if(string.IsNullOrEmpty(package.VerifyCode))
+                        {
+                            await s.CloseAsync(CloseReason.ProtocolError, "无法验证授权码[Client]");
                         }
 
                         if (package.VerifyCode!.Equals(s["VerifyCode"].ToString()))
@@ -116,7 +121,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     // 经度
                                     Lat = 113.55184,
                                     // 高德经纬度对象
-                                    GdPoint = new Point(lon, lat),
+                                    GdPoint = new Point(lon, lat).ToGeoJson(),
                                     // 方向
                                     Heading = rand.Next(1, 360),
                                     // 速度
