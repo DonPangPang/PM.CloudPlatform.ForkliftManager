@@ -117,9 +117,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     // 终端Id
                                     TerminalId = "868120278343188",
                                     // 纬度
-                                    Lon = 34.826682222222222222222222222,
+                                    Lon = lon,
                                     // 经度
-                                    Lat = 113.55184,
+                                    Lat = lat,
                                     // 高德经纬度对象
                                     GdPoint = new Point(lon, lat).ToGeoJson(),
                                     // 方向
