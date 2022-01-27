@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-
+using NetTopologySuite.Geometries;
 using PM.CloudPlatform.ForkliftManager.Apis.CorrPacket;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
@@ -28,6 +28,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         private readonly ClientSessionManagers _clientSessionManager;
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
         private readonly IGeneralRepository _generalRepository;
+
+        private Random rand = new Random();
+
+        double lon = 34.826682222222222222222222222;
+        double lat = 113.55184;
+
 
         /// <summary>
         /// </summary>
@@ -78,21 +84,66 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                     if (package.PackageType == PackageType.Heart)
                     {
-                        if(string.IsNullOrEmpty(s["VerifyCode"].ToString()))
+                        if(s["VerifyCode"] is null)
                         {
-                            await s.CloseAsync(CloseReason.ProtocolError, "无法获取授权码");
+                            await s.CloseAsync(CloseReason.ProtocolError, "无法验证授权码");
                         }
 
                         if (package.VerifyCode!.Equals(s["VerifyCode"].ToString()))
                         {
+                            // var packet = new ClientPackage()
+                            // {
+                            //     PackageType = PackageType.Heart,
+                            //     ClientId = "",
+                            // };
+                            // var msg = packet.ToJson();
+
+                            // await s.SendAsync(msg);
+
+                            #region 测试
+
+                            lon += (rand.NextDouble() / 100000000);
+                            lat += (rand.NextDouble() / 100000000);
                             var packet = new ClientPackage()
                             {
-                                PackageType = PackageType.Heart,
-                                ClientId = "",
+                                PackageType = PackageType.Gps,
+                                Data = new
+                                {
+                                    // 终端Id
+                                    TerminalId = "868120278343188",
+                                    // 纬度
+                                    Lon = 34.826682222222222222222222222,
+                                    // 经度
+                                    Lat = 113.55184,
+                                    // 高德经纬度对象
+                                    GdPoint = new Point(lon, lat),
+                                    // 方向
+                                    Heading = rand.Next(1, 360),
+                                    // 速度
+                                    Speed = rand.Next(1, 40)
+                                }
                             };
                             var msg = packet.ToJson();
 
                             await s.SendAsync(msg);
+
+                            var alarmPacket = new ClientPackage()
+                            {
+                                PackageType = PackageType.Alarm,
+                                Data = new
+                                {
+                                    // 终端Id
+                                    TerminalId = "868120278343188",
+                                    // 车牌号
+                                    LicensePlateNumber = "测A123456",
+                                    // 超出距离
+                                    Distance = 20,
+                                    // 提示信息
+                                    Msg = $"[868120278343188]超出围栏{20}米"
+                                }
+                            }.ToJson();
+                            await s.SendAsync(alarmPacket);
+                            #endregion
                         }
                         else
                         {
