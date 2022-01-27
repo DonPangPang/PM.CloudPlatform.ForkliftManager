@@ -1,8 +1,10 @@
 ﻿using System;
+using AutoMapper;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
+    [AutoMap(typeof(CarMaintenanceRecord), ReverseMap = true)]
     public class CarMaintenanceRecordAddOrUpdateDto
     {
         /// <summary>
