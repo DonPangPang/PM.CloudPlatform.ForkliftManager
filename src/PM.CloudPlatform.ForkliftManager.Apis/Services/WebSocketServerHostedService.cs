@@ -107,8 +107,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                             #region 测试
 
-                            lon += (rand.NextDouble() / 100000000);
-                            lat += (rand.NextDouble() / 100000000);
+                            lon += (rand.NextDouble() / 10000);
+                            lat += (rand.NextDouble() / 10000);
                             var packet = new ClientPackage()
                             {
                                 PackageType = PackageType.Gps,

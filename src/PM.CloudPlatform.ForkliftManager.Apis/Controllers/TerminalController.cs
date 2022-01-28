@@ -100,7 +100,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Include(t => t.TerminalBindRecords)
                 .ThenInclude(x => x.Terminal)
                 .Where(x => !onlineTerminals.Contains(x.IMEI))
-                .Select(x => new { IMEI = x.IMEI, CarInfo = x.TerminalBindRecords!.OrderByDescending(t => t.CreateDate).FirstOrDefault()!.Car, IsOnline = true })
+                .Select(x => new { IMEI = x.IMEI, CarInfo = x.TerminalBindRecords!.OrderByDescending(t => t.CreateDate).FirstOrDefault()!.Car, IsOnline = false })
                 .ToListAsync();
 
             if (allTerminals is null)
