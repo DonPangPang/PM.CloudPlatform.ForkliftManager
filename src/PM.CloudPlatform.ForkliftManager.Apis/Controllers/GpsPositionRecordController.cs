@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base;
@@ -63,6 +64,27 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .FilterDeleted()
                 .Include(x => x.Terminal)
                 .Where(x => x.TerminalId.Equals(terminalId)).ToPagedAsync(parameters);
+
+            var res = data.MapTo<GpsPositionRecordDto>();
+
+            return Success(res);
+        }
+
+        /// <summary>
+        /// 获取指定设备的定位数据(点集合)
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetGpsPositionRecordsPointsByTerminal(Guid terminalId, [FromQuery] DtoParametersBase parameters)
+        {
+            var data = await _generalRepository.GetQueryable<GpsPositionRecord>()
+                .FilterDeleted()
+                .Include(x => x.Terminal)
+                .Where(x => x.TerminalId.Equals(terminalId))
+                .ApplyPaged(parameters)
+                .Select(x=> new { x.Lon, x.Lat, x.CreateDate })
+                .OrderBy(t=>t.CreateDate)
+                .ToListAsync();
 
             var res = data.MapTo<GpsPositionRecordDto>();
 

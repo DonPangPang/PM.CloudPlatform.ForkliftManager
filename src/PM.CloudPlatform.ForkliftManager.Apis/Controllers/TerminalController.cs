@@ -10,6 +10,7 @@ using NbazhGPS.Protocol;
 using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.Extensions;
 using NbazhGPS.Protocol.MessageBody;
+using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
@@ -93,14 +94,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Include(t => t.TerminalBindRecords)
                 .ThenInclude(x => x.Terminal)
                 .Where(x => onlineTerminals.Contains(x.IMEI))
-                .Select(x => new { IMEI = x.IMEI, CarInfo = x.TerminalBindRecords!.OrderByDescending(t => t.CreateDate).FirstOrDefault()!.Car, IsOnline = true })
+                .Select(x => new { IMEI = x.IMEI, CarInfo = x.TerminalBindRecords!.OrderByDescending(t => t.CreateDate).FirstOrDefault()!.Car!.MapTo<CarDto>(), IsOnline = true })
                 .ToListAsync();
 
             var offlineTerminals = await _generalRepository.GetQueryable<Terminal>()
                 .Include(t => t.TerminalBindRecords)
                 .ThenInclude(x => x.Terminal)
                 .Where(x => !onlineTerminals.Contains(x.IMEI))
-                .Select(x => new { IMEI = x.IMEI, CarInfo = x.TerminalBindRecords!.OrderByDescending(t => t.CreateDate).FirstOrDefault()!.Car, IsOnline = false })
+                .Select(x => new { IMEI = x.IMEI, CarInfo = x.TerminalBindRecords!.OrderByDescending(t => t.CreateDate).FirstOrDefault()!.Car!.MapTo<CarDto>(), IsOnline = false })
                 .ToListAsync();
 
             if (allTerminals is null)
