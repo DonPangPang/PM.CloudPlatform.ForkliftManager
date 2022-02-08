@@ -255,28 +255,61 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                 var gdPoint = new Point((double)gpsPositionRecord.Lon, (double)gpsPositionRecord.Lat)
                                     .Transform_WGS84_To_GCJ02();
 
-                                foreach (var client in _clientSessionManager.Sessions)
+                                if (_clientSessionManager.IsTrace)
                                 {
-                                    await client.Value.SendAsync(new ClientPackage()
+                                    if (s["TerminalId"].ToString().Equals(_clientSessionManager.TraceTerminalId))
                                     {
-                                        PackageType = PackageType.Gps,
-                                        Data = new
+                                        foreach (var client in _clientSessionManager.Sessions)
                                         {
-                                            // 终端Id
-                                            TerminalId = s["TerminalId"].ToString(),
-                                            // 纬度
-                                            Lon = gdPoint.X,
-                                            // 经度
-                                            Lat = gdPoint.Y,
-                                            // 高德经纬度对象
-                                            GdPoint = gdPoint.ToGeoJson(),
-                                            // 方向
-                                            Heading = gpsPositionRecord.Heading,
-                                            // 速度
-                                            Speed = gpsPositionRecord.Speed
+                                            await client.Value.SendAsync(new ClientPackage()
+                                            {
+                                                PackageType = PackageType.Gps,
+                                                Data = new
+                                                {
+                                                    // 终端Id
+                                                    TerminalId = s["TerminalId"].ToString(),
+                                                    // 纬度
+                                                    Lon = gdPoint.X,
+                                                    // 经度
+                                                    Lat = gdPoint.Y,
+                                                    // 高德经纬度对象
+                                                    GdPoint = gdPoint.ToGeoJson(),
+                                                    // 方向
+                                                    Heading = gpsPositionRecord.Heading,
+                                                    // 速度
+                                                    Speed = gpsPositionRecord.Speed
+                                                }
+                                            }.ToJson());
                                         }
-                                    }.ToJson());
+                                    }
                                 }
+                                else
+                                {
+                                    foreach (var client in _clientSessionManager.Sessions)
+                                    {
+                                        await client.Value.SendAsync(new ClientPackage()
+                                        {
+                                            PackageType = PackageType.Gps,
+                                            Data = new
+                                            {
+                                                // 终端Id
+                                                TerminalId = s["TerminalId"].ToString(),
+                                                // 纬度
+                                                Lon = gdPoint.X,
+                                                // 经度
+                                                Lat = gdPoint.Y,
+                                                // 高德经纬度对象
+                                                GdPoint = gdPoint.ToGeoJson(),
+                                                // 方向
+                                                Heading = gpsPositionRecord.Heading,
+                                                // 速度
+                                                Speed = gpsPositionRecord.Speed
+                                            }
+                                        }.ToJson());
+                                    }
+                                }
+
+                                
                             }, cancellationToken);
                         }
 

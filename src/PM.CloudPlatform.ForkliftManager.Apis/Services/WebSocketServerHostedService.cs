@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,6 +31,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         private readonly IGeneralRepository _generalRepository;
 
         private Random rand = new Random();
+
+        
 
         double lon = 34.826682222222222222222222222;
         double lat = 113.55184;
@@ -181,6 +184,58 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                         var msg = loginPacket.ToJson();
                         await s.SendAsync(msg);
+                    }
+                
+                    // 车辆追踪
+                    if(package.PackageType == PackageType.Trace)
+                    {
+                        if(s["VerifyCode"] is null)
+                        {
+                            await s.CloseAsync(CloseReason.ProtocolError, "无法验证授权码[Server]");
+                        }
+
+                        if(string.IsNullOrEmpty(package.VerifyCode))
+                        {
+                            await s.CloseAsync(CloseReason.ProtocolError, "无法验证授权码[Client]");
+                        }
+
+                        _clientSessionManager.TraceTerminalId = package.Data!.ToString() ?? "";
+
+                        if(string.IsNullOrEmpty(package.Data.ToString()))
+                        {
+                            _clientSessionManager.IsTrace = false;
+                            var tracePacket = new ClientPackage()
+                            {
+                                PackageType = PackageType.Trace,
+                                Data = "停止追踪"
+                            }.ToJson();
+                            await s.SendAsync(tracePacket);
+                            return;
+                        }
+
+                        var findTerminal = _gpsTrackerSessionManager.Sessions.AsEnumerable().FirstOrDefault(x=>x.Value["TerminalId"] != null
+                            && string.IsNullOrEmpty(x.Value["TerminalId"].ToString())
+                            && x.Value["TerminalId"].ToString()!.Equals(_clientSessionManager.TraceTerminalId)).Value;
+                        if(findTerminal is null)
+                        {
+                            _clientSessionManager.IsTrace = false;
+                            var tracePacket = new ClientPackage()
+                            {
+                                PackageType = PackageType.Trace,
+                                Data = "车辆不在线"
+                            }.ToJson();
+                            await s.SendAsync(tracePacket);
+                        }
+                        else
+                        {
+                            _clientSessionManager.IsTrace = true;
+                            var tracePacket = new ClientPackage()
+                            {
+                                PackageType = PackageType.Trace,
+                                Data = "正在追踪"
+                            }.ToJson();
+                            await s.SendAsync(tracePacket);
+                        }
                     }
                 })
                 .UseInProcSessionContainer()
