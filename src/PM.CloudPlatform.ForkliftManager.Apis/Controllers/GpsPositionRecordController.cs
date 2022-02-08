@@ -81,14 +81,34 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .FilterDeleted()
                 .Include(x => x.Terminal)
                 .Where(x => x.TerminalId.Equals(terminalId))
+                .Select(x=> new { x.Lon, x.Lat, x.CreateDate })
+                .OrderBy(t=>t.CreateDate)
+                .ToListAsync();
+
+            //var res = data.MapTo<GpsPositionRecordDto>();
+
+            return Success(data);
+        }
+
+        /// <summary>
+        /// 获取指定设备的定位数据(点集合)
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetGpsPositionRecordsPointsByIMEI(string imei, [FromQuery] DtoParametersBase parameters)
+        {
+            var data = await _generalRepository.GetQueryable<GpsPositionRecord>()
+                .FilterDeleted()
+                .Include(x => x.Terminal)
+                .Where(x => x.Terminal!.IMEI.Equals(imei))
                 .ApplyPaged(parameters)
                 .Select(x=> new { x.Lon, x.Lat, x.CreateDate })
                 .OrderBy(t=>t.CreateDate)
                 .ToListAsync();
 
-            var res = data.MapTo<GpsPositionRecordDto>();
+            //var res = data.MapTo<GpsPositionRecordDto>();
 
-            return Success(res);
+            return Success(data);
         }
     }
 }

@@ -46,6 +46,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base
         //public string? Fields { get; set; }
 
         /// <summary>
+        /// 是否需要分页
+        /// </summary>
+        /// <value></value>
+        public bool IsNeedPaged { get; set; } = true;
+
+        /// <summary>
         /// 页面大小
         /// </summary>
         public int PageSize

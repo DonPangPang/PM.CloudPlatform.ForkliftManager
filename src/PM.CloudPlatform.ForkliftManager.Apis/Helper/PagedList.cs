@@ -76,6 +76,20 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Helper
         /// <param name="source">     </param>
         /// <param name="pageNumber"> </param>
         /// <param name="pageSize">   </param>
+        /// <param name="isNeedPaged"></param>
+        /// <returns> </returns>
+        public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize, bool isNeedPaged = true)
+        {
+            var count = await source.CountAsync();
+            var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+            return isNeedPaged ? new PagedList<T>(items, count, pageNumber, pageSize) : new PagedList<T>(await source.ToListAsync(), count, 1, count);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="source">     </param>
+        /// <param name="pageNumber"> </param>
+        /// <param name="pageSize">   </param>
         /// <returns> </returns>
         public static async Task<IQueryable<T>> ApplyPagedAsync(IQueryable<T> source, int pageNumber, int pageSize)
         {
@@ -91,6 +105,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Helper
             var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize);
 
             return items;
+        }
+
+        public static IQueryable<T> ApplyPaged(IQueryable<T> source, int pageNumber, int pageSize, bool isNeedPaged = true)
+        {
+            var count = source.Count();
+            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+            return isNeedPaged ? items : source;
         }
     }
 }

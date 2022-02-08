@@ -229,7 +229,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
             //    parameters.Name = parameters.Name.Trim();
             //}
 
-            return PagedList<T>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize);
+            return PagedList<T>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize, parameters.IsNeedPaged);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 queryExpression = queryExpression.ApplySort(parameters.OrderBy);
             }
 
-            return await PagedList<T>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize);
+            return await PagedList<T>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize, parameters.IsNeedPaged);
         }
 
         /// <summary>
