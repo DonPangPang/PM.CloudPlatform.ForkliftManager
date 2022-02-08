@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dlzTCx0F10W1tdLNW+N9WRu86RsCx/MA/PSpmET/MsLlF/nb9yqDZKWHdQwKn7Pm2z5CaABKk64UKYuLz4O8Kg==",
+  "dgSpecHash": "HS1xzZrH5RPHhZl/oRwOPJaOZ75m4mPZ9LQrEwS+d0TGOTKqRWBSY7Ls50/xwUBHUd9v6ea3twY4prmL1wZ6cg==",
   "success": true,
-  "projectFilePath": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
+  "projectFilePath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pm011\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
     "C:\\Users\\pm011\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
