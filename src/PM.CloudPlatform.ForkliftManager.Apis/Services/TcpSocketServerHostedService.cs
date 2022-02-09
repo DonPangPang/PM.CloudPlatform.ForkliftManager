@@ -192,8 +192,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                 }
                                 // var distance = gpsPositionRecord.Point!.ProjectTo(2855)
                                 //     .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855)).ShapeDistance();
-                                var distance = gpsPositionRecord.Point
-                                    .Distance(terminal.Car?.ElectronicFence!.Border).ShapeDistance();
+                                var distance = gpsPositionRecord.Point.Transform_GCJ02_To_WGS84().ProjectTo(2855)
+                                    .Distance(terminal.Car?.ElectronicFence!.Border.ProjectTo(2855)).ShapeDistance();
                                 // 超出围栏计算
                                 var fence = await _generalRepository.GetQueryable<SystemConfig>()
                                     .FilterDeleted()
