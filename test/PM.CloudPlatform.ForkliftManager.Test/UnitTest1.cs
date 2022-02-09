@@ -161,6 +161,17 @@ namespace PM.CloudPlatform.ForkliftManager.Test
         }
 
         [Fact]
+        public void DistanceTest8_1()
+        {
+            var gps = new Point(113.55408888888888888888888889, 34.831737777777777777777777778);
+             var gps1 = new Point(113.55508888888888888888888889, 34.831737777777777777777777778);
+
+            var distance = gps.Transform_GCJ02_To_WGS84().ProjectTo(2855).Distance(gps1.Transform_GCJ02_To_WGS84().ProjectTo(2855));
+
+            _testOutputHelper.WriteLine($"Distance is: {distance.ToString()}");
+        }
+
+        [Fact]
         public void TestName()
         {
             unchecked

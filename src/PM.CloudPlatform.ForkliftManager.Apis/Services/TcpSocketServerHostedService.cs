@@ -169,6 +169,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                             {
                                 gpsPositionRecord.Create(Guid.NewGuid(), s["TerminalId"].ToString() ?? "Unknown Terminal.");
 
+                                #region GPS转换坐标系
+                                gpsPositionRecord.Point = gpsPositionRecord.Point.Transform_WGS84_To_GCJ02();
+                                gpsPositionRecord.Lat = (decimal)gpsPositionRecord.Point.X;
+                                gpsPositionRecord.Lon = (decimal)gpsPositionRecord.Point.Y;
+                                #endregion
+
                                 await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
                                 await _generalRepository.SaveAsync();
 
@@ -184,8 +190,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                 {
                                     return;
                                 }
-                                var distance = gpsPositionRecord.Point!.ProjectTo(2855)
-                                    .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855)).ShapeDistance();
+                                // var distance = gpsPositionRecord.Point!.ProjectTo(2855)
+                                //     .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855)).ShapeDistance();
+                                var distance = gpsPositionRecord.Point
+                                    .Distance(terminal.Car?.ElectronicFence!.Border).ShapeDistance();
                                 // 超出围栏计算
                                 var fence = await _generalRepository.GetQueryable<SystemConfig>()
                                     .FilterDeleted()

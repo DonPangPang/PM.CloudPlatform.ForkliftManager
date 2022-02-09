@@ -81,7 +81,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .FilterDeleted()
                 .Include(x => x.Terminal)
                 .Where(x => x.TerminalId.Equals(terminalId))
-                .Select(x=> new { x.Lon, x.Lat, x.CreateDate, x.Speed })
+                .Select(x=> new { Geo = new Point((double)x.Lat, (double)x.Lon).Transform_WGS84_To_GCJ02().ToGeoJson(), x.Lon, x.Lat, x.CreateDate, x.Speed })
                 .OrderBy(t=>t.CreateDate)
                 .ToListAsync();
 
@@ -102,7 +102,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Include(x => x.Terminal)
                 .Where(x => x.Terminal!.IMEI.Equals(imei))
                 .ApplyPaged(parameters)
-                .Select(x=> new { x.Lon, x.Lat, x.CreateDate, x.Speed })
+                .Select(x=> new { Geo = new Point((double)x.Lat, (double)x.Lon).Transform_WGS84_To_GCJ02().ToGeoJson() ,x.Lon, x.Lat, x.CreateDate, x.Speed })
                 .OrderBy(t=>t.CreateDate)
                 .ToListAsync();
 
