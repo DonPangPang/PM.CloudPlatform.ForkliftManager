@@ -1,10 +1,13 @@
-﻿using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
+﻿using AutoMapper;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
     /// <summary>
     /// 系统设置
     /// </summary>
+    [AutoMap(typeof(SystemConfig), ReverseMap = true)]
     public class SystemConfigDto : DtoBase
     {
         /// <summary>

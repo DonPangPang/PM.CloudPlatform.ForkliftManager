@@ -1,5 +1,10 @@
-﻿namespace PM.CloudPlatform.ForkliftManager.Apis.Models
+﻿
+using AutoMapper;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+
+namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
+    [AutoMap(typeof(SystemConfig), ReverseMap = true)]
     public class SystemConfigAddOrUpdateDto
     {
         /// <summary>
