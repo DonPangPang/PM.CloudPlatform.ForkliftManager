@@ -73,6 +73,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
             _clientSessionManager = clientSessionManager ?? throw new ArgumentNullException(nameof(clientSessionManager));
             _gpsTrackerSessionManager = gpsTrackerSessionManager ?? throw new ArgumentNullException(nameof(gpsTrackerSessionManager));
             _generalRepository = factory.CreateScope().ServiceProvider.GetRequiredService<IGeneralRepository>();
+
+
+            for(var i = 0; i < 200; i++)
+            {
+                testTerminals.Add(new TestTerminal{IMEI = Guid.NewGuid().ToString()});
+            }
         }
 
         /// <summary>
@@ -131,8 +137,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                             foreach (var item_test in testTerminals)
                             {
-                                item_test.Lon += (rand.NextDouble() / 10000);
-                                item_test.Lat += (rand.NextDouble() / 10000);
+                                item_test.Lon += (rand.Next(-100, 100)) * (rand.NextDouble() / 10000);
+                                item_test.Lat += (rand.Next(-100, 100)) * (rand.NextDouble() / 10000);
                                 var packet = new ClientPackage()
                                 {
                                     PackageType = PackageType.Gps,
