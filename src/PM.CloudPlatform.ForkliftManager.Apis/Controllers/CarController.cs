@@ -190,6 +190,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     CarTypeName = x.CarType!.Name,
                     IMEI = x.TerminalBindRecords!.OrderByDescending(x => x.CreateDate).FirstOrDefault()!.Terminal!.IMEI
                 })
+                .AsSplitQuery()
                 .ToListAsync();
 
             return Success(data);
