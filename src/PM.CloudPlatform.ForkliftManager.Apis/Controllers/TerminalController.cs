@@ -54,6 +54,23 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         }
 
         /// <summary>
+        /// 获取所有不在线设备
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetOfflineTerminals()
+        {
+            
+            var onlineTerminals = _gpsTrackerSessionManager.GetAllSessions().Values
+                .Select(x => x["TerminalId"].ToString());
+
+            var offlineTerminals = await _generalRepository.GetQueryable<Terminal>()
+                .Where(x => !onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, IsOnline = false }).ToListAsync();
+
+            return Success(offlineTerminals);
+        }
+
+        /// <summary>
         /// 获取所有终端及状态
         /// </summary>
         /// <returns> </returns>
