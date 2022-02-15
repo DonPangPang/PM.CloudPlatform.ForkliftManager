@@ -164,21 +164,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                         {
                             var gpsPositionRecord = (p.Bodies as Nbazh0X22)!.MapTo<GpsPositionRecordTemp>().MapTo<GpsPositionRecord>();
 
-                            // 记录定位, 超出围栏计算
-                            await Task.Run(async () =>
-                            {
-                                gpsPositionRecord.Create(Guid.NewGuid(), s["TerminalId"].ToString() ?? "Unknown Terminal.");
-
-                                #region GPS转换坐标系
-                                gpsPositionRecord.Point = gpsPositionRecord.Point.Transform_WGS84_To_GCJ02();
-                                gpsPositionRecord.Lat = (decimal)gpsPositionRecord.Point.X;
-                                gpsPositionRecord.Lon = (decimal)gpsPositionRecord.Point.Y;
-                                #endregion
-
-                                await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
-                                await _generalRepository.SaveAsync();
-
-                                var terminal = await _generalRepository.GetQueryable<Terminal>()
+                            var terminal = await _generalRepository.GetQueryable<Terminal>()
                                     .FilterDeleted()
                                     .FilterDisabled()
                                     .Include(x => x.Car)
@@ -186,13 +172,28 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     .Where(x => x.IMEI.Equals(s["TerminalId"].ToString()))
                                     .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
+                            gpsPositionRecord.Create(terminal.Id, s["TerminalId"].ToString());
+
+                            #region GPS转换坐标系
+
+                            gpsPositionRecord.Point = gpsPositionRecord.Point.Transform_WGS84_To_GCJ02().Transform_WGS84_To_GCJ02();
+                            gpsPositionRecord.Lat = (decimal)gpsPositionRecord.Point.X;
+                            gpsPositionRecord.Lon = (decimal)gpsPositionRecord.Point.Y;
+
+                            #endregion GPS转换坐标系
+
+                            //await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
+                            //await _generalRepository.SaveAsync();
+
+                            // 记录定位, 超出围栏计算
+                            await Task.Run(async () =>
+                            {
                                 if (terminal.Car is null)
                                 {
                                     return;
                                 }
-                                // var distance = gpsPositionRecord.Point!.ProjectTo(2855)
-                                //     .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855)).ShapeDistance();
-                                var distance = gpsPositionRecord.Point.Transform_GCJ02_To_WGS84().ProjectTo(2855)
+                                // var distance = gpsPositionRecord.Point!.ProjectTo(2855) .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855)).ShapeDistance();
+                                var distance = gpsPositionRecord.Point/*.Transform_GCJ02_To_WGS84()*/.ProjectTo(2855)
                                     .Distance(terminal.Car?.ElectronicFence!.Border.ProjectTo(2855)).ShapeDistance();
                                 // 超出围栏计算
                                 var fence = await _generalRepository.GetQueryable<SystemConfig>()
@@ -222,7 +223,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                                     foreach (var client in _clientSessionManager.Sessions)
                                     {
-                                        await client.Value.SendAsync(new ClientPackage()
+                                        var msg = new ClientPackage()
                                         {
                                             PackageType = PackageType.Alarm,
                                             Data = new
@@ -236,7 +237,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                                 // 提示信息
                                                 Msg = $"{terminal.Car!.LicensePlateNumber}超出围栏{distance}米"
                                             }
-                                        }.ToJson());
+                                        }.ToJson();
+                                        await client.Value.SendAsync(msg);
                                     }
                                 }
                                 else
@@ -263,13 +265,20 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                 var gdPoint = new Point((double)gpsPositionRecord.Lon, (double)gpsPositionRecord.Lat)
                                     .Transform_WGS84_To_GCJ02();
 
+                                gpsPositionRecord.Point = gdPoint;
+                                gpsPositionRecord.Lon = (decimal)gdPoint.X;
+                                gpsPositionRecord.Lat = (decimal)gdPoint.Y;
+                                gpsPositionRecord.ModifyUserName = gdPoint.ToGeoJson();
+                                await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
+                                await _generalRepository.SaveAsync();
+
                                 if (_clientSessionManager.IsTrace)
                                 {
                                     if (s["TerminalId"].ToString().Equals(_clientSessionManager.TraceTerminalId))
                                     {
                                         foreach (var client in _clientSessionManager.Sessions)
                                         {
-                                            await client.Value.SendAsync(new ClientPackage()
+                                            var msg = new ClientPackage()
                                             {
                                                 PackageType = PackageType.Gps,
                                                 Data = new
@@ -287,7 +296,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                                     // 速度
                                                     Speed = gpsPositionRecord.Speed
                                                 }
-                                            }.ToJson());
+                                            }.ToJson();
+                                            await client.Value.SendAsync(msg);
                                         }
                                     }
                                 }
@@ -295,7 +305,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                 {
                                     foreach (var client in _clientSessionManager.Sessions)
                                     {
-                                        await client.Value.SendAsync(new ClientPackage()
+                                        var msg = new ClientPackage()
                                         {
                                             PackageType = PackageType.Gps,
                                             Data = new
@@ -313,11 +323,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                                 // 速度
                                                 Speed = gpsPositionRecord.Speed
                                             }
-                                        }.ToJson());
+                                        }.ToJson();
+                                        await client.Value.SendAsync(msg);
                                     }
                                 }
-
-                                
                             }, cancellationToken);
                         }
 

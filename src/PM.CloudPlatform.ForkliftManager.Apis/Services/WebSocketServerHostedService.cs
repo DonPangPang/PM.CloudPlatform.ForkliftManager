@@ -33,9 +33,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
         private Random rand = new Random();
 
-
-
-        List<TestTerminal> testTerminals = new List<TestTerminal>()
+        private List<TestTerminal> testTerminals = new List<TestTerminal>()
         {
             new TestTerminal{IMEI = "868120278343188"},
             new TestTerminal{IMEI = "868120278343189"},
@@ -49,13 +47,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
             new TestTerminal{IMEI = "868120278343197"},
         };
 
-        class TestTerminal
+        private class TestTerminal
         {
             public string IMEI { get; set; }
             public double Lon { get; set; } = 34.826682222222222222222222222;
             public double Lat { get; set; } = 113.55184;
         }
-
 
         /// <summary>
         /// </summary>
@@ -74,11 +71,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
             _gpsTrackerSessionManager = gpsTrackerSessionManager ?? throw new ArgumentNullException(nameof(gpsTrackerSessionManager));
             _generalRepository = factory.CreateScope().ServiceProvider.GetRequiredService<IGeneralRepository>();
 
+            #region 车辆测试数据
 
-            for(var i = 0; i < 200; i++)
-            {
-                testTerminals.Add(new TestTerminal{IMEI = Guid.NewGuid().ToString()});
-            }
+            //for (var i = 0; i < 200; i++)
+            //{
+            //    testTerminals.Add(new TestTerminal { IMEI = Guid.NewGuid().ToString() });
+            //}
+
+            #endregion 车辆测试数据
         }
 
         /// <summary>
@@ -124,65 +124,63 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                         if (package.VerifyCode!.Equals(s["VerifyCode"].ToString()))
                         {
-                            // var packet = new ClientPackage()
-                            // {
-                            //     PackageType = PackageType.Heart,
-                            //     ClientId = "",
-                            // };
-                            // var msg = packet.ToJson();
+                            var packet = new ClientPackage()
+                            {
+                                PackageType = PackageType.Heart,
+                                ClientId = "",
+                            }; var msg = packet.ToJson();
 
-                            // await s.SendAsync(msg);
+                            await s.SendAsync(msg);
 
                             #region 测试
 
-                            foreach (var item_test in testTerminals)
-                            {
-                                item_test.Lon += (rand.Next(-100, 100)) * (rand.NextDouble() / 10000);
-                                item_test.Lat += (rand.Next(-100, 100)) * (rand.NextDouble() / 10000);
-                                var packet = new ClientPackage()
-                                {
-                                    PackageType = PackageType.Gps,
-                                    Data = new
-                                    {
-                                        // 终端Id
-                                        TerminalId = item_test.IMEI,
-                                        // 纬度
-                                        Lon = item_test.Lon,
-                                        // 经度
-                                        Lat = item_test.Lat,
-                                        // 高德经纬度对象
-                                        GdPoint = new Point(item_test.Lon, item_test.Lat).ToGeoJson(),
-                                        // 方向
-                                        Heading = rand.Next(1, 360),
-                                        // 速度
-                                        Speed = rand.Next(1, 40)
-                                    }
-                                };
-                                var msg = packet.ToJson();
+                            //foreach (var item_test in testTerminals)
+                            //{
+                            //    item_test.Lon += (rand.Next(-100, 100)) * (rand.NextDouble() / 10000);
+                            //    item_test.Lat += (rand.Next(-100, 100)) * (rand.NextDouble() / 10000);
+                            //    var packet = new ClientPackage()
+                            //    {
+                            //        PackageType = PackageType.Gps,
+                            //        Data = new
+                            //        {
+                            //            // 终端Id
+                            //            TerminalId = item_test.IMEI,
+                            //            // 纬度
+                            //            Lon = item_test.Lon,
+                            //            // 经度
+                            //            Lat = item_test.Lat,
+                            //            // 高德经纬度对象
+                            //            GdPoint = new Point(item_test.Lon, item_test.Lat).ToGeoJson(),
+                            //            // 方向
+                            //            Heading = rand.Next(1, 360),
+                            //            // 速度
+                            //            Speed = rand.Next(1, 40)
+                            //        }
+                            //    };
+                            //    var msg = packet.ToJson();
 
-                                await s.SendAsync(msg);
+                            // await s.SendAsync(msg);
 
-                                var test_distance = rand.Next(1, 200);
-                                var alarmPacket = new ClientPackage()
-                                {
-                                    PackageType = PackageType.Alarm,
-                                    Data = new
-                                    {
-                                        // 终端Id
-                                        TerminalId = item_test.IMEI,
-                                        // 车牌号
-                                        LicensePlateNumber = "测A123456",
-                                        // 超出距离
-                                        Distance = test_distance,
-                                        // 提示信息
-                                        Msg = $"[{item_test.IMEI}]超出围栏{test_distance}米"
-                                    }
-                                }.ToJson();
-                                await s.SendAsync(alarmPacket);
-                            }
+                            //    var test_distance = rand.Next(1, 200);
+                            //    var alarmPacket = new ClientPackage()
+                            //    {
+                            //        PackageType = PackageType.Alarm,
+                            //        Data = new
+                            //        {
+                            //            // 终端Id
+                            //            TerminalId = item_test.IMEI,
+                            //            // 车牌号
+                            //            LicensePlateNumber = "测A123456",
+                            //            // 超出距离
+                            //            Distance = test_distance,
+                            //            // 提示信息
+                            //            Msg = $"[{item_test.IMEI}]超出围栏{test_distance}米"
+                            //        }
+                            //    }.ToJson();
+                            //    await s.SendAsync(alarmPacket);
+                            //}
 
-
-                            #endregion
+                            #endregion 测试
                         }
                         else
                         {

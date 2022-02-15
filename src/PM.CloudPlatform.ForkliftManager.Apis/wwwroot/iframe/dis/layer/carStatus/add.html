@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加租凭信息</title>
+    <link rel="stylesheet" href="../../../../css/layui.css">
+    <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+    <link rel="stylesheet" id="blue" title="blue" href="../../../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../../../css/openStyleWhite.css" disabled='true'>
+</head>
+
+<style>
+    #container {
+        height: 90vh;
+    }
+
+    .input-item {
+        height: 2.2rem;
+    }
+
+    .layui-col-md8 {
+        padding: 20px;
+    }
+
+    .btn {
+        width: 6rem;
+        margin: 0 1rem 0 2rem;
+    }
+
+    .input-text {
+        width: 4rem;
+        margin-right: 1rem;
+    }
+
+    #record>div {
+        width: 100%;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+
+    .dn {
+        display: none;
+    }
+
+    .sty {
+        background-color: #FFF;
+        color: #000;
+    }
+</style>
+
+<body>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
+                <!-- <div class="layui-form-item">
+                    <label class="layui-form-label">租赁公司</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="department" required lay-verify="required" placeholder="请输入租赁公司"
+                            autocomplete="off" class="layui-input">
+                    </div>
+                </div> -->
+                <div class="layui-form-item">
+                    <label class="layui-form-label">租赁公司</label>
+                    <div class="layui-input-block">
+                        <select name="rentalCompanyId" lay-verify="required" id="rentalCompanyId" lay-filter="filter">
+                            <option value=""></option>
+                            <!-- <option value="海马(郑州)汽车有限公司">海马(郑州)汽车有限公司</option>
+                            <option value="郑州中车四方轨道车辆有限公司">郑州中车四方轨道车辆有限公司</option>
+                            <option value="郑州云豪车辆部件有限公司">郑州云豪车辆部件有限公司</option> -->
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">公司地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="site" required readonly lay-verify="required" placeholder="请输入公司地址"
+                            autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">法定人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="rentalEmployeeName" required readonly lay-verify="required"
+                            placeholder="请输入法定人姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">电话</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="rentalEmployeeTel" required readonly lay-verify="required"
+                            placeholder="请输入电话" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">车辆数量</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="number" required readonly lay-verify="required" placeholder="请输入车辆数量"
+                            autocomplete="off" id="number" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">车辆类型</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="type" required readonly lay-verify="required" placeholder="请输入车辆编号"
+                            autocomplete="off" id="type" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">租凭时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="onTime" required id="onTime" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <div class="layui-btn" lay-submit readonly lay-filter="formDemo" id="submit">立即提交</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-col-md8">
+            <div id="record"
+                style="position: fixed; top: 20px; left:35%; background: #222;color: #FFF; width: 100px; z-index: 99;">
+            </div>
+            <div id="container"></div>
+            <div class="layui-btn-group" style="position: fixed; bottom: 28px;">
+                <button type="button" id='save' class="layui-btn dn" onclick="save()">确认围栏</button>
+            </div>
+        </div>
+    </div>
+
+    <script
+        src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor,AMap.MouseTool,AMap.CircleEditor,AMap.Polygon"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <script src="../../../../layui.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script src="../../../../js/common.js"></script>
+    <script>
+        var style = JSON.parse(sessionStorage.getItem('style'));
+        var mapCoordLat = [];
+        var map = new AMap.Map('container', {
+            resizeEnable: true,
+            zoom: 10.5,
+            center: [113.437446, 34.20769],
+            pitch: 0,
+            viewMode: '2D',
+        });
+        shadefun()
+        var selectCoordinate = []; //选择div后的将坐标传入
+        var shade; //遮罩
+        function shadefun() {
+            AMap.plugin('AMap.DistrictSearch', function () {
+                var district = new AMap.DistrictSearch({
+                    extensions: 'all',
+                    // 设置查询行政区级别为 区 
+                    level: 'province'
+                })
+                district.search('河南省', function (status, result) {
+                    // 外多边形坐标数组和内多边形坐标数组
+                    var outer = [
+                        new AMap.LngLat(-360, 90, true),
+                        new AMap.LngLat(-360, -90, true),
+                        new AMap.LngLat(360, -90, true),
+                        new AMap.LngLat(360, 90, true),
+                    ];
+                    var holes = result.districtList[0].boundaries
+                    var pathArray = [
+                        outer
+                    ];
+                    pathArray.push.apply(pathArray, holes)
+                    shade = new AMap.Polygon({
+                        map: map,
+                        pathL: pathArray,
+                        //线条颜色，使用16进制颜色代码赋值。默认值为#006600
+                        strokeColor: 'rgb(20,164,173)',
+                        strokeWeight: 4,
+                        //轮廓线透明度，取值范围[0,1]，0表示完全透明，1表示不透明。默认为0.9
+                        strokeOpacity: 0.5,
+                        fillColor: 'rgba(0,0,0)',
+                        //多边形填充透明度，取值范围[0,1]，0表示完全透明，1表示不透明。默认为0.9
+                        fillOpacity: 1,
+                        //轮廓线样式，实线:solid，虚线:dashed
+                        strokeStyle: 'dashed',
+                        /*勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在    
+                            ie9+浏览器有效 取值： 
+                            实线：[0,0,0] 
+                            虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
+                            点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实 
+                            线和10个像素的空白 （如此反复）组成的虚线*/
+                        strokeDasharray: [10, 2, 10]
+                    });
+                    shade.setPath(pathArray);
+                    // if (style == false) {
+                    //     shade.setOptions(shade.Ce.fillColor = "#000"); //修改覆盖物样式
+                    // } else {
+                    //     shade.setOptions(shade.Ce.fillColor = "#e2ebf3"); //修改覆盖物样式
+                    // }
+                })
+            })
+        }
+
+        var polygon; //点击div出现的覆盖物
+        //围栏二次显示 
+        var number;
+        var xy;
+        $('body').on('click', '.number', function () {
+            $(this).addClass('sty').siblings().removeClass('sty')
+            $('#save').removeClass('dn')
+            obj = []  //清除绘制覆盖物
+            if (polygon != undefined) {
+                map.remove(polygon);
+            }
+            let n = $(this).attr('number') - 1;
+            number = n;
+            let m = [];                 
+            xy = mapCoordLat[n]
+            m = xy.lngLats;  
+            polygon = new AMap.Polygon({
+                path: m,
+                strokeColor: "#FF33FF",
+                strokeWeight: 6,
+                strokeOpacity: 0.2,
+                fillOpacity: 0.4,
+                fillColor: '#1791fc',
+                zIndex: 50,
+            })
+            map.add(polygon)
+            // 缩放地图到合适的视野级别
+            map.setFitView([polygon])
+            m = [];
+            n = null;
+        })
+        var save = function () {
+            let a = number + 1
+            if (selectCoordinate == 0) {
+                layer.msg('确认选择这个围栏吗', {
+                    time: 0 //不自动关闭
+                    , btn: ['确定', '取消']
+                    , yes: function (index) {
+                        console.log(mapCoordLat[number])
+                        layer.close(index);
+                        selectCoordinate = xy;
+                        layer.msg('已选择围栏' + a, {
+                            time: 2000,
+                        })
+                        $('#save').addClass('dn')
+                    }
+                });
+                $('#save').addClass('dn')
+            } else {
+                layer.msg('确认覆盖前一个围栏吗？', {
+                    time: 0 //不自动关闭
+                    , btn: ['确定', '取消']
+                    , yes: function (index) {
+                        console.log(mapCoordLat[number])
+                        layer.close(index);
+                        selectCoordinate = xy;
+                        layer.msg('已选择围栏' + a, {
+                            time: 2000,
+                        })
+                    }
+                });
+            }
+        }
+
+        layui.use(['element', 'jquery', 'form', 'laydate'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form,
+                laydate = layui.laydate;
+            var addData = JSON.parse(sessionStorage.getItem('data-add'));
+            var CarId = []
+            addData.forEach(item => {
+                console.log(item)
+                CarId.push(item.carId)
+            })
+            if (style == false) {
+                var styleName = "amap://styles/blue";
+                map.setMapStyle(styleName);
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+            } else {
+                var styleName = "amap://styles/normal";
+                map.setMapStyle(styleName);
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+            }
+
+            form.on('select(filter)', function (data) {
+                console.log(data)
+                if (!selectCoordinate.length == 0) {
+                    layer.msg('围栏已重置');
+                    selectCoordinate = []
+                }
+                //获取公司围栏
+                ajax('get', 'api/RentalCompany/GetRentalCompanyIncludeElectronicFence?id=' + data.value)
+                    .then(function (res) {
+                        console.log(res)
+                        if (res.code = 200) {
+                            let data = res.data
+                            form.val('overTimeForm', {
+                                site: data.address,
+                                rentalEmployeeName: data.contact,
+                                rentalEmployeeTel: data.tel
+                            });
+                            mapCoordLat = [];
+                            let electronicFences = data.electronicFences
+                            electronicFences.forEach(item => {
+                                let lngLats = JSON.parse(item.lngLats)
+                                let coordinates = lngLats.coordinates[0]
+                                coordinates.length = coordinates.length - 1
+                                console.log(coordinates)
+
+                                mapCoordLat.push({ id: item.id, name: item.name, lngLats: coordinates })
+                            })
+                            //围栏参数 坐标
+
+                            $('#record').html('');
+                            for (let n = 0; n < mapCoordLat.length; n++) {
+                                let a = n + 1;
+                                if (mapCoordLat[n].lngLats.length == 0) {  //清除无效围栏
+                                    mapCoordLat.splice(n, 1);
+                                } else {
+                                    $('#record').append('<div class = "number" number=' + a + '>围栏' + a + '</div>');
+                                    a = null;
+                                }
+                            }
+                        }
+                    })
+
+                $('.layui-select-tips').on('click', function () {
+                    form.val('overTimeForm', {
+                        site: '',
+                        name: '',
+                        phone: ""
+                    });
+                    mapCoordLat = []
+                    $('#record').html('');
+                    for (let n = 0; n < mapCoordLat.length; n++) {
+                        let a = n + 1;
+                        if (mapCoordLat[n].length == 0) {  //清除无效围栏
+                            mapCoordLat.splice(n, 1);
+                        } else {
+                            $('#record').append('<div class = "number" number=' + a + '>围栏' + a + '</div>');
+                            a = null;
+                        }
+                    }
+                })
+            });
+
+
+            var type = [{ '叉车': 0 }, { "托盘车": 0 }, { "堆垛车": 0 }];
+
+            for (let i = 0; i < addData.length; i++) {
+                if (addData[i].type == '叉车') {
+                    type[0].叉车++
+                } else if (addData[i].type == '托盘车') {
+                    type[1].托盘车++
+                } else if (addData[i].type == '堆垛车') {
+                    type[2].堆垛车++
+                }
+            }
+            form.val('overTimeForm', {
+                type: "叉车数：" + type[0].叉车 + "托盘车数量：" + type[1].托盘车 + "堆垛车数量：" + type[2].堆垛车,
+                number: addData.length,
+            });
+            laydate.render({
+                elem: '#onTime' //指定元素
+                , range: true
+                , min: 0
+                , trigger: "click"
+            });
+
+            form.on('submit(formDemo)', function (fromval) {
+                if (selectCoordinate.length != 0) {
+                    let result = fromval.field;
+                    let dateTime = result.onTime.split(' - ');
+                    let rentalStartTime = dateTime[0],
+                        rentalendTime = dateTime[1]
+                    let RentalRecordEntity = [];
+                    CarId.forEach(item => {
+                        let entity = {
+                            "rentalCompanyId": result.rentalCompanyId,
+                            "rentalEmployeeName": result.rentalEmployeeName,
+                            "rentalEmployeeTel": result.rentalEmployeeTel,
+                            "rentalStartTime": rentalStartTime,
+                            "rentalEndTime": rentalendTime,
+                            "carId": item,
+                            "electronicFenceId": selectCoordinate.id
+                        }
+                        RentalRecordEntity.push(entity)
+                    })
+                    console.log(RentalRecordEntity)
+                    ajax('post', 'api/RentalRecord/CreateRentalRecords', RentalRecordEntity)
+                        .then(function (res) {
+                            if (res.code == 200) {
+
+                                layer.msg('添加成功', {
+
+                                    time: 2000
+                                },
+                                    function () {
+                                        parent.layui.table.reload('test')
+                                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                        parent.layer.close(iframeIndex);
+                                    }
+                                );
+                            }
+
+                        })
+                    layer.msg(JSON.stringify(selectCoordinate));
+                } else {
+                    layer.msg('请选中一个电子围栏后提交', {
+                        time: 2000,
+                    })
+                }
+
+            })
+            //租赁公司下拉框绑定
+            ajax('get', 'api/RentalCompany/GetRentalCompanyIncludeElectronicFencePaged')
+                .then(function (res) {
+                    console.log(res)
+                    if (res.code = 200) {
+                        let data = res.data
+                        $.each(data, function (index, value) {
+                            $('#rentalCompanyId').append(new Option(value.name, value.id))
+                        })
+                        layui.form.render("select")
+                    }
+                })
+        });
+    </script>
+</body>
+
+</html>

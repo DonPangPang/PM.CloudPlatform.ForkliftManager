@@ -18,7 +18,6 @@ using PM.CloudPlatform.ForkliftManager.Apis.Models;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
 
-
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 {
     /// <summary>
@@ -81,8 +80,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .FilterDeleted()
                 .Include(x => x.Terminal)
                 .Where(x => x.TerminalId.Equals(terminalId))
-                .Select(x=> new { Geo = new Point((double)x.Lat, (double)x.Lon).Transform_WGS84_To_GCJ02().ToGeoJson(), x.Lon, x.Lat, x.CreateDate, x.Speed })
-                .OrderBy(t=>t.CreateDate)
+                .Select(x => new { RGeo = x.Point.ToGeoJson(), Geo = new Point((double)x.Lat, (double)x.Lon).ToGeoJson(), x.Lon, x.Lat, CreateDate = x.DateTime, x.Speed })
+                .OrderBy(t => t.CreateDate)
                 .ToListAsync();
 
             //var res = data.MapTo<GpsPositionRecordDto>();
@@ -99,11 +98,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         {
             var data = await _generalRepository.GetQueryable<GpsPositionRecord>()
                 .FilterDeleted()
-                .Include(x => x.Terminal)
-                .Where(x => x.Terminal!.IMEI.Equals(imei))
-                .ApplyPaged(parameters)
-                .Select(x=> new { Geo = new Point((double)x.Lat, (double)x.Lon).Transform_WGS84_To_GCJ02().ToGeoJson() ,x.Lon, x.Lat, x.CreateDate, x.Speed })
-                .OrderBy(t=>t.CreateDate)
+                .Where(x => x.CreateUserName!.Equals(imei))
+                .ApplyPaged(parameters, isGps: true)
+                .Select(x => new { RGeo = x.Point.ToGeoJson(), Geo = new Point((double)x.Lat, (double)x.Lon).ToGeoJson(), x.Lon, x.Lat, CreateDate = x.DateTime, x.Speed })
+                .OrderBy(t => t.CreateDate)
                 .ToListAsync();
 
             //var res = data.MapTo<GpsPositionRecordDto>();

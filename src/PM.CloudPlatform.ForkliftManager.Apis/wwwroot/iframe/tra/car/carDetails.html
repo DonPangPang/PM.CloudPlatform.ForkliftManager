@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>pictureViewer</title>
+    <link rel="stylesheet" href="./css/pictureViewer.css">
+    <!-- <script src="../../../css/layui.css"></script> -->
+    <link rel="stylesheet" id="blue" title="blue" href="../../../css/openStyleBlue.css">
+    <link rel="stylesheet" id="white" title="white" href="../../../css/openStyleWhite.css" disabled='true'>
+</head>
+
+<body>
+    <div class="main-content">
+        <div class="image-list">
+            <div class="cover"><img src="./images/0.png" alt=""></div>
+            <div class="cover"><img src="./images/1.png" alt=""></div>
+            <div class="cover"><img src="./images/2.png" alt=""></div>
+            <div class="cover"><img src="./images/3.png" alt=""></div>
+            <div class="cover"><img src="./images/4.png" alt=""></div>
+            <div class="cover"><img src="./images/5.png" alt=""></div>
+        </div>
+    </div>
+    <!-- <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script> -->
+    <script src="./js/jquery.min.js"></script>
+    <!-- <script src="../../../layui.js"></script> -->
+    <script src="./js/pictureViewer.js"></script>
+    <script src="./js/jquery.mousewheel.min.js"></script>
+    <script>
+
+        var aaa = window.location.href;
+        $(function () {
+            $('.image-list').on('click', '.cover', function () {
+                var this_ = $(this);
+                var images = this_.parents('.image-list').find('.cover');
+                var imagesArr = new Array();
+                $.each(images, function (i, image) {
+                    imagesArr.push($(image).children('img').attr('src'));
+                });
+                $.pictureViewer({
+                    images: imagesArr, //需要查看的图片，数据类型为数组
+                    initImageIndex: this_.index() + 1, //初始查看第几张图片，默认1
+                    scrollSwitch: true //是否使用鼠标滚轮切换图片，默认false
+                });
+            });
+        });
+        var boolean = window.parent.aaa;
+        function getCaption(obj) {  //提取boolean
+            var index = obj.lastIndexOf("=");
+            obj = obj.substring(index + 1, obj.length);
+            return obj;
+        }
+
+        if (getCaption(aaa) == "false") {
+            $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+            $('link[title="blue"]').removeAttr('disabled');
+        } else {
+            $('link[title="white"]').removeAttr('disabled');
+            $('link[title="blue"]').attr('disabled', 'true');
+        }
+
+    </script>
+</body>
+
+</html>

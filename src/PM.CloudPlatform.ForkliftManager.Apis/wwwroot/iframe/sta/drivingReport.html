@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>维护状态 </title>
+    <link rel="stylesheet" href="../../css/layui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../css/openStyleWhite.css" disabled='true'>
+</head>
+<style>
+    .category {
+        padding: 5px;
+    }
+
+    .category-admin {
+        color: #FFFFFF;
+        background-color: #5CB85C;
+        border-radius: 3px;
+    }
+
+    .category-tixing {
+        color: #FFFFFF;
+        background-color: #8f54b1;
+        border-radius: 3px;
+    }
+
+
+    .category-gen {
+        color: #FFFFFF;
+        background-color: #631b0f;
+        border-radius: 3px;
+    }
+</style>
+
+<body>
+    <script type="text/html" id="toolbarDemo">
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+        <!-- <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 编辑 </button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button> -->
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="username" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+                搜 索</button>
+        </div>
+    </script>
+    <table id="test" lay-filter="currentTableFilter"></table>
+    <script type="text/html" id="F_CategoryBar">
+        {{#  if( d.lengthOfUse< 300) { }}
+            <span class="category category-admin">无需维护</span>
+        {{#  } else if(d.lengthOfUse < 400){ }}
+            <span class="category category-tixing">需要维护</span>
+        {{#  } else  if(500<= d.lengthOfUse) {  }}
+            <span  class="category category-gen" lay-event="again">请维护</span>
+        {{#  } }}
+    </script>
+    <script src="../../layui.js"></script>
+    <script src="../../js/common.js"></script>
+    <script>
+        layui.use(['element', 'jquery', 'table', 'tableMerge'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                tableMerge = layui.tableMerge,
+                table = layui.table;
+            var style = JSON.parse(sessionStorage.getItem('style'));
+            if (style == false) {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+                var color = 'color:#fff;background-color:#033447;'
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+                var color = 'color:#000;background-color:#FFF;'
+            }
+            setTimeout(function () {
+                table.render({
+                    elem: '#test'
+                    , height: 'full-20'
+                    , toolbar: '#toolbarDemo'
+                    , post: 'get'
+                    , headers: { Authorization: "Bearer " + Token }
+                    , url: requestUrl + 'api/CarMaintenanceRecord/GetCarUseRecordsMaintenance' //数据接口
+                    , cols: [[ //表头
+                    { type: 'radio' }
+                        ,{ field: 'licensePlateNumber', title: '车牌号', merge: true, }
+                        , { field: 'lastOfMaintenanceTime', title: '上次维护时间' }
+                        , { field: 'serialNumber', title: '车辆编号', }
+                        , { field: 'brand', title: '品牌' }
+                        , { field: 'lengthOfUse', title: '使用时长', }
+                        , { field: 'maintainerContent', toolbar: '#F_CategoryBar', title: '维修信息', align: "center", sort: true }
+                    ]]
+                    , page: true //开启分页
+                    , limit: 30
+                    , limits: [10, 30, 50, 70, 100]
+                    , request: {
+                        pageName: 'PageNumber' //页码的参数名称，默认：page
+                        , limitName: 'PageSize' //每页数据量的参数名，默认：limit
+                    }
+                    , parseData: function (res) {
+                        console.log()
+                        return {
+                            'code': res.code,
+                            'count': res.total,
+                            'data': res.data,
+                            'msg': res.msg
+                        }
+                    },
+                    response: {
+                        statusName: 'code',
+                        statusCode: 200,
+                        msgName: 'msg',
+                        countName: 'count',
+                        dataName: 'data'
+                    }
+                    , done: function () {
+                        tableMerge.render(this)
+                    }
+                });
+            }, 500)
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                let checkStatus = table.checkStatus('test'),
+                    data = checkStatus.data[0];
+                sessionStorage.setItem('data-edit', JSON.stringify(data));
+                if (obj.event === 'add') {
+                    var index = layer.open({
+                        title: ['添加维护记录', color],
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: false,
+                        shadeClose: true,
+                        area: ['500px', '80%'],
+                        content: './driving/add.html?boolean' ,
+                        success: function (layero) {
+                            if (style == false) {
+                                $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                            } else {
+                            }
+                        },
+                    });
+                } 
+            });
+            // table.on('rowDouble', function (obj) {
+            //     let data = obj.data;
+            //     let type = $('.pm-nav-item-active').attr('data-value');
+            //     sessionStorage.setItem('detail', JSON.stringify(data));
+            //     window.clockDetail = data;
+            //     var index = layer.open({
+            //         title: ['租凭信息详情', color],
+            //         type: 2,
+            //         shade: 0.2,
+            //         maxmin: true,
+            //         shadeClose: true,
+            //         area: ['90%', '90%'],
+            //         content: './layer/carPlan/detail.html?type=detail',
+            //         maxmin: false, //最大化最小化
+            //         success: function (layero) {
+            //             if (style == false) {
+            //                 $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+            //             } else {
+            //             }
+            //         },
+            //     });
+            // });
+
+
+
+
+
+
+
+            function random(min, max) {
+                return parseInt(Math.random() * (max - min + 1) + min, 10);
+            }
+            function dateTime() {
+                var date = new Date();
+                return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+            }
+            var cars = [
+                {
+                    type: '叉车',
+                },
+                {
+                    type: '托盘车',
+                },
+                {
+                    type: '堆垛车',
+                },
+            ];
+
+            function getData() {
+                var data = []
+
+                for (var i = 0; i < 100; i++) {
+                    var item = {
+                        // id: i,
+                        car_plate: '豫A' + random(100000, 199999),
+                        type: cars[random(0, 2)].type,
+                        car_no: random(10000000, 19999999),
+                        brand: '品牌' + random(1, 5),
+                        use_time: random(0, 1000),
+                        // end_time: dateTime(),
+                        // tel: '137' + random(10000000, 19999999),
+                        // return_time: dateTime(),
+                        // warn: random(0, 2),
+                    }
+                    data.push(item);
+                }
+
+                return data;
+            }
+
+            //监听行单击事件（双击事件为：rowDouble，单击事件为：row）
+            table.on('row', function (obj) {
+                var data = obj.data;
+                //标注单选框
+                obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
+                //标注选中样式
+                obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            });
+        });
+    </script>
+</body>
+
+</html>

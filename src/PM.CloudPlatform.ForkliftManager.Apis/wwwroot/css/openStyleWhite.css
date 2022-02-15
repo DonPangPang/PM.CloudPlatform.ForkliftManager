@@ -1,0 +1,78 @@
+html {
+    background: #fff;
+}
+/* 高德地图icon */
+.amap-logo,
+.amap-copyright {
+    display: none !important;
+}
+.layui-tab-brief {
+    color: #000;
+    background-color: #fff;
+}
+.layui-layer-setwin .layui-layer-min cite {
+    background-color: rgb(255, 255, 255);
+}
+.layui-icon {
+    color: #333;
+}
+
+.layui-table-tool {
+    color: #000;
+    background-color: #f2f2f2;
+}
+.layui-layer {
+    color: #000;
+    background-color: #fff;
+}
+.layui-table thead tr {
+    color: #000;
+    background-color: #f2f2f2;
+}
+.layui-table {
+    color: #000;
+    background-color: #fff;
+}
+
+.layui-table tr:hover {
+    color: #000;
+    background-color: #fff;
+}
+.layui-table-click {
+    color: #000;
+}
+.layui-table-page .layui-laypage span{
+    color:unset;
+}
+.el-timeline-item__content{
+    color: #333;
+}
+.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span{
+    color: #333;
+}
+.image-list .cover{
+    background-color:#FFF;
+}
+.layui-input{
+    background-color: #fff;
+}
+/* input placeholder 提示文字颜色 */
+input::-webkit-input-placeholder {
+    color: #333;
+}
+.layui-btn-primary:hover{
+    color: #000;
+}
+/* loading动画背景颜色 */
+.pageload-overlay svg path {
+	fill: #FFF
+}
+.layui-tab-item{
+    height: 89vh;
+}
+.layui-form{
+    background-color: #FFF;
+}
+.layui-form>.layui-form-item>.layui-form-label{
+    color: #000;
+}

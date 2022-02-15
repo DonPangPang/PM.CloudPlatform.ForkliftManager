@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>编辑角色</title>
+    <link rel="stylesheet" href="../../../css/layui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../../css/openStyleWhite.css" disabled='true'>
+    <!-- <link rel="stylesheet" id="blue" title="blue" href="../../../css/indexStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../../css/indexStyleWhite.css" disabled='true'> -->
+</head>
+
+<body>
+    <form class="layui-form" action="" lay-filter="form">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">角色名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入角色名称" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            </div>
+        </div>
+    </form>
+    <script src="../../../layui.js"></script>
+    <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script>
+        var aaa = window.location.href;
+        layui.use(['element', 'jquery', 'form'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form;
+            let Barer = JSON.parse(sessionStorage.getItem('userInfo'));
+            var parentData = JSON.parse(sessionStorage.getItem('data-edit'));
+            console.log(parentData);
+            var boolean = getCaption(aaa);
+            function getCaption(obj) {  //提取boolean
+                var index = obj.lastIndexOf("=");
+                obj = obj.substring(index + 1, obj.length);
+                return obj;
+            }
+            form.val('form', {
+                //根据name来获取值
+                name:parentData.name,
+            })
+            let color;
+            if (boolean == "false") {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+                color = 'color:#fff;background-color:#033447;'
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+                color = 'color:#000;background-color:#FFF;'
+            }  //监听提交
+            form.on('submit(formDemo)', function (data) {
+                var result = data.field;
+                console.log(data.field)
+                console.log(parentData.id)
+                data.field.id = parentData.id;
+                ajax("put", "api/Role/UpdateEntity/"+parentData.id,result)
+                    .then(function (res) {
+                        layer.msg('修改成功', {
+                            time: 2000
+                        }, function () {
+                            parent.layui.table.reload('test')
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(iframeIndex);
+                           
+                        });
+                    });
+                return false;
+            });
+
+        });
+    </script>
+</body>
+
+</html>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Helper;
 
@@ -102,8 +103,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
         /// <param name="queryable">      </param>
         /// <param name="parameters">     </param>
         /// <param name="isAsIQueryable"> </param>
+        /// <param name="isGps">          </param>
         /// <returns> </returns>
-        public static IQueryable<T> ApplyPaged<T>(this IQueryable<T> queryable, DtoParametersBase parameters, bool isAsIQueryable = false)
+        public static IQueryable<T> ApplyPaged<T>(this IQueryable<T> queryable, DtoParametersBase parameters, bool isAsIQueryable = false, bool isGps = false)
             where T : EntityBase
         {
             if (parameters is null)
@@ -113,10 +115,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
 
             var queryExpression = queryable;
 
-            if (parameters.StartTime is not null && parameters.EndTime is not null)
+            if (parameters.StartTime is not null && parameters.EndTime is not null && !isGps)
             {
                 queryExpression = queryExpression.Where(x =>
                     x.CreateDate >= parameters.StartTime && x.CreateDate <= parameters.EndTime);
+            }
+
+            if (parameters.StartTime is not null && parameters.EndTime is not null && isGps)
+            {
+                queryExpression = queryExpression.Where(x =>
+                    (x as GpsPositionRecord)!.DateTime >= parameters.StartTime && (x as GpsPositionRecord)!.DateTime <= parameters.EndTime);
             }
 
             if (!string.IsNullOrWhiteSpace(parameters.SearchTerm))

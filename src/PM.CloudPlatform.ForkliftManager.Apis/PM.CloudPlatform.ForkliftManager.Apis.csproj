@@ -9,14 +9,41 @@
 		<NoWarn>1701;1702;1591;8603;8618;0168;0108</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Remove="wwwroot\**" />
-		<Content Remove="wwwroot\**" />
-		<EmbeddedResource Remove="wwwroot\**" />
-		<None Remove="wwwroot\**" />
-	</ItemGroup>
-	<ItemGroup>
 		<None Remove="forklift.db" />
 		<None Remove="forkliftDb.db-journal" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20210425114237.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20211203092921.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20211203092936.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20211203093022.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20211203093051.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20211203093109.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20211203093118.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20211203093238.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20211203093240.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\carFile\add_20211203093700.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20210529174053.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113093154.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113093505.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113093624.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113093626.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113094243.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113095014.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113095129.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113095221.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113095320.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113095742.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113095840.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113095852.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113095910.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113095922.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113100713.html" />
+	  <Content Include="wwwroot\.history\iframe\arc\layer\driverFile\edit_20220113100717.html" />
+	  <Content Include="wwwroot\.history\index_20210621142133.html" />
+	  <Content Include="wwwroot\.history\index_20220112165711.html" />
+	  <Content Include="wwwroot\.history\index_20220112165735.html" />
+	  <Content Include="wwwroot\.vscode\settings.json" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
@@ -45,6 +72,130 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Middleware\" />
+		<Folder Include="wwwroot\js\js\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="wwwroot\css\modules\laydate\default\font\iconfont.svg" />
+	  <None Include="wwwroot\dist\echarts.common.js" />
+	  <None Include="wwwroot\dist\echarts.common.js.map" />
+	  <None Include="wwwroot\dist\echarts.common.min.js" />
+	  <None Include="wwwroot\dist\echarts.esm.js" />
+	  <None Include="wwwroot\dist\echarts.esm.js.map" />
+	  <None Include="wwwroot\dist\echarts.esm.min.js" />
+	  <None Include="wwwroot\dist\echarts.js" />
+	  <None Include="wwwroot\dist\echarts.js.map" />
+	  <None Include="wwwroot\dist\echarts.min.js" />
+	  <None Include="wwwroot\dist\echarts.simple.js" />
+	  <None Include="wwwroot\dist\echarts.simple.js.map" />
+	  <None Include="wwwroot\dist\echarts.simple.min.js" />
+	  <None Include="wwwroot\dist\extension\bmap.js" />
+	  <None Include="wwwroot\dist\extension\bmap.js.map" />
+	  <None Include="wwwroot\dist\extension\bmap.min.js" />
+	  <None Include="wwwroot\dist\extension\dataTool.js" />
+	  <None Include="wwwroot\dist\extension\dataTool.js.map" />
+	  <None Include="wwwroot\dist\extension\dataTool.min.js" />
+	  <None Include="wwwroot\font\iconfont.svg" />
+	  <None Include="wwwroot\font\iconfont.woff2" />
+	  <None Include="wwwroot\iframe\tra\car1\js\index.js" />
+	  <None Include="wwwroot\iframe\tra\car1\js\jquery.min.js" />
+	  <None Include="wwwroot\iframe\tra\car1\js\jquery.qrcode.min.js" />
+	  <None Include="wwwroot\iframe\tra\car1\js\jquery.rotate.min.js" />
+	  <None Include="wwwroot\iframe\tra\car1\js\pace.min.js" />
+	  <None Include="wwwroot\iframe\tra\car\js\jquery.min.js" />
+	  <None Include="wwwroot\iframe\tra\car\js\jquery.mousewheel.min.js" />
+	  <None Include="wwwroot\iframe\tra\car\js\pictureViewer.js" />
+	  <None Include="wwwroot\js\common.js" />
+	  <None Include="wwwroot\js\echarts.js" />
+	  <None Include="wwwroot\js\jquery-3.5.1.min.js" />
+	  <None Include="wwwroot\js\jquery.md5.min.js" />
+	  <None Include="wwwroot\js\lay-config.js" />
+	  <None Include="wwwroot\js\untils.js" />
+	  <None Include="wwwroot\lay\modules\axios.js" />
+	  <None Include="wwwroot\lay\modules\carousel.js" />
+	  <None Include="wwwroot\lay\modules\code.js" />
+	  <None Include="wwwroot\lay\modules\colorpicker.js" />
+	  <None Include="wwwroot\lay\modules\element.js" />
+	  <None Include="wwwroot\lay\modules\flow.js" />
+	  <None Include="wwwroot\lay\modules\form.js" />
+	  <None Include="wwwroot\lay\modules\jquery.js" />
+	  <None Include="wwwroot\lay\modules\laydate.js" />
+	  <None Include="wwwroot\lay\modules\layedit.js" />
+	  <None Include="wwwroot\lay\modules\layer.js" />
+	  <None Include="wwwroot\lay\modules\laypage.js" />
+	  <None Include="wwwroot\lay\modules\laytpl.js" />
+	  <None Include="wwwroot\lay\modules\lodash.js" />
+	  <None Include="wwwroot\lay\modules\mobile.js" />
+	  <None Include="wwwroot\lay\modules\rate.js" />
+	  <None Include="wwwroot\lay\modules\sidebar.js" />
+	  <None Include="wwwroot\lay\modules\slider.js" />
+	  <None Include="wwwroot\lay\modules\table.js" />
+	  <None Include="wwwroot\lay\modules\tableMerge.js" />
+	  <None Include="wwwroot\lay\modules\transfer.js" />
+	  <None Include="wwwroot\lay\modules\tree.js" />
+	  <None Include="wwwroot\lay\modules\upload.js" />
+	  <None Include="wwwroot\lay\modules\util.js" />
+	  <None Include="wwwroot\lay\modules\utils.js" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\fonts\fontawesome-webfont.svg" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\fonts\fontawesome-webfont.woff2" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\animated.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\bordered-pulled.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\core.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\fixed-width.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\font-awesome.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\icons.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\larger.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\list.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\mixins.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\path.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\rotated-flipped.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\screen-reader.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\stacked.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\less\variables.less" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\font-awesome.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_animated.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_bordered-pulled.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_core.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_fixed-width.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_icons.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_larger.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_list.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_mixins.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_path.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_rotated-flipped.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_screen-reader.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_stacked.scss" />
+	  <None Include="wwwroot\lib\font-awesome-4.7.0\scss\_variables.scss" />
+	  <None Include="wwwroot\lib\jq-module\jquery.particleground.min.js" />
+	  <None Include="wwwroot\lib\jq-module\paigusu.min.js" />
+	  <None Include="wwwroot\lib\jq-module\zyupload\zyupload-1.0.0.min.js" />
+	  <None Include="wwwroot\lib\jquery-3.4.1\jquery-3.4.1.min.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\font\iconfont.svg" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\font\iconfont.woff2" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\layui.all.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\layui.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\carousel.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\code.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\colorpicker.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\element.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\flow.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\form.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\jquery.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\laydate.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\layedit.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\layer.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\laypage.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\laytpl.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\mobile.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\rate.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\slider.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\table.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\transfer.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\tree.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\upload.js" />
+	  <None Include="wwwroot\lib\layui-v2.5.5\lay\modules\util.js" />
+	  <None Include="wwwroot\Loading\js\classie.js" />
+	  <None Include="wwwroot\Loading\js\snap.svg-min.js" />
+	  <None Include="wwwroot\Loading\js\svgLoader.js" />
 	</ItemGroup>
 	<ProjectExtensions>
 		<VisualStudio>

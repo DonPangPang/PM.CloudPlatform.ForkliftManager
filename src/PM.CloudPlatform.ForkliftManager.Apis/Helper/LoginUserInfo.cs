@@ -36,10 +36,17 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Helper
         public static T? Get<T>() where T : EntityBase
         {
             //var res = _httpContextAccessor.HttpContext!.Session.GetString("UserInfo");
-            var id = Guid.Parse(_httpContextAccessor.HttpContext!.User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name))!.Value);
-            var res = _generalRepository.GetQueryable<T>().FirstOrDefault(x => x.Id.Equals(id));
+            try
+            {
+                var id = Guid.Parse(_httpContextAccessor.HttpContext!.User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name))!.Value);
+                var res = _generalRepository.GetQueryable<T>().FirstOrDefault(x => x.Id.Equals(id));
 
-            return res;
+                return res;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>

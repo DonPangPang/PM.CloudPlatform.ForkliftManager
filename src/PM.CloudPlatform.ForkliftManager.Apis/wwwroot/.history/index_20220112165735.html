@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>叉车管理云平台</title>
+    <link rel="shortcut icon" href="./images/face/favicon.ico">
+    <!-- <link rel="shortcut icon" href="#"/> -->
+    <link rel="stylesheet" href="css/layui.css">
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" id="blue" title="blue" href="./css/indexStyleBlue.css">
+    <link rel="stylesheet" disabled='true' id="white" title="white" href="./css/indexStyleWhite.css">
+
+    <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
+    <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <style>
+        #mp3 {
+            display: none;
+        }
+    </style>
+
+    <script src="layui.js"></script>
+    <script src="dist/echarts.js"></script>
+</head>
+
+<!-- 颜色配置 -->
+<script>
+    var chartsColorConfig = {
+        light: '#000',
+        dark: '#fff'
+    }
+
+    var chartsColor = chartsColorConfig.dark;
+</script>
+<!-- 颜色配置 -->
+
+<!-- 参数配置 -->
+<script>
+    var ParameterConfig = {
+        设备状态: {
+            工作中: [500],
+            异常: [40],
+            维护中: [260]
+        },
+        月度统计: {
+            出售量: [70000, 100000],
+            借出量: [30000, 50000],
+            保养量: [15000, 30000]
+        }
+    }
+
+    function dataShape(max, min) {
+        return Math.round(random(min, max) / 100);
+    }
+
+    function dataShaped(item, type = 0) {
+        if (type == 1) {
+            return Math.round(random(item[0], item[1]) / 100);
+        } else {
+            return random(item[0], item[1]) / 100;
+        }
+    }
+
+    function random(min, max) {
+        return parseInt(Math.random() * (max - min + 1) + min, 10);
+    }
+
+    function dateTime() {
+        var date = new Date();
+
+        return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    }
+
+
+</script>
+<!-- 参数配置 -->
+
+<body>
+    <h1 class="h1">叉车管理云平台</h1>
+    <audio autoplay id="mp3" src=""></audio>
+    <div class="top">
+    </div>
+    <div id="container"></div>
+    <div class="input-card style" style="width:16rem">
+        <div id="map-styles">
+            <div class="layui-form" action="">
+                <input type="radio" lay-filter='mapStyle' name="mapStyle" value="normal" title="简约">
+                <input type="radio" lay-filter='mapStyle' name="mapStyle" value="blue" title="科技" checked>
+            </div>
+        </div>
+
+    </div>
+    <!-- <style>
+        #myPageTop1 {
+            position: absolute;
+            right: 355px;
+            top: 120px;
+            width: 200px;
+            background-image: linear-gradient(45deg, #1b557350, #31afc355) !important;
+            background-color: unset;
+        }
+
+        #myPageTop1 input {
+            background-color: transparent;
+            color: white;
+            width: 45px;
+            border-color: white;
+            border: 1px solid white;
+        }
+    </style> -->
+    <!-- <div id="myPageTop1" class="style">
+        <table>
+            <tr>
+                <td>添加新围栏:</td>
+                <td><input type="button" value="开始" onClick="startDrawPolygon();"></td>
+                <td><input type="button" value="完成" onClick="endDrawPolygon();"></td>
+            </tr>
+        </table>
+    </div> -->
+
+    <img id="inputImg" src="./images/face/搜索--1 (1).png" alt="">
+    <div id="input">
+        <input type="text" class="style1 style2" name="title" required lay-verify="required" placeholder="请输入要查找的车辆"
+            autocomplete="off" class="layui-input">
+    </div>
+    <!-- 右边区域图表 -->
+    <style>
+        .right-panel-chart {
+            position: absolute;
+            width: 300px;
+            height: 250px;
+            margin-bottom: 10px;
+        }
+
+        .right-panel-box>div:nth-child(1) {
+            top: 60px;
+            right: 40px;
+        }
+
+        .right-panel-box>div:nth-child(2) {
+            top: 315px;
+            right: 40px;
+        }
+
+        .right-panel-box>div:nth-child(3) {
+            top: 570px;
+            right: 40px;
+            height: 500px;
+            overflow: auto;
+        }
+
+        #right-box-msglist {
+            overflow: hidden;
+        }
+
+        #message-list {
+            height: 95%;
+            overflow-x: auto;
+            padding-right: 5px;
+        }
+
+        #message-list::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        #message-list::-webkit-scrollbar-thumb {
+            background-color: #62c1d8;
+            border-radius: 10px;
+        }
+
+        #message-list::-webkit-scrollbar-track {
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        #message-list>div {
+            height: auto;
+            width: 100%;
+            border-bottom: #62c1d8 1px solid;
+            border-radius: 1rem;
+            margin-top: 10px;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            padding-left: 20px;
+        }
+    </style>
+    <div class="right-panel-box">
+        <div id="right-box-chart1" class="style right-panel-chart"></div>
+        <div id="right-box-chart2" class="style right-panel-chart"></div>
+        <div id="right-box-msglist" class="style right-panel-chart">
+            <div>
+                消息通知
+            </div>
+            <div id="message-list">
+
+            </div>
+        </div>
+    </div>
+    <!-- chart1 -->
+    <script>
+        var rightBoxChart_1 = document.getElementById('right-box-chart1');
+        var rightBoxMyChart_1 = echarts.init(rightBoxChart_1);
+        var rightBoxOption_1;
+
+        rightBoxOption_1 = {
+            title: {
+                text: '设备状态',
+                textStyle: {
+                    color: chartsColor
+                },
+                x: 'center',
+                y: 'top',
+                textAlign: 'left'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                top: '13%',
+                left: 'center',
+                textStyle: {
+                    color: chartsColor
+                }
+            },
+            series: [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '50%',
+                    center: ['50%', '60%'],
+                    data: [
+                        {
+                            value: ParameterConfig.设备状态.工作中[0], name: '工作中', itemStyle: {
+                                color: '#56C65A'
+                            }
+                        },
+                        {
+                            value: ParameterConfig.设备状态.异常[0], name: '异常', itemStyle: {
+                                color: '#F44336'
+                            }
+                        },
+                        {
+                            value: ParameterConfig.设备状态.维护中[0], name: '维护中', itemStyle: {
+                                color: '#FFEB3B'
+                            }
+                        },
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    textStyle: {
+                        color: chartsColor
+                    },
+                    label: {
+                        color: chartsColor,
+                    }
+                }
+            ]
+        };
+
+        rightBoxOption_1 && rightBoxMyChart_1.setOption(rightBoxOption_1);
+
+    </script>
+    <!-- chart2 -->
+    <script>
+        var rightBoxChart_2 = document.getElementById('right-box-chart2');
+        var rightBoxMyChart_2 = echarts.init(rightBoxChart_2);
+        var rightBoxOption_2;
+
+        rightBoxOption_2 = {
+            title: {
+                text: '月度统计',
+                textStyle: {
+                    color: chartsColor
+                },
+                x: 'center',
+                y: 'top',
+                textAlign: 'left',
+            },
+            grid: {
+                top: '30%',
+                left: '18%',
+                bottom: '10%'
+            },
+            legend: {
+                top: '15%',
+                textStyle: {
+                    color: chartsColor
+                }
+            },
+            tooltip: {},
+            dataset: {
+                source: [
+                    ['product', '出售量', '借出量', '保养量'],
+                    ['1月', dataShape(ParameterConfig.月度统计.出售量[0], ParameterConfig.月度统计.出售量[1]),
+                        dataShape(ParameterConfig.月度统计.借出量[0], ParameterConfig.月度统计.借出量[1]),
+                        dataShape(ParameterConfig.月度统计.保养量[0], ParameterConfig.月度统计.保养量[1])],
+                    ['2月', dataShape(ParameterConfig.月度统计.出售量[0], ParameterConfig.月度统计.出售量[1]),
+                        dataShape(ParameterConfig.月度统计.借出量[0], ParameterConfig.月度统计.借出量[1]),
+                        dataShape(ParameterConfig.月度统计.保养量[0], ParameterConfig.月度统计.保养量[1])],
+                    ['3月', dataShape(ParameterConfig.月度统计.出售量[0], ParameterConfig.月度统计.出售量[1]),
+                        dataShape(ParameterConfig.月度统计.借出量[0], ParameterConfig.月度统计.借出量[1]),
+                        dataShape(ParameterConfig.月度统计.保养量[0], ParameterConfig.月度统计.保养量[1])],
+                    ['4月', dataShape(ParameterConfig.月度统计.出售量[0], ParameterConfig.月度统计.出售量[1]),
+                        dataShape(ParameterConfig.月度统计.借出量[0], ParameterConfig.月度统计.借出量[1]),
+                        dataShape(ParameterConfig.月度统计.保养量[0], ParameterConfig.月度统计.保养量[1])],
+                ],
+            },
+            xAxis: {
+                type: 'category', 
+                axisLabel: {
+                    color: chartsColor
+                }
+            },
+            yAxis: {
+                axisLabel: {
+                    color: chartsColor
+                }
+            },
+            // Declare several bar series, each will be mapped
+            // to a column of dataset.source by default.
+            series: [
+                { type: 'bar' },
+                { type: 'bar' },
+                { type: 'bar' }
+            ]
+        };
+
+        rightBoxOption_2 && rightBoxMyChart_2.setOption(rightBoxOption_2);
+
+    </script>
+
+    <!-- 右边区域图表 -->
+    <div id="app">
+    </div>
+
+    <div class="btn style" id="leftBtn"><i class="iconfont icon-arrow-right"></i></div>
+    <div class="stat-main style">
+        <div class="layui-card-header">车辆信息</div>
+        <div class="layui-card-body">
+            <div>租凭中: 780</div>
+            <div>未租凭: 350</div>
+        </div>
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title ">
+                <li class="layui-this">租凭车辆</li>
+                <li >维修/保养车辆</li>
+            </ul>
+            <div class="layui-tab-content ">
+                <div class="layui-tab-item layui-show">
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫A 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫A 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫A 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫A 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫A 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫A 123456</label>
+                </div>
+                <div class="layui-tab-item">
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫B 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫B 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫B 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫B 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫B 123456</label>
+                    <label><input type="checkbox" name="" title="" lay-skin="primary"> 豫B 123456</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="bottomIframe" class=''>
+        <div lay-event='archivesManagement' title='档案管理' onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        </div>
+        <div lay-event='dispatchManagement' title='调度管理' onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        </div>
+        <div lay-event='statisticsManagement' title="维护记录" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        </div>
+        <!-- <div lay-event='' title="预留" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        </div>
+        <div lay-event='' title="预留" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        </div> -->
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script
+    src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor"></script>
+<script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+<script>
+var shade;
+    play_over("./video/WindowsNavigationStart.wav");
+    var boolean = false;  //false为蓝色背景 true为白色背景
+    var map = new AMap.Map('container', {
+        resizeEnable: true,
+        zoom: 10.5,
+        center: [113.437446, 34.20769],
+        pitch: 0,
+        viewMode: '2D',
+        //设置地图背景图 
+        mapStyle: "amap://styles/blue"
+    });
+    //map.setZoom(12.2); //设置地图层级
+    AMap.plugin('AMap.DistrictSearch', function () {
+        var district = new AMap.DistrictSearch({
+            extensions: 'all',
+            // 设置查询行政区级别为 区 
+            level: 'province'
+        })
+        district.search('河南省', function (status, result) {
+            // 外多边形坐标数组和内多边形坐标数组
+            var outer = [
+                new AMap.LngLat(-360, 90, true),
+                new AMap.LngLat(-360, -90, true),
+                new AMap.LngLat(360, -90, true),
+                new AMap.LngLat(360, 90, true),
+            ];
+            var holes = result.districtList[0].boundaries
+
+            var pathArray = [
+                outer
+            ];
+            pathArray.push.apply(pathArray, holes)
+            shade = new AMap.Polygon({
+                map: map,
+                pathL: pathArray,
+                //线条颜色，使用16进制颜色代码赋值。默认值为#006600
+                strokeColor: 'rgb(20,164,173)',
+                strokeWeight: 4,
+                //轮廓线透明度，取值范围[0,1]，0表示完全透明，1表示不透明。默认为0.9
+                strokeOpacity: 0.5,
+                //多边形填充颜色，使用16进制颜色代码赋值，如：#FFAA00
+                fillColor: 'rgba(0,0,0)',
+                //多边形填充透明度，取值范围[0,1]，0表示完全透明，1表示不透明。默认为0.9
+                fillOpacity: 1,
+                //轮廓线样式，实线:solid，虚线:dashed
+                strokeStyle: 'dashed',
+                /*勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在    
+                    ie9+浏览器有效 取值： 
+                    实线：[0,0,0] 
+                    虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
+                    点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实 
+                    线和10个像素的空白 （如此反复）组成的虚线*/
+                strokeDasharray: [10, 2, 10]
+            });
+            shade.setPath(pathArray);
+
+            // map.add(polygon);
+            /*   var polyline = new AMap.Polyline({
+                strokeColor: '#3366FF',   // 线颜色
+                strokeOpacity: 1,         // 线透明度
+                strokeWeight: 2,          // 线宽
+                strokeStyle: 'solid',     // 线样式
+                strokeDasharray: [10, 5], // 补充线样式
+                geodesic: false            // 绘制大地线
+            });
+            polyline.setPath(pathArray);
+            map.add(polyline);*/
+        })
+    })
+    
+    //给底部图片添加鼠标移上时的声音效果
+    function play_over(fileName) {
+        document.all.mp3.src = fileName;
+    }
+</script>
+<script>
+
+    // 31.23~36.22
+    // 110.21~116.39
+
+    var carPara = {
+        name:[1,100],
+        No: [10000000, 19999999],
+        time: [500, 10000],
+        plate: [10000, 19999],
+        state: [0, 2],
+        lat: [3233, 3502],
+        lng: [11211, 11500]
+    }
+
+    var cars = [
+        {
+            type: '叉车',
+        },
+        {
+            type: '托盘车',
+        },
+        {
+            type: '堆垛车',
+        },
+    ];
+
+    var states = ['正常', '需要维护', '长时间未维护']
+
+    var carlist = []
+
+    for (var i = 0; i < 500; i++) {
+        var car = cars[random(0, 2)];
+        car.id = i + 1;
+        car.name = "公司"+ random(carPara.name[0],carPara.name[1]);
+        car.plateNum = '豫A' + random(carPara.plate[0], carPara.plate[1]);
+        car.No = random(carPara.No[0], carPara.No[1]);
+        car.time = random(carPara.time[0], carPara.time[1]);
+        car.state = random(carPara.state[0], carPara.state[1]);
+        carlist.push(car)
+    }
+
+    var icon = new AMap.Icon({
+        size: new AMap.Size(40, 40),    // 图标尺寸
+        image: './images/011-叉车.png',  // Icon的图像 images/011-叉车.png
+        // imageOffset: new AMap.Pixel(0, -60),  // 图像相对展示区域的偏移量，适于雪碧图等
+        imageSize: new AMap.Size(40, 40)   // 根据所设置的大小拉伸或压缩图片
+    });
+
+    carlist.forEach(x => {
+        var marker = new AMap.Marker({
+            position: new AMap.LngLat(random(carPara.lng[1], carPara.lng[0]) / 100, random(carPara.lat[1], carPara.lat[0]) / 100),
+            title: x.type,
+            id: x.id
+        });
+        // console.log(random(carPara.lng[1], carPara.lng[0]) / 100, random(carPara.lat[1], carPara.lat[0]) / 100)
+
+        marker.on('click', function (e) {
+            var item = carlist.find(x => x.id == marker.Ce.id);
+            var infoWindow = new AMap.InfoWindow({
+                anchor: 'bottom-center',
+                draggable: true,  //是否可拖动
+                offset: new AMap.Pixel(0, -31),
+                content: ""
+            });
+            infoWindow.setContent("<ul style='margin-top:10px'>"
+                + "<li><div>公司名称:" + item.name + "</div></li>"
+                + "<li><div>车辆类型:" + item.type + "</div></li>"
+                + "<li><div>车辆车牌:" + item.plateNum + "</div></li>"
+                + "<li><div>车辆编号:" + item.No + "</div></li>"
+                + "<li><div>运行时间:" + item.time + "</div></li>"
+                + "<li><div>车辆状态:" + states[item.state] + "</div></li></ul>");
+
+            infoWindow.open(map, e.lnglat);
+        })
+
+        marker.setIcon(icon);
+
+        map.add([marker]);
+    });
+</script>
+
+<!-- Message List -->
+<script>
+    var msgList = [
+
+    ]
+    var count = 0;
+    var isQueue = false;
+    setInterval(() => {
+        msgList.push(`<div>` + carlist[random(0, 49)].plateNum + ` :: ` + states[carlist[random(0, 49)].state] + `</div>`)
+        var rand = random(0, msgList.length - 1);
+        if (count > msgList.length) {
+            count = 0;
+            isQueue = true;
+        }
+
+        if ($('#message-list').children().length < msgList.length / 2) {
+            isQueue = false;
+        }
+
+        if (isQueue) {
+            $('#message-list').append(msgList[rand]);
+            $('#message-list > div:nth-child(1)').remove();
+        } else {
+            $('#message-list').append(msgList[rand]);
+        }
+        count++;
+        var scrollHeight = $('#message-list').prop("scrollHeight")
+        $('#message-list').animate({ scrollTop: scrollHeight }, 'slow');
+    }, 3 * 1000);
+</script>
+<script>
+
+
+    layui.use(['upload', "sidebar", 'jquery', 'layer', 'element', 'form'], function () {
+        var $ = layui.jquery,
+            element = layui.element,
+            sidebar = layui.sidebar,
+            form = layui.form,
+            layer = layui.layer;
+        $('#bottomIframe div').on('click', function () {
+            // let event = $(this).attr('lay-event');
+            let html = $(this).attr('title');
+            let color;
+            if (boolean == false) {
+                color = 'color:#fff;background-color:#033447;'
+            } else {
+                color = 'color:#000;background-color:#FFF;'
+            }
+            sessionStorage.setItem('style',boolean);
+            let index = layer.open({
+                title: [html, color],
+                type: 2,
+                shadeClose: true, //是否点击遮罩关闭
+                shade: 0.2, //遮罩透明度
+                area: ['80%', '80%'],
+                content: 'iframe/' + $(this).attr('lay-event') + '.html',
+                maxmin: false, //最大化最小化
+                success: function (layero) {
+                    if (boolean == false) {
+                        $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                    } else {
+                    }
+                },
+            });
+            return false;
+        })
+        //点击图片和敲回车会提取搜索框字段
+        $('#inputImg').on('click', function () {
+            console.log($("#input input").val());
+        })
+
+        $("#input").keyup(function (event) {
+            if (event.keyCode == 13) {
+                console.log($("#input input").val());
+            }
+        });
+        //左侧收缩框
+        $('#leftBtn').click(function () {
+            if ($(this).hasClass("btndb")) {
+                $('.stat-main').animate({ width: 'hide' }, 360);
+                $(this).animate({ left: "10px" }, 360);
+                $(this).removeClass('btndb');
+                $('.btn i').addClass('icon-arrow-right').removeClass('icon-left3');
+            } else {
+                $('.stat-main').animate({ width: 'show' }, 360);
+                $(this).animate({ left: "340px" }, 360);
+                $(this).addClass('btndb');
+                $('.btn i').addClass('icon-left3').removeClass('icon-arrow-right');
+            }
+        });
+
+        //绑定radio点击事件
+        form.on('radio(mapStyle)', function (data) {
+            // console.log(data.value); //被点击的radio的value值
+            var styleName = "amap://styles/" + data.value;
+            map.setMapStyle(styleName);
+            if (data.value == "blue") {
+                boolean = false;
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+                $('#inputImg').attr('src', './images/face/搜索--1 (1).png');
+                shade.setOptions(shade.Ce.fillColor="#000"); //修改覆盖物样式
+                rightBoxOption_1.title.textStyle.color = "#FFF";
+                rightBoxOption_1.legend.textStyle.color = "#FFF";
+                rightBoxOption_1.series[0].label.color = "#FFF";
+                rightBoxOption_1 && rightBoxMyChart_1.setOption(rightBoxOption_1);
+                rightBoxOption_2.title.textStyle.color = "#FFF";
+                rightBoxOption_2.legend.textStyle.color = "#FFF";
+                rightBoxOption_2.xAxis.axisLabel.color = "#FFF";
+                rightBoxOption_2.yAxis.axisLabel.color = "#FFF";
+                rightBoxOption_2 && rightBoxMyChart_2.setOption(rightBoxOption_2);
+            } else if (data.value == "normal") {
+                boolean = true;
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+                $('#inputImg').attr('src', './images/face/搜索--1.png');
+                shade.setOptions(shade.Ce.fillColor="#e2ebf3"); //修改覆盖物样式
+                rightBoxOption_1.title.textStyle.color = "#000";
+                rightBoxOption_1.legend.textStyle.color = "#000";
+                rightBoxOption_1.series[0].label.color = "#000";
+                rightBoxOption_1 && rightBoxMyChart_1.setOption(rightBoxOption_1);
+                rightBoxOption_2.title.textStyle.color = "#000";
+                rightBoxOption_2.legend.textStyle.color = "#000";
+                rightBoxOption_2.xAxis.axisLabel.color = "#000";
+                rightBoxOption_2.yAxis.axisLabel.color = "#000";
+                rightBoxOption_2 && rightBoxMyChart_2.setOption(rightBoxOption_2);
+            }
+        });
+        // map.setFitView();
+
+        new Vue({
+            el: '#app',
+            data: function () {
+                return {
+                    visible: false,
+                }
+            },
+
+            created: function () {
+                this.open1();
+            },
+            methods: {
+                open1() {
+                    this.$notify({
+                        title: '成功',
+                        message: '地图加载完成',
+                        type: 'success',
+                        duration: 2000
+                    });
+                },
+
+                open2() {
+                    this.$notify({
+                        title: '警告',
+                        message: '这是一条警告的提示消息',
+                        type: 'warning',
+                        duration: 0
+                    });
+                },
+
+                open3() {
+                    this.$notify.info({
+                        title: '消息',
+                        message: '这是一条消息的提示消息',
+                        duration: 0
+                    });
+                },
+
+                open4() {
+                    this.$notify.error({
+                        title: '错误',
+                        message: '这是一条错误的提示消息',
+                        duration: 0
+                    });
+                },
+            }
+        })
+    });
+
+
+</script>
+
+<script>
+    var beginNum = 0;
+    var clickListener;
+    var beginPoints;
+    var beginMarks;
+    var polygonEditor;
+    var resPolygon = [];
+    var resNum = 0;
+    var Polygon;
+    function init() {
+        beginPoints = [];
+        beginMarks = [];
+        beginNum = 0;
+        polygonEditor = '';
+        clickListener = AMap.event.addListener(map, "click", mapOnClick);
+
+        var str = '[{"J":39.91789947393269,"G":116.36744477221691,"lng":116.367445,"lat":39.917899},{"J":39.91184292800211,"G":116.40658356616223,"lng":116.406584,"lat":39.911843},{"J":39.88616249265181,"G":116.37963272998047,"lng":116.379633,"lat":39.886162}]';
+        var arr = json2arr(str);
+        //createPolygon(arr);
+    }
+
+    function mapOnClick(e) {
+        // document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
+        beginMarks.push(addMarker(e.lnglat));
+        beginPoints.push(e.lnglat);
+        beginNum++;
+        //alert(beginNum);				
+        if (beginNum >= 3) {
+            //AMap.event.removeListener(clickListener);  
+            if (beginNum > 3) {
+                //清除前一次的多边形
+                map.remove(Polygon);
+            }
+            Polygon = createPolygon(beginPoints);
+            //polygonEditor = createEditor(polygon);
+            clearMarks();
+        }
+
+    };
+
+
+    function createPolygon(arr) {
+        var polygon = new AMap.Polygon({
+            map: map,
+            path: arr,
+            strokeColor: "#0000ff",
+            strokeOpacity: 1,
+            strokeWeight: 3,
+            fillColor: "#f5deb3",
+            fillOpacity: 0.35
+        });
+        return polygon;
+    }
+
+    function startDrawPolygon() {
+        init();
+    }
+
+    function endDrawPolygon() {
+        AMap.event.removeListener(clickListener);
+
+    }
+
+    function createEditor(polygon) {
+        var polygonEditor = new AMap.PolyEditor(map, polygon);
+        polygonEditor.open();
+        AMap.event.addListener(polygonEditor, 'end', polygonEnd);
+        return polygonEditor;
+    }
+
+    function closeEditPolygon() {
+        polygonEditor.close();
+    }
+
+    function polygonEnd(res) {
+        resPolygon.push(res.target);
+        alert(resPolygon[resNum].contains([116.386328, 39.913818]));
+        appendHideHtml(resNum, res.target.getPath());
+
+        resNum++;
+        init();
+    }
+
+    function appendHideHtml(index, arr) {
+        var strify = JSON.stringify(arr);
+        var html = '<input type="hidden" id="index' + index + '" name="paths[]" value="' + strify + '">';
+        $('body').append(html);
+    }
+
+
+
+    function clearMarks() {
+        map.remove(beginMarks);
+    }
+
+    function json2arr(json) {
+        var arr = JSON.parse(json);
+        var res = [];
+        for (var i = 0; i < arr.length; i++) {
+            var line = [];
+            line.push(arr[i].lng);
+            line.push(arr[i].lat);
+            res.push(line);
+        };
+        return res;
+    }
+
+
+    // 实例化点标记
+    function addMarker(lnglat) {
+        var marker = new AMap.Marker({
+            icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+            position: lnglat
+        });
+        marker.setMap(map);
+        return marker;
+    }
+
+</script>
+
+</html>

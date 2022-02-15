@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="../../css/layui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../css/openStyleWhite.css" disabled='true'>
+    <link rel="stylesheet" id="blue" title="blue" href="../../css/indexStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../css/indexStyleWhite.css" disabled='true'>
+    <!-- <style>
+        body{
+            color: #000;
+        }
+    </style> -->
+</head>
+
+<body>
+    <script type="text/html" id="toolbarDemo">
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="pm_add"> 添加 </button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="pm_edit"> 编辑 </button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="pm_delete"> 删除 </button>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="id" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+                搜 索</button>
+        </div>
+    </script>
+    <table id="test" lay-filter="currentTableFilter"></table>
+
+    <script src="../../layui.js"></script>
+    <script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="../../js/common.js"></script>
+    <script>
+        var abc = "123"
+        var aaa = window.location.href;
+        layui.use(['element', 'jquery', 'table', 'form'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form,
+                table = layui.table;
+            var color;
+            var style = JSON.parse(sessionStorage.getItem('style'));
+            if (style == false) {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+                color = 'color:#fff;background-color:#033447;'
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+                color = 'color:#000;background-color:#FFF;'
+            }
+
+            let more = [{
+                title: "禁用账户",
+                type: 'pm_disabled'
+            }, {
+                title: "启用账户",
+                type: 'pm_enabled'
+            }, 
+            // {
+            //     // title: "重置密码",
+            //     // type: 'pm_resetpassword'
+            // }, {
+            //     // title: "分配角色",
+            //     // type: 'pm_addrole'
+            // }
+        ];
+            let defaultToolbar = [{
+                title: '导出Excel',
+                layEvent: 'pm_export',
+                icon: 'layui-icon-export'
+            }, 'print', {
+                title: '导入上传',
+                layEvent: 'pm_import',
+                icon: 'layui-icon-upload-drag'
+            }, {
+                title: '更多',
+                layEvent: 'pm_more',
+                icon: 'layui-icon-app'
+            }];
+            let Barer = JSON.parse(sessionStorage.getItem('userInfo'));
+            let defaultToolbarData = ['filter'];
+            let moreData = [];
+            more.map(function (v) {
+                // 此循环用于判断更多按钮里的内容\
+                moreData.push(v)
+            });
+            defaultToolbar.map(function (v) {
+                // 此循环用于判断有侧工具栏内容
+                defaultToolbarData.push(v)
+            });
+            // var boolean = window.parent.aaa;
+            // let aaa = getCaption(boolean);
+            // function getCaption(obj) {  //提取boolean
+            //     var index = obj.lastIndexOf("=");
+            //     obj = obj.substring(index + 1, obj.length);
+            //     return obj;
+            // }
+            // let color;
+            // if (aaa == "false") {
+            //     $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+            //     $('link[title="blue"]').removeAttr('disabled');
+            //     color = 'color:#fff;background-color:#033447;'
+            // } else {
+            //     $('link[title="white"]').removeAttr('disabled');
+            //     $('link[title="blue"]').attr('disabled', 'true');
+            //     color = 'color:#000;background-color:#FFF;'
+            // }
+            let data = '';
+            setTimeout(function () {
+                table.render({
+                    elem: '#test'
+                    , height: 'full-20'
+                    , toolbar: '#toolbarDemo'
+                    , defaultToolbar: ['filter', 'exports', 'print', {
+                        title: '更多',
+                        layEvent: 'pm_more',
+                        icon: 'layui-icon-app'
+                    }]
+                    , headers: { Authorization: "Bearer " + Token }
+                    , url: requestUrl + 'api/User/GetEntitiesByPaged' //数据接口                 
+                    , cols: [[ //表头
+                        { type: 'radio' }
+                        , { field: 'id', title: 'id', sort: true }
+                        , { field: 'username', title: '用户账号', sort: true }
+                        , { field: 'password', title: '密码' }
+                        // , { field: 'name', title: '姓名' }
+                        //, { field: 'upkeep', title: '租凭次数', sort: true }
+                        //, { field: 'number', title: '租凭车辆数' }
+                        // , { field: 'buy_time', title: '租凭时间', }
+                        // , { field: 'use_time', title: '使用时长（h）', }
+                        // , { field: 'upkeep', title: '保养次数', sort: true }
+                        // , { field: 'time', title: '上一次保养时间', sort: true }
+                    ]]
+                    , page: true //开启分页
+                    , limit: 30
+                    , limits: [10, 30, 50, 70, 100]
+                    , request: {
+                        pageName: 'PageNumber' //页码的参数名称，默认：page
+                        , limitName: 'PageSize' //每页数据量的参数名，默认：limit
+                    }
+                    , parseData: function (res) {
+                        return {
+                            'code': res.code,
+                            'count': res.total,
+                            'data': res.data,
+                            'msg': res.msg
+                        }
+                    },
+                    response: {
+                        statusName: 'code',
+                        statusCode: 200,
+                        msgName: 'msg',
+                        countName: 'count',
+                        dataName: 'data'
+                    } 
+
+                });
+            }, 500)
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                let checkStatus = table.checkStatus('test'),
+                    data = checkStatus.data[0];
+                sessionStorage.setItem('data-edit', JSON.stringify(data));
+                if (obj.event === 'pm_add') {
+                    var index = layer.open({
+                        title: ['添加用户', color],
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: false,
+                        shadeClose: true,
+                        area: ['500px', '80%'],
+                        content: './user/add.html?boolean=' + aaa,
+                        success: function (layero) {
+                            if (style == false) {
+                                $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                            } else {
+                            }
+                        },
+                    });
+                } else if (obj.event === 'pm_edit') {
+                    if (data) {
+                        var index = layer.open({
+                            title: ['编辑用户', color],
+                            type: 2,
+                            shade: 0.2,
+                            maxmin: false,
+                            shadeClose: true,
+                            area: ["500px", '80%'],
+                            content: './user/edit.html?boolean=' + aaa,
+                            success: function (layero) {
+                                if (style == false) {
+                                $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                            } else {
+                            }
+                            },
+                        });
+                    } else {
+                        layer.msg('未选择用户', {
+                            time: 2000
+                        });
+                    }
+                } else if (obj.event === 'pm_delete') {
+                    if (data) {
+                        layer.open({
+                            type: 1,
+                            shade: 0.2,
+                            shadeClose: true,
+                            title: ['提示', color],
+                            offset: 'auto',
+                            id: 'layerDemo',
+                            content: '<div style="padding: 20px 100px;">是否删除账户</div>',
+                            btn: ['是', '否'],
+                            btnAlign: 'r',
+                            yes: function (index,layero) {
+                                ajax("delete", "api/User/DeleteEntity/" + data.id)
+                                    .then(function (res) {
+                                        if (res.code = 200) {
+                                            table.reload('test');
+                                            layer.msg('删除成功', {
+                                                time: 2000
+                                            });
+                                        } else {
+                                            layer.msg(res.info, {
+                                                time: 2000
+                                            });
+                                        }
+                                    });
+                                    layer.close(index);
+                            }
+                        });
+                    } else {
+                        layer.msg('未选择用户', {
+                            time: 2000
+                        });
+                    }
+                } else if (obj.event === 'pm_more') {
+                    let htmlUl = `<ul class="layui-table-tool-panel" id="gengduo-ul"></ul>`;
+                    $(this).append(htmlUl);
+                    moreData.map(function (v, i) {
+                        $("#gengduo-ul").append(`<li style="${color}" data-type="` + v.type + `">` + v.title + `<li>`);
+                    })
+                    $('#gengduo-ul').on('click', 'li', function (e) {
+                        let isType = $(this).attr('data-type');
+                        switch (isType) {
+                            case 'pm_disabled': //禁用
+                                if (data) {
+                                    layer.open({
+                                        type: 1,
+                                        title: ['提示', color],
+                                        offset: 'auto',
+                                        id: 'layerDemo',
+                                        content: '<div style="padding: 20px 100px;">是否禁用账号</div>',
+                                        btn: ['是', '否'],
+                                        btnAlign: 'r',
+                                        shade: 0,
+                                        yes: function () {
+                                            console.log(data.id)
+                                            ajax('get','api/User/Disable?id='+data.id)
+                                             .then( function (data) {
+                                                    if (data.code == 200) {
+                                                        layer.msg('禁用账号成功', {
+                                                            time: 2000
+                                                        }, function () {
+                                                            table.reload('currentTableId');
+                                                            layer.closeAll();
+                                                        });
+                                                    } else {
+                                                        layer.msg(res.info, {
+                                                            time: 2000
+                                                        });
+                                                    }
+                                               
+                                            });
+                                            // let forbiddenData = {
+                                            //     token: info.token,
+                                            //     loginMark: loginMark,
+                                            //     data: JSON.stringify({
+                                            //         id: data.id,
+                                            //     })
+                                            // }
+                                            // $.ajax({
+                                            //     type: 'get',
+                                            //     url: requestUrl + '/api/User/Disable',
+                                            //     data: forbiddenData,
+                                            //     success: function (data) {
+                                            //         if (data.code == 200) {
+                                            //             layer.msg('禁用账号成功', {
+                                            //                 time: 2000
+                                            //             }, function () {
+                                            //                 table.reload('currentTableId');
+                                            //                 layer.closeAll();
+                                            //             });
+                                            //         } else {
+                                            //             layer.msg(res.info, {
+                                            //                 time: 2000
+                                            //             });
+                                            //         }
+                                            //     },
+                                            //     error: function (error) {
+                                            //         console.log(error)
+                                            //     }
+                                            // });
+                                        }
+                                    });
+                                } else {
+                                    layer.msg('未选择用户', {
+                                        time: 2000
+                                    });
+                                }
+                                break;
+                            case 'pm_enabled': //启用
+                                if (data) {
+                                    layer.open({
+                                        type: 1,
+                                        title: '提示',
+                                        offset: 'auto',
+                                        id: 'layerDemo',
+                                        content: '<div style="padding: 20px 100px;">是否启用账号</div>',
+                                        btn: ['是', '否'],
+                                        btnAlign: 'r',
+                                        shade: 0,
+                                        yes: function () {
+                                           ajax('get','api/User/Enable?id='+data.id)
+                                             .then( function (data) {
+                                                    if (data.code == 200) {
+                                                        layer.msg('启用账号成功', {
+                                                            time: 2000
+                                                        }, function () {
+                                                            table.reload('currentTableId');
+                                                            layer.closeAll();
+                                                        });
+                                                    } else {
+                                                        layer.msg(res.info, {
+                                                            time: 2000
+                                                        });
+                                                    }
+                                               
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    layer.msg('未选择用户', {
+                                        time: 2000
+                                    });
+                                }
+                                break;
+                            case 'pm_resetpassword': // 重置密码
+                                if (data) {
+                                    layer.open({
+                                        type: 1,
+                                        title: '提示',
+                                        offset: 'auto',
+                                        id: 'layerDemo',
+                                        content: '<div style="padding: 20px 100px;">是否重置密码</div>',
+                                        btn: ['是', '否'],
+                                        btnAlign: 'r',
+                                        shade: 0,
+                                        yes: function () {
+                                            let resetData = {
+                                                token: info.token,
+                                                loginMark: loginMark,
+                                                data: JSON.stringify({
+                                                    keyValue: data.F_UserId
+                                                })
+                                            }
+                                            // $.ajax({
+                                            //     type: 'post',
+                                            //     //url: requestUrl + 'Simple/Areas/PMOrganization/User/resetpassword',
+                                            //     data: resetData,
+                                            //     success: function (data) {
+                                            //         if (data.code == 200) {
+                                            //             layer.msg('密码重置成功', {
+                                            //                 time: 2000
+                                            //             }, function () {
+                                            //                 layer.closeAll();
+                                            //             });
+                                            //         } else {
+                                            //             layer.msg(res.info, {
+                                            //                 time: 2000
+                                            //             });
+                                            //         }
+                                            //     },
+                                            //     error: function (error) {
+                                            //         console.log(error)
+                                            //     }
+                                            // });
+                                        }
+                                    });
+                                } else {
+                                    layer.msg('未选择用户', {
+                                        time: 2000
+                                    });
+                                }
+                                break;
+                            case 'pm_addrole': //分配角色
+                                if (data) {
+                                    sessionStorage.setItem('role-allot', JSON.stringify(data));
+                                    var index = layer.open({
+                                        title: '分配角色',
+                                        type: 2,
+                                        shade: 0.2,
+                                        maxmin: true,
+                                        shadeClose: true,
+                                        area: ['600px', '80%'],
+                                        content: './layer/user/allot.html',
+                                    });
+                                } else {
+                                    layer.msg('未选择用户', {
+                                        time: 2000
+                                    });
+                                }
+                                break;
+                        }
+                    })
+                }
+            });
+
+            // 监听搜索操作
+            form.on('submit(data-search-btn)', function (data) {
+                console.log(data);
+                if (data.field.id != '') {
+                    var result = data.field.id;
+                    // ajax({ type: "get", myurl: "api/User/GetEntityById?id=" + result, data: '', barer: "Bearer " + Barer })
+                    //     .then(function (res) {
+                    //         let data = res;
+                    //         console.log(data);
+                    //         layui.table.reload('demo', { data: [data] });
+                    //     });
+                    // return false;
+                } else {
+                    layer.msg('请输入id', {
+                        time: 2000
+                    });
+                }
+            });
+
+
+
+            //监听行单击事件（双击事件为：rowDouble，单击事件为：row）
+            table.on('row', function (obj) {
+                var data = obj.data;
+                //标注单选框
+                obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
+                //标注选中样式
+                obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            });
+        });
+    </script>
+</body>
+
+</html>

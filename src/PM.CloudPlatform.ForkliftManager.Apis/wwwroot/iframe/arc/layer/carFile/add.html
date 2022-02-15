@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增车辆</title>
+    <link rel="stylesheet" href="../../../../css/layui.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../../../css/openStyleWhite.css" disabled='true'>
+</head>
+<style>
+    .none {
+        display: none;
+    }
+</style>
+
+<body>
+    <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
+        <!-- <div class="layui-form-item">
+            <label class="layui-form-label">车辆id</label>
+            <div class="layui-input-block">
+                <input type="text" name="id" required lay-verify="required" placeholder="请输入车辆id" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div> -->
+        <div class="layui-form-item">
+            <label class="layui-form-label">车牌号</label>
+            <div class="layui-input-block">
+                <input type="text" name="licensePlateNumber" required lay-verify="required" placeholder="请输入车牌号"
+                    autocomplete="off" class="layui-input" id="licensePlateNumber">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">品牌</label>
+            <div class="layui-input-block">
+                <input type="text" name="brand" required lay-verify="required" placeholder="请输入品牌" autocomplete="off"
+                    class="layui-input" id="brand">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="serialNumber" required lay-verify="required" placeholder="请输入编号"
+                    autocomplete="off" id="serialNumber" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">型号</label>
+            <div class="layui-input-block">
+                <input type="text" name="carModel" required lay-verify="required" placeholder="请输入型号" autocomplete="off"
+                    id="carModel" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">车辆类型</label>
+            <div class="layui-input-block">
+                <select name="carTypeId" id="carTypeId" lay-verify="required">
+                    <option value=""></option>
+                    <!-- <option value="叉车">叉车</option>
+                    <option value="堆垛车">堆垛车</option>
+                    <option value="托盘车">托盘车</option> -->
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">购买时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="buyTime" required id="buyTime" placeholder="请输入购买时间" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">使用时长（h）</label>
+            <div class="layui-input-block">
+                <input type="text" name="lengthOfUse" required placeholder="请输入使用时长" autocomplete="off" id="lengthOfUse"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">保养次数</label>
+            <div class="layui-input-block">
+                <input type="text" name="numberOfMaintenance" required placeholder="请输入结保养次数" id="numberOfMaintenance"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上一次保养时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="lastMaintenanceOfTime" required placeholder="上一次保养时间"
+                    id="lastMaintenanceOfTime" class="layui-input" autocomplete="off">
+            </div>
+        </div>
+        <div class="layui-form-item ">
+            <div class="layui-input-block">
+                <button class="layui-btn" id='save' lay-submit readonly lay-filter="formDemo">提交</button>
+                <button type="reset" id='reset' class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+    <script src="../../../../js/jquery-3.5.1.min.js"></script>
+    <script src="../../../../layui.js"></script>
+    <script src="../../../../js/common.js"></script>
+
+    <script>
+        var F_Id;
+        var obj = {};
+        var localUrl = window.location.search.substr(1).split('&');
+        localUrl.map(function (v, i) {
+            var vlen = v.split('=');
+            var str = decodeURIComponent(vlen[1]);
+            obj[vlen[0]] = str;
+        })
+        layui.use(['element', 'jquery', 'form', 'laydate'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form,
+                laydate = layui.laydate;
+            var style = JSON.parse(sessionStorage.getItem('style'));
+
+            if (style == false) {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+            }
+
+            if (obj.type == 'edit') {
+
+                var data = JSON.parse(sessionStorage.getItem('carData'));
+                F_Id = data.id;
+                form.val('overTimeForm', {
+                    licensePlateNumber: data.licensePlateNumber,
+                    brand: data.brand,
+                    serialNumber: data.serialNumber,
+                    buyTime: data.buyTime,
+                    lengthOfUse: data.lengthOfUse,
+                    carModel: data.carModel,
+                    numberOfMaintenance: data.numberOfMaintenance,
+                    lastMaintenanceOfTime: data.lastMaintenanceOfTime,
+
+                });
+                // 
+                //车辆类型
+                ajax('get', 'api/CarType/GetEntities')
+                    .then(function (res) {
+                        if (res.code = 200) {
+                            console.log(2)
+                            let Typedata = res.data
+                            $.each(Typedata, function (index, value) {
+                                $('#carTypeId').append(new Option(value.name, value.id))
+                            })
+                            $('#carTypeId').val(data.carTypeId)
+                            layui.form.render("select")
+                        }
+                    })
+
+
+                $('.none').css('display', 'block');
+                // $('#unselect').css('display', 'none');
+                // ajax('get', 'Simple/Areas/PMOrganization/User/getlist', {
+                //     token: info.token,
+                //     loginMark: loginMark,
+                //     data: JSON.stringify({
+                //         companyId: info.companyId,
+                //         departmentId: parentData.F_CreateDate,
+                //         keyword: ''
+                //     }),
+                // }).then(function(data) {
+                //     if (data.data.length > 0) {
+                //         $('#F_Category').html('');
+                //         $('#F_Category').prepend(`<option value=""></option>`);
+                //         data.data.map(function(v, i) {
+                //             $('#F_Category').append(`<option value="` + v.F_UserId + `">` + v.F_RealName + `</option>`);
+                //         })
+                //         $("#F_DepartmentId").val(parentData.F_DepartmentId);
+                //         // $("#modules").siblings().find('input').val("其他");
+                //         // $(":input[ value ='5']").val();
+                //         $('#Reason').css("display", "block")
+                //         form.render();
+                //         form.val('overTimeForm', {
+                //             F_FullNamed1: parentData.F_DepartmentId,
+                //             F_Category: parentData.F_CreateUserId,
+                //             F_ApplyStart: parentData.F_ApplyStart,
+                //             F_ApplyEnd: parentData.F_ApplyEnd,
+                //             F_CountDay1: parentData.F_CountDay,
+                //             F_Region: parentData.F_Region,
+                //             F_CountDay: parentData.F_CountDay,
+                //             F_CheckMark: parentData.F_CheckMark,
+                //             F_ApplyReason: parentData.F_ApplyReason,
+                //         })
+
+                //     }
+                // })
+                // depPeo()
+            } else if (obj.type == 'add') {
+                //车辆类型
+                ajax('get', 'api/CarType/GetEntities')
+                    .then(function (res) {
+                        if (res.code = 200) {
+                            console.log(2)
+                            let data = res.data
+                            $.each(data, function (index, value) {
+                                $('#carTypeId').append(new Option(value.name, value.id))
+                            })
+                            layui.form.render("select")
+                        }
+                    })
+                $('.none').find("input").removeAttr("required")
+                // display: none;
+                // depPeo()
+                // $('#resend').css('display', 'none');
+                // $('#delete').css('display', 'none');
+                // $(this).prop("selected", false);
+                // laydate.render({
+                //     elem: '#F_ApplyStart',
+                //     value: date.toLocaleDateString().replace(/\//g, "-"),
+                //     isInitValue: true
+                // });
+                // $('#Reason').css("display", "block");
+            }
+
+
+            laydate.render({
+                elem: '#buyTime' //指定元素
+                // ,type: 'date'
+                // , range: true
+                // ,min: 0 
+                // ,max: 2023-12-31 //7天后
+                , trigger: "click"
+            });
+            laydate.render({
+                elem: '#lastMaintenanceOfTime' //指定元素
+                // ,type: 'date'
+                // , range: true
+                // ,min: 0 
+                // ,max: 2023-12-31 //7天后
+                , trigger: "click"
+            });
+
+
+            form.on('submit(formDemo)', function (fromval) {
+                //layer.msg(JSON.stringify(data.field));
+                var result = fromval.field;
+
+                if (!!F_Id) {
+                    ajax('put', 'api/Car/UpdateEntity/' + F_Id, result)
+                        .then(function (res) {
+                            console.log(res)
+                            if (res.code == 200) {
+                                F_Id = '';
+                                layer.msg('编辑成功', {
+                                    time: 2000
+                                },
+                                    function () {
+                                        parent.layui.table.reload('test')
+                                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                        parent.layer.close(iframeIndex);
+                                    }
+                                );
+                            }
+                        })
+
+                } else {
+
+                    ajax('post', 'api/Car/CreateEntity', result)
+                        .then(function (res) {
+                            console.log(res)
+
+                            if (res.code == 200) {
+                                layer.msg('添加成功', {
+                                    time: 2000
+                                },
+                                    function () {
+                                        parent.layui.table.reload('test')
+                                        var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                        parent.layer.close(iframeIndex);
+                                    }
+                                );
+                            }
+
+                        })
+                }
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

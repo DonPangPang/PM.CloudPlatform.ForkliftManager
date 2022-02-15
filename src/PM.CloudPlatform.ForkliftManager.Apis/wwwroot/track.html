@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>轨迹回放</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="./css/layui.css" media="all">
+
+    <style>
+        body {
+            background-color: #ffffff;
+            margin: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        #container {
+            height: 100vh;
+        }
+
+
+        .input-card {
+            position: fixed;
+            bottom: 20px;
+            right: 10px;
+            background: #FFF;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .input-item {
+            margin-bottom: 5px;
+        }
+
+        #track {
+            position: relative;
+        }
+
+        #track-time-box {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+        }
+
+        #speed {
+            background-color: #fff;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+    <div class="input-card">
+        <h4 style="font-size: 18px;
+        text-align: center;
+        padding: 5px;">轨迹回放控制</h4>
+        <div class="input-item">
+            <button type="button" class="layui-btn" id="start" onclick="startAnimation()">开始动画</button>
+            <button type="button" class="layui-btn" id="pause" onclick="pauseAnimation()">暂停动画</button>
+        </div>
+        <div class="input-item">
+            <button type="button" class="layui-btn" id="resume" onclick="resumeAnimation()">继续动画</button>
+            <button type="button" class="layui-btn" id="stop" onclick="stopAnimation()">停止动画</button>
+        </div>
+    </div>
+    <div class="layui-inline" id="track-time-box">
+        <!-- 注意：这一层元素并不是必须的 -->
+        <input type="text" class="layui-input" id="track-time" placeholder="请选择查询时间">
+    </div>
+    <script src="./js/jquery-3.5.1.min.js"></script>
+    <script src="./js/common.js"></script>
+    <script
+        src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Geocoder"></script>
+    <script src="./layui.js"></script>
+
+
+    <script type="text/html" template id="popupTheme">
+
+        </script>
+
+    <script>
+        var marker;
+        var lineArr = [];
+        var routeInfo = [];
+        layui.use(['laydate', 'jquery'], function () {
+            var $ = layui.jquery,
+                laydate = layui.laydate,
+                layer = layui.layer;
+            var obj = {};
+            var localUrl = window.location.search.substr(1).split('&');
+            localUrl.map(function (v, i) {
+                var vlen = v.split('=');
+                var str = decodeURIComponent(vlen[1]);
+                obj[vlen[0]] = str;
+            })
+            var id = obj.id;
+            let date = dateFormat("YYYY-mm-dd", new Date())
+            laydate.render({
+                elem: '#track-time',
+                max: date,
+                value: date,
+                done: function (value, date, endDate) {
+                    getTrack(value)
+                }
+            });
+            getTrack(date)
+            function getTrack(date) {
+                let obj = {
+                    imei: "868120278343188",
+                    // StartTime: date,
+                    // EndTime: date,
+                    IsNeedPaged: false
+                }
+
+                //轨迹回放接口
+                ajax('get', 'api/GpsPositionRecord/GetGpsPositionRecordsPointsByIMEI', obj)
+                    .then(function (res) {
+                        console.log(res)
+                        //数据处理
+                        lineArr = [];
+                        routeInfo = [];
+                        res.data.forEach(v => {
+                            let geo = JSON.parse(v.geo)
+                            console.log(geo.coordinates)
+                            routeInfo.push({
+                                "lat": geo.coordinates[0],
+                                "lng": geo.coordinates[1],
+                                "speed": v.speed,
+                                "locusTimestamp": v.createDate,
+                            })
+                            lineArr.push([geo.coordinates[0], geo.coordinates[1]])
+                        })
+                        console.log(routeInfo)
+                        if (routeInfo.length != 0) {
+                            // 1. 创建地图
+                            var map = new AMap.Map('container', {
+                                zoom: 13,
+                            });
+
+                            var icon = new AMap.Icon({
+                                //size: new AMap.Size(40, 40),    // 图标尺寸
+                                image: './images/011-叉车.png',  // Icon的图像 images/011-叉车.png
+                                imageOffset: new AMap.Pixel(0, -10),  // 图像相对展示区域的偏移量，适于雪碧图等
+                                imageSize: new AMap.Size(40, 40)   // 根据所设置的大小拉伸或压缩图片
+                            });
+                            // 2.创建小汽车marker
+                            marker = new AMap.Marker({
+                                map: map,
+                                position: [routeInfo[0].lat, routeInfo[0].lng],
+                                icon: icon,
+                                size: new AMap.Size(40, 40),
+                                // icon: makerData.icon,
+                                offset: new AMap.Pixel(-26, -13),
+                                autoRotation: true,
+                            });
+                            // 3.创建跟速度信息展示框
+                            var carWindow = new AMap.InfoWindow({
+                                offset: new AMap.Pixel(6, -25),
+                                content: ""
+                            });
+
+                            console.log(routeInfo.length)
+                            // 4.生成车辆回放轨迹
+                            var pathPolyline = initializePaths(routeInfo);
+
+                            // // 5.车辆随轨迹移动
+                            // carMarker.moveAlong(pathPolyline.getPath(), 1000, function (k) {
+                            //     return k
+                            // }, false);
+                            // 6.速度框随车辆移动
+                            AMap.event.addListener(marker, 'moving', function (e) {
+                                var lastLocation = e.passedPath[e.passedPath.length - 1];
+
+                                carWindow.setPosition(lastLocation);
+                                setVehicleSpeedInWidowns(lastLocation, e.passedPath.length - 1);
+                            });
+                            // 7.打开速度框
+                            carWindow.open(map, marker.getPosition());
+
+                            function initializePaths(paths) {
+                                var line;
+                                if (paths) {
+                                    line = new AMap.Polyline({
+                                        map: map,
+                                        path: lineArr,
+                                        showDir: true,
+                                        strokeColor: "#28F",
+                                        strokeOpacity: 0.8,
+                                        strokeWeight: 6,
+                                    });
+                                    line.setMap(map);
+                                }
+                                return line;
+                            }
+
+                            function setVehicleSpeedInWidowns(lnglat, index) {
+                                let e_index = lineArr.indexOf(lnglat);
+                                if (e_index>=0) {
+
+                                    marker.moveAlong(lineArr.slice(e_index), (routeInfo[e_index].speed) * 10 + 150)
+
+                                    carWindow.setContent("速度:" + (routeInfo[e_index].speed) + "公里/时" + "--时间:" + routeInfo[e_index].locusTimestamp);
+                                }
+                                // console.log(routeInfo)
+                                // console.log(routeInfo[e_index])
+
+
+
+                                // carWindow.setContent("速度:" + (lnglat.speed) + "公里/时" + "--时间：" + lnglat.locusTimestamp);
+                                // for (var i = 0; i < routeInfo.length; i++) {
+                                //     console.log(lnglat.distance(new AMap.LngLat(routeInfo[i].lat, routeInfo[i].lng)))
+                                //     if (lnglat.distance(new AMap.LngLat(routeInfo[i].lng, routeInfo[i].lat)) <600) {
+                                //         console.log(i)
+                                //         carWindow.setContent("速度:" + (routeInfo[i].speed) + "公里/时" + "--时间：" + routeInfo[i].locusTimestamp);
+                                //         return;
+                                //     }
+                                // }
+                            }
+                            map.setFitView();
+                        } else {
+                            layer.msg("该天没有轨迹记录", {
+                                time: 2000
+                            })
+                        }
+                    });
+
+            }
+
+        });
+
+        function startAnimation() {
+            marker.moveAlong(lineArr, 200);
+        }
+
+        function pauseAnimation() {
+            marker.pauseMove();
+        }
+
+        function resumeAnimation() {
+            marker.resumeMove();
+        }
+
+        function stopAnimation() {
+            marker.stopMove();
+        }
+        function dateFormat(fmt, date) {
+            let ret;
+            const opt = {
+                "Y+": date.getFullYear().toString(),        // 年
+                "m+": (date.getMonth() + 1).toString(),     // 月
+                "d+": date.getDate().toString(),            // 日
+                "H+": date.getHours().toString(),           // 时
+                "M+": date.getMinutes().toString(),         // 分
+                "S+": date.getSeconds().toString()          // 秒
+                // 有其他格式化字符需求可以继续添加，必须转化成字符串
+            };
+            for (let k in opt) {
+                ret = new RegExp("(" + k + ")").exec(fmt);
+                if (ret) {
+                    fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : (opt[k].padStart(ret[1].length, "0")))
+                };
+            };
+            return fmt;
+        }
+
+    </script>
+</body>
+
+</html>

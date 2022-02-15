@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车辆保险</title>
+    <link rel="stylesheet" href="../../css/layui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../css/openStyleWhite.css" disabled='true'>
+    <link rel="stylesheet" id="blue" title="blue" href="../../css/indexStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../css/indexStyleWhite.css" disabled='true'>
+</head>
+</head>
+
+<body>
+    <script type="text/html" id="toolbarDemo">
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 编辑 </button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="username" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+                搜 索</button>
+        </div>
+    </script>
+    <table id="demo" lay-filter="test"></table>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="details">查看报表</a>
+    </script>
+    <script src="../../layui.js"></script>
+    <script>
+        // var aaa = window.location.href;
+        layui.use(['element', 'jquery', 'table'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                table = layui.table;
+            var boolean = window.parent.aaa;
+            var aaa = getCaption(boolean);
+            function getCaption(obj) {  //提取boolean
+                var index = obj.lastIndexOf("=");
+                obj = obj.substring(index + 1, obj.length);
+                return obj;
+            }
+            if (aaa == "false") {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+            }
+            setTimeout(function () {
+                table.render({
+                    elem: '#demo'
+                    ,height: 'full-20'
+                    , toolbar: '#toolbarDemo'
+                    , url: '../../api/table.json' //数据接口
+                    , cols: [[ //表头
+                        { type: 'radio' }
+                        , { field: 'id', title: '车牌号', sort: true }
+                        , { field: 'sex', title: '保险人', sort: true }
+                        , { field: 'username', title: '车辆类型' }
+                        , { field: 'city', title: '品牌', }
+                        , { field: 'sex', title: '保险单号', sort: true }
+                        , { field: 'sign', title: '保险信息', }
+                        , { field: 'experience', title: '保险种类', sort: true }
+                        , { field: 'score', title: '保险公司', sort: true }
+                        , { field: 'classify', title: '保额', }
+                        , { field: 'classify', title: '续保时间', }
+                        , { field: 'classify', title: '保期', }
+                        , { fixed: 'right', title: '操作', toolbar: '#barDemo', align: "center" }
+                    ]]
+                    , page: true //开启分页
+                });
+            }, 1000)
+
+            //监听行单击事件（双击事件为：rowDouble，单击事件为：row）
+            table.on('row', function (obj) {
+                var data = obj.data;
+                //标注单选框
+                obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
+                //标注选中样式
+                obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            });
+            let color;
+            if (aaa == "false") {
+                color = 'color:#fff;background-color:#033447;'
+            } else {
+                color = 'color:#000;background-color:#FFF;'
+            }
+            table.on('tool(test)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'details') {
+                    var index = layer.open({
+                        title: ['照片',color],
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: false,
+                        shadeClose: true,
+                        area: ["950px", '100%'],
+                        content: './car1/index.html?boolean=' + aaa,
+                        success: function (layero) {
+                            if (aaa == "false") {
+                                // layero.find('.layui-layer-setwin .layui-layer-min cite ').css('background-color', '#FFF ');
+                                $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                                // $('.layui-layer-max').append('<i class="iconfont icon-zuidahua"></i>');
+                            } else {
+                                layero.find('.layui-layer-setwin .layui-layer-min cite ').css('background-color', '#000');
+                                // $('.layui-layer-close').remove('<i class="iconfont  icon-cha"></i>');
+                                // $('.layui-layer-max').remove('<i class="iconfont icon-zuidahua"></i>');
+                            }
+
+                        },
+                    });
+                } else if (obj.event === 'edit') {
+                    layer.prompt({
+                        formType: 2
+                        , value: data.email
+                    }, function (value, index) {
+                        obj.update({
+                            email: value
+                        });
+                        layer.close(index);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

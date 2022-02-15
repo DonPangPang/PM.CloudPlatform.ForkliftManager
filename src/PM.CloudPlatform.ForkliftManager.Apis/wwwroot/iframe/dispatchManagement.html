@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>租赁管理</title>
+    <link rel="stylesheet" href="../css/layui.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../css/openStyleWhite.css" disabled='true'>
+    <link rel="stylesheet" type="text/css" href="../Loading/css/component.css" />
+</head>
+
+<body>
+    <div id="pagewrap" class="pagewrap">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief"">
+        <ul class=" layui-tab-title">
+            <li class="layui-this">车辆状态</li>
+            <li>车辆租赁记录</li>
+            <li>公司租凭车辆档案</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <iframe src="./dis/carStatus.html" frameborder="0" height='100%' width="100%"></iframe>
+                </div>
+                <div class="layui-tab-item">
+                    <iframe src="./dis/carPlan.html" frameborder="0" height='100%' width="100%"></iframe>
+                </div>
+                <div class="layui-tab-item">
+                    <iframe src="./dis/comeRegister.html" frameborder="0" height='100%' width="100%"></iframe>
+                </div>
+            </div>
+            <div id="loader" class="pageload-overlay"
+                data-opening="M 40 -21.875 C 11.356078 -21.875 -11.875 1.3560784 -11.875 30 C -11.875 58.643922 11.356078 81.875 40 81.875 C 68.643922 81.875 91.875 58.643922 91.875 30 C 91.875 1.3560784 68.643922 -21.875 40 -21.875 Z">
+                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 80 60"
+                    preserveAspectRatio="xMidYMid slice">
+                    <path d="M40,30 c 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 0,0 Z" />
+                </svg>
+            </div>
+        </div>
+        <script src="../layui.js"></script>
+        <script src="../Loading/js/snap.svg-min.js"></script>
+        <script src="../Loading/js/classie.js"></script>
+        <script src="../Loading/js/svgLoader.js"></script>
+        <script>
+            layui.use(['element', 'jquery', 'table'], function () {
+                var element = layui.element,
+                    $ = layui.jquery,
+                    table = layui.table;
+                (function () {
+                    var pageWrap = document.getElementById('pagewrap'),
+                        loader = new SVGLoader(document.getElementById('loader'), { speedIn: 300, easingIn: mina.easeinout });
+                    function init() {
+                        loader.show();
+                        setTimeout(function () {
+                            loader.hide();
+                        }, 1000);
+                    }
+                    init();
+                })();
+                var style = JSON.parse(sessionStorage.getItem('style'));
+                if (style == false) {
+                    $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                    $('link[title="blue"]').removeAttr('disabled');
+                } else {
+                    $('link[title="white"]').removeAttr('disabled');
+                    $('link[title="blue"]').attr('disabled', 'true');
+                }
+            });
+        </script>
+</body>
+
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>租凭详情</title>
+    <link rel="stylesheet" href="../../../../css/layui.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../../../css/openStyleWhite.css" disabled='true'>
+</head>
+<style>
+    #container {
+        height: 90vh;
+    }
+
+    .layui-col-md8 {
+        padding: 20px;
+    }
+
+    .dn {
+        display: none;
+    }
+</style>
+
+<body>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">处理人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="people" required readonly lay-verify="required" autocomplete="off" id="people"
+                            class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">租赁公司</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="company" required readonly lay-verify="required" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">法定人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" required readonly lay-verify="required" autocomplete="off"
+                            id="name" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">电话</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="tel" required readonly lay-verify="required" autocomplete="off"
+                            id="tel" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">车辆类型</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="car_type" required readonly lay-verify="required" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="begin_time" required readonly lay-verify="required" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">归还时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="return_time" required autocomplete="off" readonly id="return_time" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item dn" id="btn">
+                    <div class="layui-input-block">
+                        <div class="layui-btn" id="submit" lay-submit="" lay-filter="demo1">立即提交</div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-col-md8">
+            <div id="container"></div>
+        </div>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor"></script>
+    <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+    <script src="../../../../layui.js"></script>
+    <script>
+        var obj = {};
+        var localUrl = window.location.search.substr(1).split('&');
+        localUrl.map(function (v, i) {
+            var vlen = v.split('=');
+            var str = decodeURIComponent(vlen[1]);
+            obj[vlen[0]] = str;
+        })
+        layui.use(['element', 'jquery', 'form', 'laydate'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form,
+                laydate = layui.laydate;
+            var style = JSON.parse(sessionStorage.getItem('style'));
+
+            if (style == false) {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+            }
+            if (obj.type == 'detail') {
+                var detailData = JSON.parse(sessionStorage.getItem('detail'));
+                form.val('overTimeForm', {
+                    // id: detailData.id,
+                    people: detailData.people,
+                    company: detailData.company,
+                    car_type: detailData.car_type,
+                    name: detailData.name,
+                    car_num: detailData.car_num,
+                    begin_time: detailData.begin_time,
+                    end_time: detailData.end_time,
+                    tel: detailData.tel,
+                    return_time: detailData.return_time,
+                });
+            } else if (obj.type == 'again') {
+                var againData = JSON.parse(sessionStorage.getItem('againData'));
+                form.val('overTimeForm', {
+                    // id: againData.id,
+                    // people: againData.people,
+                    company: againData.company,
+                    name: againData.name,
+                    car_type: againData.car_type,
+                    car_num: againData.car_num,
+                    begin_time: againData.begin_time,
+                    end_time: againData.end_time,
+                    tel: againData.tel,
+                    // return_time: detailData.return_time,
+                });
+                laydate.render({
+                    elem: '#return_time' //指定元素
+                    // , range: true
+                    , min: 0
+                    , trigger: "click"
+                });
+                $("#return_time").removeAttr("readonly")
+                $("#people").removeAttr("readonly")
+                $("#btn").removeClass("dn")
+                form.on('submit(demo1)', function (data) {
+                    layer.alert(JSON.stringify(data.field), {
+                        title: '最终的提交信息'
+                    })
+                    parent.html.html('<span  class="category category-admin">未逾期</span>')  //正式写的时候改为父级页面刷新
+                    parent.layer.closeAll()  //关闭父页面所有弹框
+                });
+            }
+            // console.log(id);
+
+            var map = new AMap.Map('container');
+            //商鼎路围栏
+            var fen = [
+                [113.799596, 34.755614],
+                [113.799553, 34.756214],
+                [113.794017, 34.755403],
+                [113.793888, 34.754848]
+            ];
+            // map.setZoomAndCenter(17, [113.796456, 34.755614])
+            var color = '#000';
+            var polygon = new AMap.Polygon({
+                path: fen,
+                strokeColor: color,
+                strokeWeight: 4,
+                strokeOpacity: 1,
+                fillOpacity: 0,
+                fillColor: '',
+                zIndex: 50,
+            })
+            map.add(polygon)
+            map.setFitView(polygon)
+        });
+    </script>
+</body>
+
+</html>

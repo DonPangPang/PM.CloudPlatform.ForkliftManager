@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增车辆</title>
+    <link rel="stylesheet" href="../../../../css/layui.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../../../css/openStyleWhite.css" disabled='true'>
+</head>
+<style>
+    #container {
+        height: 90vh;
+    }
+
+    .dn {
+        display: none;
+    }
+
+    .sty {
+        background-color: #FFF;
+        color: #000;
+    }
+
+    .layui-col-md8 {
+        padding: 20px;
+    }
+
+    #record>div {
+        width: 100%;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+    }
+
+    .none {
+        display: none;
+    }
+</style>
+
+<body>
+    <div class="layui-row">
+        <div class="layui-col-md4">
+            <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">公司名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="firm" required lay-verify="required" placeholder="" autocomplete="off"
+                            class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">法定人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" required lay-verify="required" placeholder="" autocomplete="off"
+                            id="name" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">手机号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="car_plate" required lay-verify="required" placeholder=""
+                            autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">位置</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="location" required lay-verify="required" placeholder=""
+                            autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item ">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit readonly lay-filter="formDemo">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-col-md8">
+            <div id="record"
+                style="position: fixed; top: 20px; left:35%; background: #222;color: #FFF; width: 100px; z-index: 99;">
+            </div>
+            <div id="hint" class="dn"
+                style="position: fixed; top: 20px; right:3%; color: #FFF;z-index: 99; font-size: 16px;">
+                点击鼠标右键结束绘制<button type="button" id="over" class="layui-btn" onClick="over()">关闭绘制</button></div>
+            <div id="container"></div>
+            <div class="layui-btn-group" style="position: fixed; bottom: 28px;">
+                <button type="button" id="add" class="layui-btn" onClick="drawPolygon()">开始绘制</button>
+                <button type="button" id="edit" class="layui-btn dn" onclick="edit()">开始编辑</button>
+                <button type="button" id="Delete" class="layui-btn dn" onclick="Delete()">删除围栏</button>
+                <button type="button" id="endedit" class="layui-btn dn" onclick="editend()">结束编辑</button>
+                <button type="button" id='save' class="layui-btn dn" onclick="save()">保存围栏</button>
+            </div>
+        </div>
+    </div>
+    <script
+        src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor,AMap.MouseTool,AMap.CircleEditor,AMap.Polygon"></script>
+    <!-- <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script src="../../../../layui.js"></script>
+    <script>
+        var style = JSON.parse(sessionStorage.getItem('style'));
+        var objType = {};
+        var localUrl = window.location.search.substr(1).split('&');
+        localUrl.map(function (v, i) {
+            var vlen = v.split('=');
+            var str = decodeURIComponent(vlen[1]);
+            objType[vlen[0]] = str;
+        })
+
+        var map = new AMap.Map('container', {
+            resizeEnable: true,
+            zoom: 10.5,
+            center: [113.437446, 34.20769],
+            pitch: 0,
+            viewMode: '2D',
+        });
+        function drawPolygon() {
+            $("#record").addClass('dn')
+            $('#hint').removeClass('dn')
+            $('#add').addClass('dn')
+            $("#Delete").addClass('dn');
+            $('#endedit').addClass('dn')
+            if (polygon != undefined) {
+                map.remove(polygon);
+            }
+            add.polygon({
+                strokeColor: "#FF33FF",
+                strokeOpacity: 1,
+                strokeWeight: 6,
+                strokeOpacity: 0.2,
+                fillColor: '#1791fc',
+                fillOpacity: 0.4,
+                strokeStyle: "solid",
+            })
+        }
+        shadefun()
+        var shade; //遮罩
+        function shadefun() {
+            AMap.plugin('AMap.DistrictSearch', function () {
+                var district = new AMap.DistrictSearch({
+                    extensions: 'all',
+                    // 设置查询行政区级别为 区 
+                    level: 'province'
+                })
+                district.search('河南省', function (status, result) {
+                    // 外多边形坐标数组和内多边形坐标数组
+                    var outer = [
+                        new AMap.LngLat(-360, 90, true),
+                        new AMap.LngLat(-360, -90, true),
+                        new AMap.LngLat(360, -90, true),
+                        new AMap.LngLat(360, 90, true),
+                    ];
+                    var holes = result.districtList[0].boundaries
+                    var pathArray = [
+                        outer
+                    ];
+                    pathArray.push.apply(pathArray, holes)
+                    shade = new AMap.Polygon({
+                        map: map,
+                        pathL: pathArray,
+                        //线条颜色，使用16进制颜色代码赋值。默认值为#006600
+                        strokeColor: 'rgb(20,164,173)',
+                        strokeWeight: 4,
+                        //轮廓线透明度，取值范围[0,1]，0表示完全透明，1表示不透明。默认为0.9
+                        strokeOpacity: 0.5,
+                        fillColor: 'rgba(0,0,0)',
+                        //多边形填充透明度，取值范围[0,1]，0表示完全透明，1表示不透明。默认为0.9
+                        fillOpacity: 1,
+                        //轮廓线样式，实线:solid，虚线:dashed
+                        strokeStyle: 'dashed',
+                        /*勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在    
+                            ie9+浏览器有效 取值： 
+                            实线：[0,0,0] 
+                            虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
+                            点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实 
+                            线和10个像素的空白 （如此反复）组成的虚线*/
+                        strokeDasharray: [10, 2, 10]
+                    });
+                    shade.setPath(pathArray);
+                    if (style == false) {
+                        shade.setOptions(shade.Ce.fillColor = "#000"); //修改覆盖物样式
+                    } else {
+                        shade.setOptions(shade.Ce.fillColor = "#e2ebf3"); //修改覆盖物样式
+                    }
+                })
+            })
+        }
+        var mapCoordLat = new Array();  //绘制完成后的坐标 （全部）
+        var coordinates = []; //编辑后的坐标 （单个）
+        // var sumCoord = []; //总坐标 ，感觉不需要  想办法去掉
+        var mapCoord = []; // 临时坐标
+        var obj = [];  // ‘draw’方法
+        // var arr = [];
+        var look = []; //点击左上角div获取对应的围栏坐标
+        var lookIndex; //点击左上角div获取对应的围栏index
+        var add = new AMap.MouseTool(map);
+        var nood = [];
+        add.on('draw', function (e) {
+            boolean = false;
+            console.log(e.obj.getPath());
+            map.remove(obj); //清除绘制覆盖物
+            obj = []  //清除绘制覆盖物
+            obj.push(e.obj)
+            mapCoord = e.obj.w.path
+            mapCoord.forEach(element => {
+                nood.push([element.lng, element.lat])
+            });
+            let bool = false;
+            if (!shade) {
+                shadefun()
+            }
+            for (let i = 0; i < nood.length; i++) {
+                if (shade.contains(nood[i])) {
+                    layer.msg('请在规定区域内规划围栏', {
+                        time: 2000,
+                    })
+                    nood = [];
+                    map.remove(obj);
+                    obj = [];
+                    bool = false;
+                    break;
+                } else {
+                    bool = true;
+                }
+            }
+            if (bool == true) {
+                add.close(); //结束绘制事件且不删除覆盖物 传入true 就是结束事件并删除覆盖物
+                $('#edit').removeClass('dn');
+                $('#save').removeClass('dn');
+            }
+            // if (mapCoord.length < 3) {
+            //     layer.msg('无效绘图，请重新绘制', {
+            //         time: 2000,
+            //     })
+            // }
+            // nood = [];
+        })
+        var over = function () {
+            layer.msg('确定关闭？关闭后将不会保存本次绘制', {
+                time: 0 //不自动关闭
+                , btn: ['确定', '取消']
+                , yes: function (index) {
+                    layer.close(index);
+                    $("#add").removeClass('dn');
+                    $("#record").removeClass('dn');
+                    $("#endedit").addClass('dn');
+                    $("#edit").addClass('dn');
+                    $("#Delete").addClass('dn');
+                    $("#save").addClass('dn');
+                    $('#hint').addClass('dn')
+                    map.remove(obj); //清除绘制覆盖物
+                    obj = []  //清除绘制覆盖物
+                    add.close(true);
+                    nood = [];
+                }
+            });
+        }
+        //编辑
+        var editArr = []
+        var polygon; //点击div出现的覆盖物
+        // var polyEditor;
+        var editMap; //编辑覆盖物
+        var editboolean = false;
+        var boolean = false; //判断是否点击div
+        let array = []; //临时数组
+        var edit = function () {
+            editboolean = true;
+            $("#record").addClass('dn');
+            $("#endedit").removeClass('dn');
+            $("#edit").addClass('dn');
+            $("#Delete").addClass('dn');
+            $("#add").addClass('dn');
+            $("#save").addClass('dn');
+            $('#hint').addClass('dn');
+            if (boolean == true) {        //点击div后编辑
+                add.close(true); //结束绘制事件
+                map.remove(obj); //清除绘制覆盖物
+                obj = [];  //清除绘制覆盖物
+                map.remove(polygon);
+                editMap = new AMap.Polygon({
+                    path: look,
+                    strokeColor: "#FF33FF",
+                    strokeWeight: 6,
+                    strokeOpacity: 0.2,
+                    fillOpacity: 0.4,
+                    fillColor: '#1791fc',
+                    zIndex: 50,
+                })
+                array.push(editMap);
+                map.add(array);
+                array.forEach(function (v, i) {
+                    let str = "polyEditor" + i;
+                    str = new AMap.PolyEditor(map, v)
+                    editArr.push(str)
+                    str.open()
+                    // str.on('draw', function (event) {
+                    //     //结束编辑
+                    //     console.log(event.obj.getPath());
+                    //     console.log(event.target.De.path);
+                    //     coordinates = event.target.De.path
+                    // })
+                    str.on('end', function (event) {
+                        //结束编辑
+                        coordinates = event.target.getPath()
+                    })
+                });
+                // coordinates= []
+                array = []
+            } else if (boolean == false) {          //绘制后编辑
+                if (mapCoordLat.indexOf(nood) == -1) {
+                    mapCoordLat.push(nood);
+                }
+                nood = [];
+                add.close(true) //结束绘制事件
+                map.remove(obj); //清除绘制覆盖物
+                obj = []  //清除绘制覆盖物
+                // map.remove(polygon);
+                editMap = new AMap.Polygon({
+                    path: mapCoordLat[mapCoordLat.length - 1],
+                    strokeColor: "#FF33FF",
+                    strokeWeight: 6,
+                    strokeOpacity: 0.2,
+                    fillOpacity: 0.4,
+                    fillColor: '#1791fc',
+                    zIndex: 50,
+                })
+                array.push(editMap)
+                map.add(array)
+                array.forEach(function (v, i) {
+                    let str = "polyEditor" + i;
+                    str = new AMap.PolyEditor(map, v)
+                    editArr.push(str)
+                    str.open()
+                    str.on('end', function (event) {
+                        //结束编辑
+                        coordinates = event.target.getPath()
+                        mapCoordLat.splice(-1, 1, coordinates);
+                    })
+                });
+                array = []
+            }
+        }
+        var Delete = function () { //正确删除
+            layer.msg('确认删除', {
+                time: 0 //不自动关闭
+                , btn: ['删除', '取消']
+                , yes: function (index) {
+                    layer.close(index);
+                    mapCoordLat.splice(lookIndex, 1);
+                    map.remove(polygon);
+                    $('#record').html('');
+                    for (let n = 0; n < mapCoordLat.length; n++) {
+                        let a = n + 1;
+                        if (mapCoordLat[n].length == 0) {  //清除无效围栏
+                            mapCoordLat.splice(n, 1);
+                        } else {
+                            $('#record').append('<div class = "number" number=' + a + '>围栏' + a + '</div>');
+                            a = null;
+                        }
+                    }
+                    $("#record").removeClass('dn');
+                    $('#add').removeClass('dn')
+                    $("#edit").addClass('dn');
+                    $("#Delete").addClass('dn');
+                    $("#endedit").addClass('dn');
+                    $("#save").addClass('dn');
+                    $('#hint').addClass('dn')
+                    layer.msg('围栏已删除', {
+                        time: 2000,
+                    });
+                }
+            });
+        }
+        var editend = function () {
+            $("#record").removeClass('dn');
+            $("#edit").addClass('dn');
+            $("#endedit").addClass('dn');
+            $("#Delete").addClass('dn');
+            $("#save").removeClass('dn');
+            $('#add').addClass('dn')
+            $('#hint').addClass('dn')
+            editArr.forEach(v => v.close())
+        }
+        //保存 
+        var save = function () {
+            // $("#record").removeClass('dn')
+            if (nood != []) {
+                mapCoordLat.push(nood);
+                nood = [];
+            }
+            $("#record").removeClass('dn');
+            $("#edit").addClass('dn');
+            $("#Delete").addClass('dn');
+            $("#save").addClass('dn');
+            $('#add').removeClass('dn')
+            $('#hint').addClass('dn')
+            number = null;
+            if (editMap == undefined) {
+                map.remove(obj);
+                obj = []
+            } else {
+                map.remove(editMap);
+                editMap = null;
+            }
+            if (editboolean == true) {   //经过编辑 
+                if (lookIndex != undefined) {  //直接编辑
+                    mapCoordLat.splice(lookIndex, 1, coordinates);
+                } else {   //点击div后编辑
+                }
+                lookIndex = undefined;
+            } else {
+                if (mapCoordLat.length != 0) {  //不编辑直接保存
+                } else {
+                    layer.msg('请编辑电子围栏后保存', {
+                        time: 2000,
+                    })
+                }
+            }
+            $('#record').html('');
+            for (let n = 0; n < mapCoordLat.length; n++) {
+                let a = n + 1;
+                if (mapCoordLat[n].length == 0) {  //清除无效围栏
+                    mapCoordLat.splice(n, 1);
+                } else {
+                    $('#record').append('<div class = "number" number=' + a + '>围栏' + a + '</div>');
+                    a = null;
+                }
+            }
+            coordinates = [];
+            mapCoord = [];
+            arr = [];
+            boolean = false;
+            editboolean = false;
+        }
+        //围栏二次显示 
+        $('body').on('click', '.number', function () {
+            boolean = true;
+            add.close(true) //结束绘制事件
+            map.remove(obj); //清除绘制覆盖物
+            $("#record").removeClass('dn');
+            $("#edit").removeClass('dn');
+            $("#Delete").removeClass('dn');
+            $("#save").addClass('dn');
+            $('#add').addClass('dn')
+            $('#hint').addClass('dn')
+            $(this).addClass('sty').siblings().removeClass('sty')
+            obj = []  //清除绘制覆盖物
+            if (polygon != undefined) {
+                map.remove(polygon);
+            }
+            let n = $(this).attr('number') - 1;
+            let m = [];
+            m = mapCoordLat[n];
+            look = m;
+            lookIndex = n;
+            polygon = new AMap.Polygon({
+                path: m,
+                strokeColor: "#FF33FF",
+                strokeWeight: 6,
+                strokeOpacity: 0.2,
+                fillOpacity: 0.4,
+                fillColor: '#1791fc',
+                zIndex: 50,
+            })
+            map.add(polygon)
+            // 缩放地图到合适的视野级别
+            // map.setFitView([polygon])
+            m = [];
+            n = null;
+        })
+        layui.use(['element', 'jquery', 'form', 'laydate'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form,
+                laydate = layui.laydate;
+            // var style = JSON.parse(sessionStorage.getItem('style'));
+            if (style == false) {
+                var styleName = "amap://styles/blue";
+                map.setMapStyle(styleName);
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+            } else {
+                var styleName = "amap://styles/normal";
+                map.setMapStyle(styleName);
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+            }
+            if (objType.type == 'edit') {  //如果是编辑 显示添加过的围栏
+                var data = JSON.parse(sessionStorage.getItem('firmData'));
+                form.val('overTimeForm', {
+                    firm: data.firm,
+                    name: data.name,
+                    car_plate: data.car_plate,
+                    location: data.location,
+                });
+                //围栏参数 坐标
+                mapCoordLat = [
+                    [
+                        [113.324268, 34.191504],
+                        [113.596866, 34.230117],
+                        [113.538501, 34.150601],
+                        [113.435504, 34.148328]],
+                    [
+                        [113.35448, 34.212517],
+                        [113.468463, 34.225576],
+                        [113.407352, 34.101149]
+                    ]]
+                $('#record').html('');
+                for (let n = 0; n < mapCoordLat.length; n++) {
+                    let a = n + 1;
+                    if (mapCoordLat[n].length == 0) {  //清除无效围栏
+                        mapCoordLat.splice(n, 1);
+                    } else {
+                        $('#record').append('<div class = "number" number=' + a + '>围栏' + a + '</div>');
+                        a = null;
+                    }
+                }
+            } else if (objType.type == 'add') {
+
+            }
+            form.on('submit(formDemo)', function (data) {
+                if (mapCoordLat.length != 0  ) {
+                    layer.msg(JSON.stringify(data.field) + JSON.stringify(mapCoordLat));
+                } else {
+                    layer.msg('请至少绘制一个电子围栏后提交', {
+                        time: 2000,
+                    })
+                }
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车辆状态</title>
+    <link rel="stylesheet" href="../../css/layui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../css/openStyleWhite.css" disabled='true'>
+    <style>
+        .category {
+            padding: 5px;
+        }
+
+        .category-admin {
+            color: #FFFFFF;
+            background-color: #5CB85C;
+            border-radius: 3px;
+        }
+
+        .category-gen {
+            color: #FFFFFF;
+            background-color: #c46c1b;
+            border-radius: 3px;
+        }
+
+        .category-qingjia {
+            color: #FFFFFF;
+            background-color: #8f54b1;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="demo" lay-filter="test"></table>
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="username" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+                搜 索</button>
+        </div>
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增租凭</button>
+    </script>
+    <script type="text/html" id="F_CategoryBar">
+        {{#  if(d.car_state ){ }}
+            <span data-state=  {{ d.car_state }} class="category category-admin">空闲</span>
+        {{#  } else {  }}
+            <span data-state=  {{ d.car_state }} class="category category-gen">租凭</span>
+        {{#  } }}
+    </script>
+    <script src="../../layui.js"></script>
+    <script src="../../js/common.js"></script>
+    <!-- <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script> -->
+    <script>
+        layui.use(['element', 'table', 'jquery', 'layer'], function () {
+            var element = layui.element,
+                layer = layui.layer,
+                $ = layui.jquery,
+                table = layui.table;
+            var style = JSON.parse(sessionStorage.getItem('style'));
+            var arr = [];
+            if (style == false) {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+                var color = 'color:#fff;background-color:#033447;'
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+                var color = 'color:#000;background-color:#FFF;'
+            }
+            setTimeout(function () {
+                table.render({
+                    elem: '#demo'
+                    , height: 'full-20'
+                    , post: 'get'
+                    , headers: { Authorization: "Bearer " + Token }
+                    , url: requestUrl + 'api/Car/GetCarArchives' //数据接口
+                    , toolbar: '#toolbarDemo'
+                    , cols: [[ //表头
+                        { type: "checkbox" }
+                        , { field: 'id', title: 'ID', width: 80, sort: true }
+                        , { field: 'licensePlateNumber', title: '车牌号', sort: true }
+                        , { field: 'carTypeName', title: '车辆类型' }
+                        , { field: 'serialNumber', title: '车辆编号', sort: true }
+                        , { field: 'brand', title: '品牌', }
+                        , { field: 'lengthOfUse', title: '使用时长', }
+                        , { field: 'isReturn', toolbar: '#F_CategoryBar', title: '车辆状态', align: "center", sort: true }
+                    ]]
+                    , page: false //开启分页
+                    , parseData: function (res) {
+                        console.log(res)
+
+                        return {
+                            'code': res.code,
+                            'count': res.total,
+                            'data': res.data,
+                            'msg': res.msg
+                        }
+                    },
+                    response: {
+                        statusName: 'code',
+                        statusCode: 200,
+                        msgName: 'msg',
+                        countName: 'count',
+                        dataName: 'data'
+                    }
+                });
+            }, 500)
+            table.on('toolbar(test)', function (obj) {
+                var selectData = layui.table.checkStatus('demo').data;
+                arr = selectData
+                let number = arr.length;
+                switch (obj.event) {
+                    case 'add':
+                        if (arr.length != 0) {
+                            console.log(arr)
+                            let bool=true;
+                            arr.forEach(item => {
+                                if (!item.isReturn) {
+                                bool=false;
+                            }
+                            });
+                          if (bool) {
+                            layer.msg('是否将' + number + '辆车租凭', {
+                                time: 0 //不自动关闭
+                                , btn: ['确定', '取消']
+                                , yes: function (index) {
+                                    layer.close(index);
+                                    sessionStorage.setItem('data-add', JSON.stringify(arr));
+                                    var index = layer.open({
+                                        title: ['新增租凭', color],
+                                        type: 2,
+                                        shade: 0.2,
+                                        maxmin: true,
+                                        shadeClose: true,
+                                        area: ['90%', '80%'],
+                                        content: './layer/carStatus/add.html',
+                                        maxmin: false, //最大化最小化
+                                        success: function (layero) {
+                                            if (style == false) {
+                                                $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                                            } else {
+                                            }
+                                        },
+                                    });
+                                }
+                            });
+                            break;
+                          }
+                          else{
+                            layer.msg('请重新选择车辆后执行操作', {
+                                time: 2000
+                            });
+                          }
+                            
+                        } else {
+                            layer.msg('请选中车辆后执行操作', {
+                                time: 2000
+                            });
+                        }
+                };
+            });
+
+            $(document).on("click", ".layui-table-body table.layui-table tbody tr", function () {
+                let obj = event ? event.target : event.srcElement;
+                let tag = obj.tagName;
+                let checkbox = $(this).find("td div.laytable-cell-checkbox div.layui-form-checkbox I");
+                let state = $(this).find("span[data-state]").attr("data-state")
+                if (state == '1') {
+                    layer.msg('该车辆保养/维修中，请选择其他车辆', {
+                        time: 2000,
+                    });
+                } else if (state == '2') {
+                    layer.msg('该车辆出勤中，请选择其他车辆', {
+                        time: 2000
+                    });
+                } else {
+                    if (checkbox.length != 0) {
+                        if (tag == 'DIV') {
+                            checkbox.click();
+                        }
+                    }
+                }
+            });
+            $(document).on("click", "td div.laytable-cell-checkbox div.layui-form-checkbox", function (e) {
+                e.stopPropagation();
+            });
+
+            var cars = [
+                {
+                    type: '叉车',
+                },
+                {
+                    type: '托盘车',
+                },
+                {
+                    type: '堆垛车',
+                },
+            ];
+
+            var states = [true, false];
+            function random(min, max) {
+                return parseInt(Math.random() * (max - min + 1) + min, 10);
+            }
+
+            function getData() {
+                var data = []
+                for (var i = 0; i < 100; i++) {
+                    var item = {
+                        id: i,
+                        car_plate: '豫A' + random(100000, 199999),
+                        car_no: random(10000000, 19999999),
+                        type: cars[random(0, 2)].type,
+                        brand: '品牌' + random(1, 5),
+                        use_time: random(500, 10000),
+                        car_state: random(0, 2),
+                        // car_ele: states[random(0, 1)]
+                    }
+                    data.push(item);
+                }
+                return data;
+            }
+        });
+    </script>
+</body>
+
+</html>

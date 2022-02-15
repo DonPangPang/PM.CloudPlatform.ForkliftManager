@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加终端设备</title>
+    <link rel="stylesheet" href="../../../css/layui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../../css/openStyleWhite.css" disabled='true'>
+</head>
+
+<body>
+    <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">终端设备名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="imei" required lay-verify="required" placeholder="请输入模块名称" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>   
+        <div class="layui-form-item">
+            <label class="layui-form-label">绑定车辆</label>
+            <div class="layui-input-block">
+                <select name="carId" id="carId" lay-verify="carId">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <script src="../../../layui.js"></script>
+    <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script>
+        layui.use(['element', 'jquery', 'form'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form;
+            let Barer = JSON.parse(sessionStorage.getItem('userInfo'));
+            var parentData =  JSON.parse(sessionStorage.getItem('firmData'));
+            // var boolean = getCaption(aaa);
+            function getCaption(obj) {  //提取boolean
+                var index = obj.lastIndexOf("=");
+                obj = obj.substring(index + 1, obj.length);
+                return obj;
+            }
+            console.log(parentData)
+            form.val('overTimeForm', {
+                //根据name来获取值
+                imei: parentData.imei,           
+            })
+             //上级模块
+             ajax('get','api/Car/GetEntities')
+                    .then(function (res) {
+                        console.log(res)
+                        if (res.code = 200) {
+                            console.log(2)
+                            let Typedata = res.data
+                            $.each(Typedata, function (index, value) {
+                                $('#carId').append(new Option(value.licensePlateNumber, value.id))
+                            })
+                            $('#carId').val(parentData.carId)
+                            layui.form.render("select")
+                        }
+                    })
+
+            form.on('submit(formDemo)', function (data) {
+                var result = data.field;
+                console.log(data.field)
+                console.log(parentData.id)
+                data.field.id = parentData.id;
+                ajax("put", "api/Car/GetCarTerminals"+parentData.id,result)
+                    .then(function (res) {
+                        layer.msg('修改成功', {
+                            time: 2000
+                        }, function () {
+                            parent.layui.table.reload('test')
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(iframeIndex);
+                            // ajax({ type: "get", myurl: "api/User/GetEntities", data: '', barer: "Bearer " + Barer })
+                            //     .then(function (res) {
+                            //         parent.layui.table.reload('demo', { data: res });
+                            //     });
+                        });
+                    });
+                return false;
+            });
+
+        });
+    </script>
+</body>
+
+</html>

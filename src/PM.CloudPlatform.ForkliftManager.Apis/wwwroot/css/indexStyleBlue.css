@@ -1,0 +1,313 @@
+html,
+body,
+#container {
+    width: 100%;
+    height: 100%;
+}
+
+.lnglat {
+    color: #0288d1;
+}
+
+.amap-logo,
+.amap-copyright {
+    display: none !important;
+}
+
+.style {
+    position: fixed !important;
+    z-index: 1000;
+    border-radius: 1.25rem;
+    padding: 0.75rem 1.25rem;
+    box-shadow: 0 2px 40px 0 #62c1d8 !important;
+    background-image: linear-gradient(45deg, #1b557350, #31afc355) !important;
+    color: #fff !important;
+    background-color: unset;
+}
+
+.rightBox1 {
+    top: 5rem;
+    right: 3rem;
+    width: auto;
+    height: 250px;
+    /* padding: .75rem 1.25rem; */
+    min-width: 25rem;
+}
+
+.rightBox2 {
+    top: 28rem;
+    right: 3rem;
+    width: 300px;
+    height: 600px;
+    min-width: 25rem;
+}
+.rightBox2 > div {
+    height: 50%;
+}
+#bottomIframe {
+    position: fixed !important;
+    width: 40%;
+    left: 30%;
+    display: flex;
+    justify-content: space-around;
+    bottom: 0;
+    padding: unset;
+}
+#bottomIframe:after {
+    width: 40%;
+    font-size: 18px;
+    height: 110px;
+    position: fixed;
+    left: 30%;
+    bottom: 0;
+    z-index: -1;
+    content: "";
+    border-radius: 50% 50% 0 0;
+    /* box-shadow: 0 2px 40px 0 #62c1d8; */
+    background-image: linear-gradient(45deg, #1b557390, #31afc390);
+    /* background-image: linear-gradient(45deg, #1b5573,#000); */
+    /* background: #000 ; */
+    /* background: #1b5573 ;
+    opacity: 0.9; */
+}
+#bottomIframe > div {
+    width: 90px;
+    height: 90px;
+    /* margin: 0 30px; */
+}
+
+#bottomIframe > div:nth-child(1){
+    background: url(../images/face/车务管理\ –\ 1.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
+#bottomIframe > div:nth-child(2)  {
+    background: url(../images/face/调度管理\ \ –\ 1.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
+#bottomIframe > div:nth-child(3)  {
+    background: url(../images/face/档案管理\ –\ 1.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
+#bottomIframe > div:nth-child(4)  {
+    background: url(../images/face/统计管理\ –\ 1.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
+#bottomIframe > div:nth-child(5)  {
+    background: url(../images/face/系统管理\ –\ 1.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
+
+/* #bottomIframe > div:nth-child(1):hover  {
+    background: url(../images/face/动态.gif);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
+#bottomIframe > div:nth-child(2):hover    {
+    background: url(../images/face/调度管理.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
+#bottomIframe > div:nth-child(3):hover    {
+    background: url(../images/face/档案管理.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
+#bottomIframe > div:nth-child(4):hover    {
+    background: url(../images/face/统计管理.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
+#bottomIframe > div:nth-child(5):hover    {
+    background: url(../images/face/系统管理.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+} */
+
+#bottomIframe div:hover  {
+    margin-top: -20px;
+    /* margin-left: 40px;
+    margin-right: 40px; */
+    transition: transform 0.2s ease-out;
+    -o-transition: transform 0.2s ease-out;
+    -webkit-transition: transform 0.2s ease-out;
+    -moz-transition: transform 0.2s ease-out;
+    transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+}
+
+.layui-nav-child {
+    top: unset;
+    bottom: 65px;
+}
+
+.btn {
+    position: fixed;
+    left: 10px;
+    top: 35%;
+    width: 10px;
+    height: 80px;
+}
+
+.btn > i {
+    display: block;
+    margin: 20px -8px;
+}
+
+.stat-main {
+    width: 300px;
+    height: 70%;
+    /* background: #FFF; */
+    display: none;
+    position: fixed;
+    top: 12%;
+    left: 3rem;
+    z-index: 1001;
+    color: #000;
+    /* box-shadow: 0 2px 6px 0 rgb(225, 220, 216, 50%); */
+}
+.videodiv {
+    position: fixed;
+    bottom: 10px;
+    left: 3rem;
+    width: 300px;
+    height: 15%;
+    padding: unset;
+    overflow: hidden;
+}
+.video_cage {
+    width: 300px;
+    height: 170px;
+}
+#input {
+    position: fixed;
+    top: 5rem;
+    left: 3rem;
+    z-index: 10000;
+    /* width: 350px; */
+}
+
+#input input {
+    width: 300px;
+    height: 40px;
+    border-radius: 1.25rem;
+    background: linear-gradient(to right, #00000050, #31afc355);
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    padding-left: 25px;
+    font-weight: 600;
+    padding-right: 30px;
+    /* background: none; */
+}
+
+#input input::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #fff;
+}
+
+#inputImg {
+    position: fixed;
+    top: 70px;
+    left: 300px;
+    width: 16px;
+    height: 16px;
+    z-index: 10001;
+}
+
+#map-styles .input-item {
+    height: 2rem;
+}
+
+#map-styles .input-item span {
+    display: inline-block;
+    width: 4rem;
+}
+
+#map-styles .input-item .input-text {
+    color: #0288d1;
+    margin-left: 1rem;
+    margin-right: 0rem;
+    width: 6rem;
+}
+
+.input-card {
+    top: 5rem;
+    bottom: unset;
+    right: 30rem;
+}
+
+.layui-card {
+    color: #fff;
+    background: linear-gradient(to right, #00000050, #31afc355);
+}
+
+label {
+    display: block;
+    color: #fff;
+}
+.layui-card-header {
+    color: #fff !important;
+}
+.custom-input-card {
+    width: 18rem;
+}
+
+.custom-input-card .btn:last-child {
+    margin-left: 1rem;
+}
+
+.content-window-card {
+    position: relative;
+    width: 23rem;
+    padding: 0.75rem 0 0 1.25rem;
+    box-shadow: none;
+    top: 0;
+    left: 0;
+}
+
+.content-window-card p {
+    height: 2rem;
+}
+.amap-info-content {
+    box-shadow: 0 2px 40px 0 #62c1d8;
+    background-image: linear-gradient(45deg, #1b557370, #31afc380);
+    background: unset;
+    border-radius: 10px;
+    color: #fff;
+}
+.input-card {
+    background-image: linear-gradient(45deg, #1b557380, #31afc380);
+    background: unset;
+    color: #fff;
+}
+.top {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10001;
+    background-image: url(../images/face/title3.png);
+    height: 50px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.h1 {
+    letter-spacing: 16px;
+    position: fixed;
+    top: 5px;
+    left: 42%;
+    z-index: 10003;
+    color: #fff;
+}
+.icon-cha,
+.icon-zuidahua {
+    color: #fff;
+    width: 16px;
+    height: 16px;
+}

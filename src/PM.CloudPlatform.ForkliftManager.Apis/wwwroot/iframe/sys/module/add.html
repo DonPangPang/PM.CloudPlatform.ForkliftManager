@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加模块</title>
+    <link rel="stylesheet" href="../../../css/layui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../../css/openStyleWhite.css" disabled='true'>
+</head>
+
+<body>
+    <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">模块名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入模块名称" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">模块路径</label>
+            <div class="layui-input-block">
+                <input type="text" name="url" required lay-verify="required" placeholder="请输入模块路径" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级模块</label>
+            <div class="layui-input-block">
+                <select name="parentId" id="parentId" lay-verify="parentId">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+              <textarea name="description"  id="description" placeholder="请输入描述" class="layui-textarea"></textarea>
+            </div>
+          </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <script src="../../../layui.js"></script>
+    <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script>
+      //  var aaa = window.location.href;
+        layui.use(['element', 'jquery', 'form'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form;
+            let Barer = JSON.parse(sessionStorage.getItem('userInfo'));
+            var style = JSON.parse(sessionStorage.getItem('style'));
+
+            if (style == false) {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+            }
+                        //上级模块
+             ajax('get', 'api/Module/GetEntities')
+                    .then(function (res) {
+                        if (res.code = 200) {
+                            console.log(2)
+                            let Typedata = res.data
+                            $.each(Typedata, function (index, value) {
+                                $('#parentId').append(new Option(value.name, value.id))
+                            })
+                            layui.form.render("select")
+                        }
+                    })
+
+            //监听提交
+            form.on('submit(formDemo)', function (fromval) {
+                var result = fromval.field;
+                ajax("post", "api/Module/CreateEntity", result)
+                    .then(function (res) {
+                        layer.msg('添加成功', {
+                            time: 2000
+                        }, function () {
+                            parent.layui.table.reload('test')
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(iframeIndex);
+                            
+                        });
+                    });
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

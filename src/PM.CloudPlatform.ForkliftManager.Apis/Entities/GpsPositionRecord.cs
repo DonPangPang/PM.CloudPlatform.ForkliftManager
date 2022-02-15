@@ -9,6 +9,7 @@ using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
 {
@@ -130,7 +131,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
 
         public Point Point
         {
-            get => new Point((double)Lon, (double)Lat) { SRID = 4326 };
+            get => (new Point((double)Lon, (double)Lat) { SRID = 4326 });
         }
 
         public byte Speed { get; set; }

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新增车辆</title>
+    <link rel="stylesheet" href="../../../../css/layui.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" id="blue" title="blue" href="../../../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="white" title="white" href="../../../../css/openStyleWhite.css" disabled='true'>
+</head>
+<style>
+    .none{
+        display: none;
+    }
+</style>
+<body>
+    <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">车辆id</label>
+            <div class="layui-input-block">
+                <input type="text" name="id" required lay-verify="required" placeholder="请输入车辆id" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">车牌号</label>
+            <div class="layui-input-block">
+                <input type="text" name="car_plate" required lay-verify="required" placeholder="请输入车牌号"
+                    autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">品牌</label>
+            <div class="layui-input-block">
+                <input type="text" name="brand" required lay-verify="required" placeholder="请输入品牌" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">编号</label>
+            <div class="layui-input-block">
+                <input type="text" name="car_no" required lay-verify="required" placeholder="请输入编号" autocomplete="off"
+                    id="car_no" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">车辆类型</label>
+            <div class="layui-input-block">
+                <select name="type" lay-verify="required">
+                    <option value=""></option>
+                    <option value="叉车">叉车</option>
+                    <option value="堆垛车">堆垛车</option>
+                    <option value="托盘车">托盘车</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">购买时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="buy_time" required id="buy_time" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item none">
+            <label class="layui-form-label">使用时长（h）</label>
+            <div class="layui-input-block">
+                <input type="text" name="use_time" required readonly lay-verify="required" placeholder="请输入结束时间" id="use_time"
+                    autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item none">
+            <label class="layui-form-label">保养次数</label>
+            <div class="layui-input-block">
+                <input type="text" name="upkeep" required readonly lay-verify="required" placeholder="请输入结束时间" id="upkeep"
+                    autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item none">
+            <label class="layui-form-label">上一次保养时间</label>
+            <div class="layui-input-block">
+                <input type="text" name="time" required readonly lay-verify="required" placeholder="请输入车辆数量" autocomplete="off"
+                    id="time" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item ">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit readonly lay-filter="formDemo">提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+    <script src="../../../../layui.js"></script>
+    <script>
+        var obj = {};
+        var localUrl = window.location.search.substr(1).split('&');
+        localUrl.map(function (v, i) {
+            var vlen = v.split('=');
+            var str = decodeURIComponent(vlen[1]);
+            obj[vlen[0]] = str;
+        })
+        layui.use(['element', 'jquery', 'form', 'laydate'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form,
+                laydate = layui.laydate;
+            var style = JSON.parse(sessionStorage.getItem('style'));
+            if (style == false) {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+            }
+            if (obj.type == 'edit') {
+                var data = JSON.parse(sessionStorage.getItem('carData'));
+                form.val('overTimeForm', {
+                    id: data.id,
+                    car_plate: data.car_plate,
+                    brand: data.brand,
+                    buy_time: data.buy_time,
+                    car_no: data.car_no,
+                    time: data.time,
+                    type: data.type,
+                    upkeep: data.upkeep,
+                    use_time: data.use_time,
+                });
+                $('.none').css('display', 'block');
+                // $('#unselect').css('display', 'none');
+                // ajax('get', 'Simple/Areas/PMOrganization/User/getlist', {
+                //     token: info.token,
+                //     loginMark: loginMark,
+                //     data: JSON.stringify({
+                //         companyId: info.companyId,
+                //         departmentId: parentData.F_CreateDate,
+                //         keyword: ''
+                //     }),
+                // }).then(function(data) {
+                //     if (data.data.length > 0) {
+                //         $('#F_Category').html('');
+                //         $('#F_Category').prepend(`<option value=""></option>`);
+                //         data.data.map(function(v, i) {
+                //             $('#F_Category').append(`<option value="` + v.F_UserId + `">` + v.F_RealName + `</option>`);
+                //         })
+                //         $("#F_DepartmentId").val(parentData.F_DepartmentId);
+                //         // $("#modules").siblings().find('input').val("其他");
+                //         // $(":input[ value ='5']").val();
+                //         $('#Reason').css("display", "block")
+                //         form.render();
+                //         form.val('overTimeForm', {
+                //             F_FullNamed1: parentData.F_DepartmentId,
+                //             F_Category: parentData.F_CreateUserId,
+                //             F_ApplyStart: parentData.F_ApplyStart,
+                //             F_ApplyEnd: parentData.F_ApplyEnd,
+                //             F_CountDay1: parentData.F_CountDay,
+                //             F_Region: parentData.F_Region,
+                //             F_CountDay: parentData.F_CountDay,
+                //             F_CheckMark: parentData.F_CheckMark,
+                //             F_ApplyReason: parentData.F_ApplyReason,
+                //         })
+
+                //     }
+                // })
+                // depPeo()
+            } else if (obj.type == 'add') {
+                $('.none').find("input").removeAttr("required")
+                // display: none;
+                // depPeo()
+                // $('#resend').css('display', 'none');
+                // $('#delete').css('display', 'none');
+                // $(this).prop("selected", false);
+                // laydate.render({
+                //     elem: '#F_ApplyStart',
+                //     value: date.toLocaleDateString().replace(/\//g, "-"),
+                //     isInitValue: true
+                // });
+                // $('#Reason').css("display", "block");
+            }
+            // var id = []
+            // for (let i = 0; i < addData.length; i++) {
+            //     id.push(addData[i].car_plate);
+            // }
+            // console.log(id);
+
+            // new Vue({
+            //     el: '.block',
+            //     data() {
+            //         return {
+            //             reverse: true,
+            //             activities: [{
+            //                 content: '8月14日09点41分 申请',
+            //                 size: 'large',
+            //                 type: 'primary',
+            //                 icon: 'el-icon-more'
+            //             }, {
+            //                 content: '8月14日10点41分 分配车辆',
+            //                 color: '#0bbd87'
+            //             }, {
+            //                 content: '8月15日11点41分 审核',
+            //                 color: '#0bbd87'
+            //                 // size: 'large'
+            //             }, {
+            //                 content: '8月15日12点41分 审核',
+            //                 color: '#0bbd87'
+            //             }, {
+            //                 content: '等待审核',
+            //             }, {
+            //                 content: '等待审核',
+            //             }]
+            //         };
+            //     }
+            // })
+            // setTimeout(function () {
+            //     table.render({
+            //         elem: '#demo'
+            //         , height: 'full-150'
+            //         , width: 1480
+            //         // , url: '../../api/table.json' //数据接口
+            //         , data: getData()
+            //         , toolbar: '#toolbarDemo'
+            //         // , limit: 15
+            //         , cols: [[ //表头
+            //             { field: 'id', title: 'ID' }
+            //             , { field: 'people', title: '处理人' }
+            //             , { field: 'company', title: '租赁单位' }
+            //             , { field: 'car_type', title: '车辆类型', sort: true }
+            //             , { field: 'car_num', title: '车辆数量', }
+            //             , { field: 'begin_time', title: '开始时间', }
+            //             , { field: 'end_time', title: '结束时间', sort: true }
+            //             , { field: 'tel', title: '电话', }
+            //             , { field: 'return_time', title: '归还时间', }
+            //         ]]
+            //         , page: true //开启分页
+            //     });
+            // }, 500)
+
+            // var people = ['李雷', '莉莉', '小张'];
+            // function random(min, max) {
+            //     return parseInt(Math.random() * (max - min + 1) + min, 10);
+            // }
+            // function dateTime() {
+            //     var date = new Date();
+
+            //     return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+            // }
+            // var cars = [
+            //     {
+            //         type: '叉车',
+            //     },
+            //     {
+            //         type: '托盘车',
+            //     },
+            //     {
+            //         type: '堆垛车',
+            //     },
+            // ];
+
+            // function getData() {
+            //     var data = []
+
+            //     for (var i = 0; i < 100; i++) {
+            //         var item = {
+            //             id: i,
+            //             people: people[random(0, 2)],
+            //             company: 'xxxx公司' + i,
+            //             car_type: cars[random(0, 2)].type,
+            //             car_num: random(5, 20),
+            //             begin_time: dateTime(),
+            //             end_time: dateTime(),
+            //             tel: '137' + random(10000000, 19999999),
+            //             return_time: dateTime(),
+            //         }
+
+            //         data.push(item);
+            //     }
+
+            //     return data;
+            // }
+
+            laydate.render({
+                elem: '#buy_time' //指定元素
+                // ,type: 'date'
+                // , range: true
+                // ,min: 0 
+                // ,max: 2023-12-31 //7天后
+                , trigger: "click"
+            });
+            // laydate.render({
+            //     elem: '#offTime' //指定元素
+            // });
+
+
+            //监听行单击事件（双击事件为：rowDouble，单击事件为：row）
+            // table.on('row', function (obj) {
+            //     var data = obj.data;
+            //     //标注单选框
+            //     obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
+            //     //标注选中样式
+            //     obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            // });
+            form.on('submit(formDemo)', function (data) {
+                layer.msg(JSON.stringify(data.field));
+                return false;
+            });
+        });
+    </script>
+</body>
+
+</html>

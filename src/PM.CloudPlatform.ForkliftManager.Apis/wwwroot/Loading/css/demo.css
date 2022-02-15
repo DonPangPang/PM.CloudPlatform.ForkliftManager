@@ -1,0 +1,54 @@
+@font-face {
+	font-weight: normal;
+	font-style: normal;
+	font-family: 'codropsicons';
+	src:url('../fonts/codropsicons/codropsicons.eot');
+	src:url('../fonts/codropsicons/codropsicons.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/codropsicons/codropsicons.woff') format('woff'),
+		url('../fonts/codropsicons/codropsicons.ttf') format('truetype'),
+		url('../fonts/codropsicons/codropsicons.svg#codropsicons') format('svg');
+}
+
+*, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+.clearfix:before, .clearfix:after { content: ''; display: table; }
+.clearfix:after { clear: both; }
+
+.pageload-link {
+	padding: 13px 20px;
+	color: #fff;
+	background: rgba(0,0,0,0.25);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-size: 0.6em;
+	white-space: nowrap;
+}
+
+.pageload-link:hover {
+	color: #fff;
+	background: rgba(0,0,0,0.2);
+}
+
+
+
+@media screen and (max-width: 40em) {
+
+	.column {
+		width: 100%;
+		float: none;
+		padding: 2em;
+		text-align: center;
+	}
+
+	.codrops-demos {
+		text-align: center;
+	}
+
+}
+
+@media screen and (max-width: 25em) {
+
+	.codrops-icon span {
+		display: none;
+	}
+
+}
