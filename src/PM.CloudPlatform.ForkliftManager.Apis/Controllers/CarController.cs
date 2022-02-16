@@ -26,7 +26,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
-    [Authorize]
+    [Authorize("Identify")]
     public class CarController : MyControllerBase<CarRepository, Car, CarDto, CarAddOrUpdateDto>
     {
         private readonly CarRepository _repository;

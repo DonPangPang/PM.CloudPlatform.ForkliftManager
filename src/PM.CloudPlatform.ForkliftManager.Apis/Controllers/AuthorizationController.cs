@@ -16,11 +16,10 @@ using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Helper;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
+using PM.CloudPlatform.ForkliftManager.Apis.Redis;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 {
-
-
     /// <summary>
     /// 授权接口
     /// </summary>
@@ -31,10 +30,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     {
         private readonly IGeneralRepository _generalRepository;
         private PermissionRequirement _tokenParameter;
+        private readonly RedisHelper _redisHelper;
 
-        public AuthorizationController(IGeneralRepository generalRepository)
+        public AuthorizationController(IGeneralRepository generalRepository, RedisHelper redisHelper)
         {
             _generalRepository = generalRepository;
+            _redisHelper = redisHelper;
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -100,6 +101,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var token = GenUserToken(user.Id, request.Username, "admin");
             var refreshToken = "123456";
 
+            await _redisHelper.SetStringAsync(user.Id.ToString(), token);
+
             //LoginUserInfo.Set(user);
 
             return Success(new[] { token, refreshToken });
@@ -110,7 +113,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// </summary>
         /// <returns> </returns>
         [HttpGet]
-        [Authorize]
+        [Authorize("Identify")]
         public IActionResult GetUserInfo()
         {
             var data = LoginUserInfo.Get<User>();

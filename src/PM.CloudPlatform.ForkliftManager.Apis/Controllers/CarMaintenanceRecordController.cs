@@ -23,7 +23,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
-    [Authorize]
+    [Authorize("Identify")]
     public class CarMaintenanceRecordController : MyControllerBase<CarMaintenanceRecordRepository, CarMaintenanceRecord, CarMaintenanceRecordDto, CarMaintenanceRecordAddOrUpdateDto>
     {
         private readonly IGeneralRepository _generalRepository;

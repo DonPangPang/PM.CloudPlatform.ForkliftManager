@@ -27,7 +27,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
-    [Authorize]
+    [Authorize("Identify")]
     public class UserController : MyControllerBase<UserRepository, User, UserDto, UserAddOrUpdateDto>
     {
         private readonly IGeneralRepository _generalRepository;

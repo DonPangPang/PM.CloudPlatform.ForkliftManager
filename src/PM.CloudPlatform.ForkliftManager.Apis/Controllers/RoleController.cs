@@ -16,7 +16,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
-    [Authorize]
+    [Authorize("Identify")]
     public class RoleController : MyControllerBase<RoleRepository, Role, RoleDto, RoleAddOrUpdateDto>
     {
         public RoleController(RoleRepository repository, IMapper mapper) : base(repository, mapper)

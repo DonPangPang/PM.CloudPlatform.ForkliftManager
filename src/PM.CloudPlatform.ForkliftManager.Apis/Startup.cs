@@ -22,6 +22,7 @@ using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Services;
 using PM.CloudPlatform.ForkliftManager.Apis.Redis;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis
 {
@@ -211,6 +212,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
             services.AddWsServer();
 
             services.AddJTT808();
+
+            services.AddScoped<IAuthorizationHandler, PermissionHandler>();
+
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

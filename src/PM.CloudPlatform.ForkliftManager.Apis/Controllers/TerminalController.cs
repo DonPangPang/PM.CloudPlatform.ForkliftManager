@@ -30,7 +30,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
-    [Authorize]
+    [Authorize("Identify")]
     public class TerminalController : MyControllerBase<TerminalRepository, Terminal, TerminalDto, TerminalAddOrUpdateDto>
     {
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
@@ -56,11 +56,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <summary>
         /// 获取所有不在线设备
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         [HttpGet]
         public async Task<IActionResult> GetOfflineTerminals()
         {
-            
             var onlineTerminals = _gpsTrackerSessionManager.GetAllSessions().Values
                 .Select(x => x["TerminalId"].ToString());
 

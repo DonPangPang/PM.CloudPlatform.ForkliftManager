@@ -31,11 +31,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
-    [Authorize]
+    [Authorize("Identify")]
     public class CommandsController : MyControllerBase<CommandsRepository, Commands, CommandsDto, CommandsAddOrUpdateDto>
     {
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
         private readonly IGeneralRepository _generalRepository;
+
         public CommandsController(CommandsRepository repository, IMapper mapper, TerminalSessionManager gpsTrackerSessionManager, IGeneralRepository generalRepository) : base(repository, mapper)
         {
             _gpsTrackerSessionManager = gpsTrackerSessionManager;

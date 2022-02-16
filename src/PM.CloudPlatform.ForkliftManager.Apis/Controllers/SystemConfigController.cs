@@ -19,7 +19,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     [ApiController]
     [EnableCors("Any")]
     [Route("api/[Controller]/[Action]")]
-    [Authorize]
+    [Authorize("Identify")]
     public class SystemConfigController : MyControllerBase<SystemConfigRepository, SystemConfig, SystemConfigDto, SystemConfigAddOrUpdateDto>
     {
         private readonly IGeneralRepository generalRepository;
@@ -32,15 +32,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <summary>
         /// 查询系统设置
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         [HttpGet]
         public async Task<IActionResult> GetSystemConfig()
         {
             var config = await generalRepository.GetQueryable<SystemConfig>()
-                .OrderByDescending(x=>x.CreateDate)
+                .OrderByDescending(x => x.CreateDate)
                 .FirstOrDefaultAsync();
 
-            if(config is null)
+            if (config is null)
             {
                 return Success(new SystemConfig());
             }
