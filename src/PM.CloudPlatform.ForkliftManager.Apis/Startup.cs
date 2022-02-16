@@ -21,6 +21,7 @@ using PM.CloudPlatform.ForkliftManager.Apis.Authorization;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Services;
+using PM.CloudPlatform.ForkliftManager.Apis.Redis;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis
 {
@@ -46,6 +47,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
         /// <param name="services"> </param>
         public void ConfigureServices(IServiceCollection services)
         {
+            //redis缓存
+            var section = Configuration.GetSection("Redis:Default");
+            //连接字符串
+            string _connectionString = section.GetSection("Connection").Value;
+            //实例名称
+            string _instanceName = section.GetSection("InstanceName").Value;
+            //默认数据库
+            int _defaultDB = int.Parse(section.GetSection("DefaultDB").Value ?? "0");
+            services.AddSingleton(new RedisHelper(_connectionString, _instanceName, _defaultDB));
+
             var AppContig = Configuration.GetSection("TokenParameter").Get<PermissionRequirement>();
             services.AddAuthorization(options =>
                 {
@@ -58,7 +69,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
                     opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
-                .AddJwtBearer(options =>
+                .AddJwtBearer("Bearer", options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -71,6 +82,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
                         IssuerSigningKey =
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppContig.Secret))
                     };
+
+                    options.SaveToken = true;
                 });
 
             services
@@ -104,7 +117,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
                             ContentTypes = { "application/problem+json" }
                         };
                     };
-                });
+                }).SetCompatibilityVersion(CompatibilityVersion.Latest);
             //services.AddSwaggerGen(c =>
             //{
             //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "PM.CloudPlatform.ForkliftManager.Apis", Version = "v1" });

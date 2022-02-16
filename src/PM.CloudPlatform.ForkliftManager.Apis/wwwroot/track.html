@@ -79,26 +79,24 @@
         <!-- 注意：这一层元素并不是必须的 -->
         <input type="text" class="layui-input" id="track-time" placeholder="请选择查询时间">
     </div>
+    <script src="./layui.js"></script>
     <script src="./js/jquery-3.5.1.min.js"></script>
     <script src="./js/common.js"></script>
     <script
         src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Geocoder"></script>
-    <script src="./layui.js"></script>
-
-
-    <script type="text/html" template id="popupTheme">
-
-        </script>
+    
 
     <script>
         var marker;
         var lineArr = [];
         var routeInfo = [];
-        layui.use(['laydate', 'jquery'], function () {
-            var $ = layui.jquery,
-                laydate = layui.laydate,
-                layer = layui.layer;
-            var obj = {};
+        layui.use(['element', 'jquery', 'form','laydate'], function () {
+            var element = layui.element,
+                $ = layui.jquery,
+                form = layui.form;
+                laydate =layui.laydate;
+               
+            let obj = {};
             var localUrl = window.location.search.substr(1).split('&');
             localUrl.map(function (v, i) {
                 var vlen = v.split('=');
@@ -106,6 +104,7 @@
                 obj[vlen[0]] = str;
             })
             var id = obj.id;
+            console.log(id)
             let date = dateFormat("YYYY-mm-dd", new Date())
             laydate.render({
                 elem: '#track-time',
@@ -118,9 +117,9 @@
             getTrack(date)
             function getTrack(date) {
                 let obj = {
-                    imei: "868120278343188",
-                    // StartTime: date,
-                    // EndTime: date,
+                    imei: id,
+                    StartTime: "2022-02-15 18:00:00",
+                    EndTime: "2022-02-16 18:00:00",
                     IsNeedPaged: false
                 }
 
@@ -133,14 +132,14 @@
                         routeInfo = [];
                         res.data.forEach(v => {
                             let geo = JSON.parse(v.geo)
-                            console.log(geo.coordinates)
+                            console.log(geo)
                             routeInfo.push({
-                                "lat": geo.coordinates[0],
-                                "lng": geo.coordinates[1],
+                                "lat": geo.coordinates[1],
+                                "lng": geo.coordinates[0],
                                 "speed": v.speed,
                                 "locusTimestamp": v.createDate,
                             })
-                            lineArr.push([geo.coordinates[0], geo.coordinates[1]])
+                            lineArr.push([geo.coordinates[1], geo.coordinates[0]])
                         })
                         console.log(routeInfo)
                         if (routeInfo.length != 0) {

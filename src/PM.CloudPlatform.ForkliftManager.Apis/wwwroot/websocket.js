@@ -1,4 +1,4 @@
-var url ="ws://localhost:28081"
+var url ="ws://192.168.31.39:28081"
 var userId;
 var isGps = false;
 // $("#input input").val("868120278343194")
@@ -42,7 +42,7 @@ var vehicleData;
                                 data={
                                     TerminalId:RadioVal
                                 }
-                                //console.log(JSON.parse(evt.data))
+                                console.log(JSON.parse(evt.data))
                                 var datas;                             
                                 
                                 if (!!RadioVal) {
@@ -61,7 +61,6 @@ var vehicleData;
                                     
                                     datas = JSON.parse(evt.data).Data;  
                                 }
-                               // console.log(datas)
                                 var icon = new AMap.Icon({
                                     size: new AMap.Size(40, 40),    // 图标尺寸
                                     image: './images/011-叉车.png',  // Icon的图像 images/011-叉车.png
@@ -69,10 +68,11 @@ var vehicleData;
                                     imageSize: new AMap.Size(40, 40)   // 根据所设置的大小拉伸或压缩图片
                                 });
                                 var TerminalId = datas.TerminalId
+                                console.log(datas)
                                 marker = new AMap.Marker({
                                     icon: icon,
                                     size: new AMap.Size(40, 40), 
-                                    position: [datas.Lat,datas.Lon],
+                                    position: [datas.Lon,datas.Lat],
                                     ExtData: datas,
                                     draggable: true,
                                     cursor: 'move',
@@ -169,7 +169,7 @@ var vehicleData;
                     // 进行重连
                     setTimeout(function () {
                         webSocketInit(url);
-                    }, 1000);
+                    }, 3000);
 
                 }
                 //关闭事件
@@ -189,7 +189,7 @@ var vehicleData;
                         //     VerifyCode:VerifyCode, 
                         // }))
                      }
-                    setTimeout("timedCount()", 6000);
+                    setTimeout("timedCount()", 3000);
                      //每过一分钟运行一次
                 }
 // websocket.onopen = function () {

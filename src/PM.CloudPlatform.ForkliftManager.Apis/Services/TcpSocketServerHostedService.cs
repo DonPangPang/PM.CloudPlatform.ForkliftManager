@@ -176,7 +176,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                             #region GPS转换坐标系
 
-                            gpsPositionRecord.Point = gpsPositionRecord.Point.Transform_WGS84_To_GCJ02().Transform_WGS84_To_GCJ02();
+                            gpsPositionRecord.Point = gpsPositionRecord.Point.Transform_WGS84_To_GCJ02();
                             gpsPositionRecord.Lat = (decimal)gpsPositionRecord.Point.X;
                             gpsPositionRecord.Lon = (decimal)gpsPositionRecord.Point.Y;
 
@@ -193,8 +193,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     return;
                                 }
                                 // var distance = gpsPositionRecord.Point!.ProjectTo(2855) .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855)).ShapeDistance();
-                                var distance = gpsPositionRecord.Point/*.Transform_GCJ02_To_WGS84()*/.ProjectTo(2855)
-                                    .Distance(terminal.Car?.ElectronicFence!.Border.ProjectTo(2855)).ShapeDistance();
+                                var distance = new Point((double)gpsPositionRecord.Lon, (double)gpsPositionRecord.Lat)
+                                    .Transform_WGS84_To_GCJ02()
+                                    .ProjectTo(2855)
+                                    .Distance(terminal.Car?.ElectronicFence!.Border.ProjectTo(2855))
+                                    .ShapeDistance();
                                 // 超出围栏计算
                                 var fence = await _generalRepository.GetQueryable<SystemConfig>()
                                     .FilterDeleted()
@@ -272,6 +275,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                 await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
                                 await _generalRepository.SaveAsync();
 
+                                //车辆追踪
                                 if (_clientSessionManager.IsTrace)
                                 {
                                     if (s["TerminalId"].ToString().Equals(_clientSessionManager.TraceTerminalId))
@@ -330,7 +334,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                             }, cancellationToken);
                         }
 
-                        // 应答
+                        // 应答器
                         var handler = new EV26MsgIdTcpCustomHandler(_provider, new NullLoggerFactory(), _gpsTrackerSessionManager, s as IAppSession);
 
                         var receivePacket = handler.HandlerDict[p.Header.MsgId](new EV26Request(p, p.OriginalPackage));

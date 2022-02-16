@@ -4,9 +4,9 @@
  * description:此处公共参数与封装方法
  */
 
-
 // 以下为公共参数
-var requestUrl = 'http://localhost:10808/'; //请求地址公共前缀
+var requestUrl = 'https://localhost:44352/'; //请求地址公共前缀
+//var  requestUrl = 'http://192.168.31.39:10808/'; //请求地址公共前缀
 var loginMark = localStorage.getItem('loginMark');   //loginMark
 var userInfo = sessionStorage.getItem('userInfo');
 
@@ -39,7 +39,7 @@ var Token = JSON.parse(sessionStorage.getItem('Token'));
 //                 }else if(data.code == 410){
 //                     window.location = '/login.html';
 //                 }
-                
+
 //             },
 //             error: function (error) {
 //                 reject(error)
@@ -49,12 +49,12 @@ var Token = JSON.parse(sessionStorage.getItem('Token'));
 //     )
 // };
 
-var ajax = function(methods, url, param, dataType) {
+var ajax = function (methods, url, param, dataType) {
     let token = JSON.parse(sessionStorage.getItem('Token'))
-    return new Promise(function(resolve, reject) {
-        if(methods == "get" || methods == "Get"){
+    return new Promise(function (resolve, reject) {
+        if (methods == "get" || methods == "Get") {
             $.ajax({
-                type: methods||"get",
+                type: methods || "get",
                 url: requestUrl + url,
                 data: param || {},
                 // data: JSON.stringify(param) || {},
@@ -62,64 +62,64 @@ var ajax = function(methods, url, param, dataType) {
                 async: true,
                 cache: false,
                 beforeSend: function (request) {
-                    request.setRequestHeader("Authorization","Bearer " + token);
+                    request.setRequestHeader("Authorization", "Bearer " + token);
                 },
                 headers: { 'Content-Type': 'application/json' },
-                success: function(data) {
+                success: function (data) {
                     if (data) {
                         if (data.code == 200) {
                             resolve(data);
                         } else if (data.code == 401) {
                             layer.msg('授权过期!', {
                                 time: 2000
-                            },function () {
+                            }, function () {
                                 window.top.location.href = '/login.html';
                             });
                         } else if (data.code == 403) {
                             layer.msg('未分配权限,请联系管理员!', {
                                 time: 2000
                             });
-                        } else{
+                        } else {
                             layer.msg('请求错误：错误状态' + data.code + '，错误信息：' + data.msg)
                         }
                     }
                 },
-                error: function(error) {
+                error: function (error) {
                     reject(error)
                 }
             });
-        }else{
+        } else {
             $.ajax({
-                type: methods||"get",
+                type: methods || "get",
                 url: requestUrl + url,
                 data: JSON.stringify(param) || {},
                 dataType: dataType || "json",
                 async: true,
                 cache: false,
                 beforeSend: function (request) {
-                    request.setRequestHeader("Authorization","Bearer " + token);
+                    request.setRequestHeader("Authorization", "Bearer " + token);
                 },
                 headers: { 'Content-Type': 'application/json' },
-                success: function(data) {
+                success: function (data) {
                     if (data) {
                         if (data.code == 200) {
                             resolve(data);
                         } else if (data.code == 401) {
                             layer.msg('授权过期!', {
                                 time: 2000
-                            },function () {
+                            }, function () {
                                 window.top.location.href = '/login.html';
                             });
                         } else if (data.code == 403) {
                             layer.msg('未分配权限,请联系管理员!', {
                                 time: 2000
                             });
-                        } else{
+                        } else {
                             layer.msg('请求错误：错误状态' + data.code + '，错误信息：' + data.msg)
                         }
                     }
                 },
-                error: function(error) {
+                error: function (error) {
                     reject(error)
                 }
             });
@@ -132,26 +132,25 @@ var ajax = function(methods, url, param, dataType) {
  * @return {h} 生成的guid
  */
 function guid(l) {
-	l = l || "_";
-	var h = "";
-	for (var j = 1; j <= 32; j++) {
-		var k = Math.floor(Math.random() * 16).toString(16);
-		h += k;
-		if ((j == 8) || (j == 12) || (j == 16) || (j == 20)) {
-			h += l
-		}
-	}
-	return h
+    l = l || "_";
+    var h = "";
+    for (var j = 1; j <= 32; j++) {
+        var k = Math.floor(Math.random() * 16).toString(16);
+        h += k;
+        if ((j == 8) || (j == 12) || (j == 16) || (j == 20)) {
+            h += l
+        }
+    }
+    return h
 }
-
 
 /**
  * @description 画出验证码的方法
  * @param {show_num：Array}，验证码的数字，例如：[2,2,2,2]
  */
 function draw(show_num) {
-    var canvas_width=$('#canvas').width();
-    var canvas_height=$('#canvas').height();
+    var canvas_width = $('#canvas').width();
+    var canvas_height = $('#canvas').height();
     var canvas = document.getElementById("canvas");//获取到canvas的对象，演员
     var context = canvas.getContext("2d");//获取到canvas画图的环境，演员表演的舞台
     canvas.width = canvas_width;
@@ -193,7 +192,6 @@ function draw(show_num) {
     }
 }
 
-
 /**
  * @description 得到随机的颜色值
  * @return rgb的颜色，例如rgb(255,159,123)
@@ -205,18 +203,17 @@ function randomColor() {
     return "rgb(" + r + "," + g + "," + b + ")";
 }
 
-
 /**
  * @description 扩展数组去空方法
  */
-Array.prototype.notempty = function(){
-	let arr = [];
-	this.map(function(v){
-		if (v != undefined && v!=null && v!= 'empty') {
-			arr.push(v)
-		}
-	})
-	return arr
+Array.prototype.notempty = function () {
+    let arr = [];
+    this.map(function (v) {
+        if (v != undefined && v != null && v != 'empty') {
+            arr.push(v)
+        }
+    })
+    return arr
 }
 /**
  * @description 数组对象生成树结构数据
@@ -227,120 +224,116 @@ Array.prototype.notempty = function(){
  * @param {children:Array}父级中子级的关键值,必须项
  * @param {obj:Object}想要添加的字段，key值为添加字段的key值，value值为添加字段的在现有数据中的值的key   例;{title:'F_FullName'},像每条数据中添加一个key为title的值，title是现有数据中的F_FullName值
  */
-function renderTree(textArr,cid,pid,treeSpid,children,obj){
-	textArr.map((v,i)=>{v[children] ? "" : textArr[i][children] = []});
-	for (let i = 0; i < textArr.length; i++) {
-		for (let j = 0; j < textArr.length; j++) {
-			if (textArr[i][cid] == textArr[j][pid]) {
-                if(obj){
-                    for(let key  in obj){
+function renderTree(textArr, cid, pid, treeSpid, children, obj) {
+    textArr.map((v, i) => { v[children] ? "" : textArr[i][children] = [] });
+    for (let i = 0; i < textArr.length; i++) {
+        for (let j = 0; j < textArr.length; j++) {
+            if (textArr[i][cid] == textArr[j][pid]) {
+                if (obj) {
+                    for (let key in obj) {
                         textArr[j][key] = textArr[j][obj[key]]
                     }
                 }
-				textArr[i][children].push(textArr[j])
-			}
+                textArr[i][children].push(textArr[j])
+            }
         }
     };
-	// textArr.map((v,i)=>{v.children.length == 0 ? delete textArr[i]:''});
-	// textArr = textArr.notempty();
-	let linarr = [];
-	textArr.forEach(e=>{
-        if(e[pid]==treeSpid){
-            if(obj){
-                for(let key  in obj){
+    // textArr.map((v,i)=>{v.children.length == 0 ? delete textArr[i]:''});
+    // textArr = textArr.notempty();
+    let linarr = [];
+    textArr.forEach(e => {
+        if (e[pid] == treeSpid) {
+            if (obj) {
+                for (let key in obj) {
                     e[key] = e[obj[key]]
                 }
             }
             linarr.push(e)
         }
     });
-	return linarr
-	// return linarr.length == 1 ? linarr[0] : linarr
+    return linarr
+    // return linarr.length == 1 ? linarr[0] : linarr
 }
-
 
 /**
  * @description 数组对象中树形数据修改key值
  * @param {org:Object}需要修改key值得数组对象,必须项
  * @param {ischeckedArr:Array} 已经勾选的数组，用来判断该条记录是否已经勾选，
  */
-function mapTree (org,ischeckedArr){
+function mapTree(org, ischeckedArr) {
     const haveChildren = Array.isArray(org.ChildNodes) && org.ChildNodes.length > 0;
     let isChecked;
-    !ischeckedArr ? 
+    !ischeckedArr ?
         isChecked = false :
-            isChecked = ischeckedArr.indexOf(org.id) > -1 ?  true : false ;
+        isChecked = ischeckedArr.indexOf(org.id) > -1 ? true : false;
     return {
         title: org.text,
         id: org.id,
-        spread:true,
-        checked:isChecked,
+        spread: true,
+        checked: isChecked,
         // parentId:org.parentId,
-        children: haveChildren ? org.ChildNodes.map(i => mapTree(i,ischeckedArr)) : []
+        children: haveChildren ? org.ChildNodes.map(i => mapTree(i, ischeckedArr)) : []
     };
 }
-
 
 /**
  * @description 树状数据转线型数据
  * @param {arr:Array}需要转换的数组对象,必须项
  * @param {isColumn:String} 此字段表示是否提取每一项中的某一字段，非必须
  */
-function extract(arr,isColumn){
+function extract(arr, isColumn) {
     var link = [];
     var all = [];
     link = link.concat(arr);
-    while(link.length){
+    while (link.length) {
         var first = link.shift();
-        if(first.children){
+        if (first.children) {
             link = link.concat(first.children);
             delete first['children'];
         }
-        isColumn ? all.push(first[isColumn]) :all.push(first);
+        isColumn ? all.push(first[isColumn]) : all.push(first);
     }
     return all;
 }
-
 
 /**
  * @description window.href携带参数，解析参数的方法
  * @return {obj:Object} 返回一个解析好的携带参数所组成的对象
  */
-function hrefExtractOp(){
+function hrefExtractOp() {
     let obj = {};
     let localUrl = window.location.search.substr(1).split('&');
-    localUrl.map(function(v,i){
+    localUrl.map(function (v, i) {
         let vlen = v.split('=');
         obj[vlen[0]] = decodeURIComponent(vlen[1]);
     })
     return obj;
 }
 
-
 /**
  * @description 主页面获取权限接口
  * @param  {url:String}主页面的页面地址，eg:'page/system/usermanagement.html'
  * @return {obj:Object} 返回一个对象，cols：[{},{}]表格表头属性，btns，[]表格按钮的事件key值
  */
-function authorize(url){
-    let info =JSON.parse(sessionStorage.getItem('userInfo')).baseinfo;
-    let cols = [],obj = {};
+function authorize(url) {
+    let info = JSON.parse(sessionStorage.getItem('userInfo')).baseinfo;
+    let cols = [], obj = {};
     $.ajax({
         type: 'get',
-        url: requestUrl+'Simple/Areas/PMSystemModule/Module/authorizebuttoncolumnlist',
-        async:false,
+        url: requestUrl + 'Simple/Areas/PMSystemModule/Module/authorizebuttoncolumnlist',
+        async: false,
         data: {
             token: info.token,
-            loginMark:loginMark,
-            data: JSON.stringify({url:url})
+            loginMark: loginMark,
+            data: JSON.stringify({ url: url })
         },
         success: function (data) {
             console.log(data);
-            if(data){
-                if(data.code == 200){
+            if (data) {
+                if (data.code == 200) {
                     // 字段权限处理
-                    if(data.data && data.data.colss && data.data.colss.length > 0){
-                        data.data.colss.forEach(function(v,i){
+                    if (data.data && data.data.colss && data.data.colss.length > 0) {
+                        data.data.colss.forEach(function (v, i) {
                             let colsItem = {};
                             colsItem.field = v.F_EnCode;
                             colsItem.title = v.F_FullName;
@@ -356,11 +349,11 @@ function authorize(url){
                     }
                     obj.cols = cols;
                     // 提取按钮key值
-                    if(data.data.btns && data.data.btns != '{}'){
+                    if (data.data.btns && data.data.btns != '{}') {
                         obj.btns = Object.keys(data.data.btns)
                     }
-                }else if(data.code == 410){
-                    layer.msg('登录过期，请从新登陆',function(){
+                } else if (data.code == 410) {
+                    layer.msg('登录过期，请从新登陆', function () {
                         window.location = '/login.html';
                     });
                 }

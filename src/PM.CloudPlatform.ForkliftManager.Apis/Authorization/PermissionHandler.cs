@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
+using PM.CloudPlatform.ForkliftManager.Apis.Redis;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
 {
@@ -20,12 +22,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
     {
         private readonly IGeneralRepository _generalRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly RedisHelper _redisHelper;
         private readonly PermissionRequirement _tokenParameter;
 
-        public PermissionHandler(IConfiguration config, IGeneralRepository generalRepository, IHttpContextAccessor httpContextAccessor)
+        public PermissionHandler(
+            IConfiguration config,
+            IGeneralRepository generalRepository,
+            IHttpContextAccessor httpContextAccessor,
+            RedisHelper redisHelper
+            )
         {
             _generalRepository = generalRepository;
             _httpContextAccessor = httpContextAccessor;
+            _redisHelper = redisHelper;
             _tokenParameter = config.GetSection("TokenParameter").Get<PermissionRequirement>();
         }
 
@@ -53,6 +62,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
             }
 
             var id = Guid.Parse(context.User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name))!.Value);
+
+            var token = await _redisHelper.GetStringAsync(id.ToString());
+
+            if (!token.Equals(await _httpContextAccessor.HttpContext!.GetTokenAsync("Bearer", "access_token")))
+            {
+                context.Fail();
+                await Task.CompletedTask;
+            }
 
             var user = await _generalRepository.GetQueryable<User>()
                 .FilterDeleted()

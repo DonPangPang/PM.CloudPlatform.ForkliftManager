@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>添加用户</title>
+    <title>终端</title>
     <link rel="stylesheet" href="../../../css/layui.css">
     <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
     <link rel="stylesheet" id="blue" title="blue" href="../../../css/openStyleBlue.css" disabled='true'>
@@ -31,7 +31,11 @@
                     class="layui-input">
             </div>
         </div>
-     
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            </div>
+        </div>
     </form>
     <script src="../../../layui.js"></script>
     <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
@@ -60,22 +64,17 @@
                 $('link[title="white"]').removeAttr('disabled');
                 $('link[title="blue"]').attr('disabled', 'true');
             }
-            var parentData = JSON.parse(sessionStorage.getItem('data-edit'));
             form.on('submit(formDemo)', function (fromval) {
                 var result = fromval.field;
-                result.carId=parentData.carId;
+                console.log(result)
                 ajax("get", "api/Commands/SendCommand", result)
                     .then(function (res) {
-                        layer.msg('添加成功', {
+                        layer.msg('发送成功', {
                             time: 2000
                         }, function () {
                             parent.layui.table.reload('test')
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
-                            // ajax({ type: "get", myurl: "api/User/GetEntities", data: '', barer: "Bearer " + Barer })
-                            //     .then(function (res) {
-                            //         parent.layui.table.reload('demo', { data: res });
-                            //     });
                         });
                     });
                 return false;

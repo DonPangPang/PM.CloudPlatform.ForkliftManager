@@ -37,10 +37,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
         /// <summary>
         /// </summary>
-        /// <param name="repository">        </param>
-        /// <param name="mapper">            </param>
-        /// <param name="generalRepository"> </param>
-        /// <param name="gpsTrackerSessionManager"></param>
+        /// <param name="repository">               </param>
+        /// <param name="mapper">                   </param>
+        /// <param name="generalRepository">        </param>
+        /// <param name="gpsTrackerSessionManager"> </param>
         public CarController(CarRepository repository, IMapper mapper, IGeneralRepository generalRepository, TerminalSessionManager gpsTrackerSessionManager) : base(repository, mapper)
         {
             _repository = repository;
@@ -315,18 +315,17 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <summary>
         /// 获取车辆工作状态
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         [HttpGet]
         public async Task<IActionResult> GetCarStatus()
         {
-
             var terminalOnlines = gpsTrackerSessionManager.GetAllSessions();
 
             var onlines = await _generalRepository.GetQueryable<Terminal>()
                 .FilterDeleted()
                 .FilterDisabled()
-                .Include(x => x.Car)
-                .Where(x => terminalOnlines.Keys.Contains(x.IMEI) && x.Car != null)
+                //.Include(x => x.Car)
+                //.Where(x => terminalOnlines.Keys.Contains(x.IMEI) && x.Car != null)
                 .CountAsync();
 
             var offlines = await _generalRepository.GetQueryable<Car>().CountAsync();
@@ -344,13 +343,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <summary>
         /// 获取月度数据
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         [HttpGet]
         public async Task<IActionResult> GetMonthlyData()
         {
             var rentalRecords = await _generalRepository.GetQueryable<RentalRecord>()
-                .Where(x=>x.CreateDate > x.CreateDate!.Value.AddMonths(-6))
-                .GroupBy(det =>new 
+                .Where(x => x.CreateDate > x.CreateDate!.Value.AddMonths(-6))
+                .GroupBy(det => new
                 {
                     Year = det.CreateDate!.Value.Year,
                     Month = det.CreateDate!.Value.Month
@@ -359,8 +358,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .ToListAsync();
 
             var maintenanceRecords = await _generalRepository.GetQueryable<CarMaintenanceRecord>()
-                .Where(x=>x.CreateDate > x.CreateDate!.Value.AddMonths(-6))
-                .GroupBy(det =>new 
+                .Where(x => x.CreateDate > x.CreateDate!.Value.AddMonths(-6))
+                .GroupBy(det => new
                 {
                     Year = det.CreateDate!.Value.Year,
                     Month = det.CreateDate!.Value.Month
@@ -386,7 +385,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             });
         }
 
-        class LineData
+        private class LineData
         {
             public string Date { get; set; }
             public int Count { get; set; }
@@ -395,14 +394,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <summary>
         /// 获取未绑定终端的车辆
         /// </summary>
-        /// <returns></returns>
+        /// <returns> </returns>
         [HttpGet]
         public async Task<IActionResult> GetNoBindCars()
         {
             var cars = await _generalRepository.GetQueryable<Car>()
                 .FilterDeleted()
                 .FilterDisabled()
-                .Where(x=>x.TerminalId == null || x.TerminalId == Guid.Empty)
+                .Where(x => x.TerminalId == null || x.TerminalId == Guid.Empty)
                 .ToListAsync();
 
             return Success(cars);
