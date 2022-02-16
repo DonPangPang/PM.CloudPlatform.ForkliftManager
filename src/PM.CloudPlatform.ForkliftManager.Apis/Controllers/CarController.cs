@@ -324,11 +324,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var onlines = await _generalRepository.GetQueryable<Terminal>()
                 .FilterDeleted()
                 .FilterDisabled()
-                //.Include(x => x.Car)
-                //.Where(x => terminalOnlines.Keys.Contains(x.IMEI) && x.Car != null)
+                .Where(x => terminalOnlines.Keys.Contains(x.IMEI))
                 .CountAsync();
 
-            var offlines = await _generalRepository.GetQueryable<Car>().CountAsync();
+            var offlines = await _generalRepository.GetQueryable<Terminal>().CountAsync() - onlines;
 
             var errors = await _generalRepository.GetQueryable<AlarmRecord>().Where(x => !x.IsReturn).CountAsync();
 
