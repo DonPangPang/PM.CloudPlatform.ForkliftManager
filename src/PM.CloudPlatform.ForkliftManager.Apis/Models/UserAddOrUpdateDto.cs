@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using System.Collections.Generic;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
