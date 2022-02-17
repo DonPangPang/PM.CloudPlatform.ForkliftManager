@@ -1,9 +1,11 @@
-﻿using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+﻿using AutoMapper;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 using System;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
+    [AutoMap(typeof(TerminalBindRecord), ReverseMap = true)]
     public class TerminalBindRecordAddOrUpdateDto
     {
         /// <summary>

@@ -1,9 +1,14 @@
-﻿using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+﻿using AutoMapper;
+using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Models.Base;
 using System;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
+    /// <summary>
+    /// 绑定记录
+    /// </summary>
+    [AutoMap(typeof(TerminalBindRecord), ReverseMap = true)]
     public class TerminalBindRecordDto : DtoBase
     {
         /// <summary>

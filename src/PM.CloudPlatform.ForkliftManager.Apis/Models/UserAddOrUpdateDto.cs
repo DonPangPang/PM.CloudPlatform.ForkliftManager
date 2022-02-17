@@ -28,5 +28,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// 联系方式
         /// </summary>
         public string Tel { get; set; } = null!;
+
+        /// <summary>
+        /// 角色
+        /// </summary>
+        public ICollection<Role>? Roles { get; set; } = new List<Role>();
     }
 }
