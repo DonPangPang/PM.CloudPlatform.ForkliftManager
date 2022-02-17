@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
