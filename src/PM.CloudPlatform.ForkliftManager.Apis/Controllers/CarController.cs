@@ -321,21 +321,37 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         {
             var terminalOnlines = gpsTrackerSessionManager.GetAllSessions();
 
-            var onlines = await _generalRepository.GetQueryable<Terminal>()
+            var onlines = await _generalRepository.GetQueryable<Car>()
                 .FilterDeleted()
                 .FilterDisabled()
-                .Where(x => terminalOnlines.Keys.Contains(x.IMEI))
+                .Include(x=>x.Terminal)
+                .Where(x=>x.TerminalId != null)
+                .Where(x=>terminalOnlines.Keys.Contains(x.Terminal!.IMEI))
                 .CountAsync();
 
-            var offlines = await _generalRepository.GetQueryable<Terminal>().CountAsync() - onlines;
+            var unbind = await _generalRepository.GetQueryable<Car>()
+                .FilterDeleted()
+                .FilterDisabled()
+                .Where(x=>x.TerminalId == null)
+                .CountAsync();
+
+
+            //var onlines = await _generalRepository.GetQueryable<Terminal>()
+            //    .FilterDeleted()
+            //    .FilterDisabled()
+            //    .Where(x => terminalOnlines.Keys.Contains(x.IMEI))
+            //    .CountAsync();
+
+            var offlines = await _generalRepository.GetQueryable<Car>().CountAsync() - onlines;
 
             var errors = await _generalRepository.GetQueryable<AlarmRecord>().Where(x => !x.IsReturn).CountAsync();
 
             return Success(new
             {
                 onlines,
-                offlines,
-                errors
+                offlines = offlines - errors,
+                errors,
+                unbind
             });
         }
 
