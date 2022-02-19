@@ -160,5 +160,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             return Success();
         }
+
+        //TODO: 获取终端绑定车辆的状态
+        //TODO: 获取未绑定的终端
+        //TODO: 获取未绑定的车辆
+        //TODO: 改变绑定记录的状态, 加一个IsBind字段
     }
 }

@@ -60,12 +60,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 归还确认人姓名
         /// </summary>
-        public string? ReturnAckEmployeeName { get; set; }
+        public string? RentalAckEmployeeName { get; set; }
 
         /// <summary>
         /// 归还确认人电话
         /// </summary>
-        public string? ReturnAckEmployeeTel { get; set; }
+        public string? RentalAckEmployeeTel { get; set; }
 
         /// <summary>
         /// </summary>
@@ -122,11 +122,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 归还确认人姓名
         /// </summary>
-        public string? ReturnAckEmployeeName { get; set; }
+        public string? RentalAckEmployeeName { get; set; }
 
         /// <summary>
         /// 归还确认人电话
         /// </summary>
-        public string? ReturnAckEmployeeTel { get; set; }
+        public string? RentalAckEmployeeTel { get; set; }
     }
 }

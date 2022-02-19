@@ -17,7 +17,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// 租借处理人姓名
         /// </summary>
-        public string RentalEmployeeName { get; set; } = null!;
+        public string? RentalEmployeeName { get; set; } = null!;
 
         /// <summary>
         /// 租借处理人电话
@@ -57,7 +57,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
         /// <summary>
         /// Car Id
         /// </summary>
-        public Guid CarId { get; set; }
+        public Guid? CarId { get; set; }
 
         /// <summary>
         /// 租借的车辆

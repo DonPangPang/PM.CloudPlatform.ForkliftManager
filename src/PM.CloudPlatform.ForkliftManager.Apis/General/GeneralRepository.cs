@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -16,12 +16,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.General
     public class GeneralRepository : IGeneralRepository
     {
         private readonly ForkliftManagerDbContext _forkliftManagerDbContext;
+        private readonly IMapper _mapper;
 
         public DatabaseFacade Database { get; }
 
-        public GeneralRepository(ForkliftManagerDbContext forkliftManagerDbContext)
+        public GeneralRepository(ForkliftManagerDbContext forkliftManagerDbContext, IMapper mapper)
         {
             _forkliftManagerDbContext = forkliftManagerDbContext;
+            _mapper = mapper;
             Database = _forkliftManagerDbContext.Database;
         }
 

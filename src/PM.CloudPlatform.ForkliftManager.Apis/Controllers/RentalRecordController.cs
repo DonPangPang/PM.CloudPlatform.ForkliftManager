@@ -29,6 +29,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     public class RentalRecordController : MyControllerBase<RentalRecordRepository, RentalRecord, RentalRecordDto, RentalRecordAddOrUpdateDto>
     {
         private readonly IGeneralRepository _generalRepository;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// </summary>
@@ -37,6 +38,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="generalRepository"> </param>
         public RentalRecordController(RentalRecordRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(repository, mapper)
         {
+            _mapper = mapper;
             _generalRepository = generalRepository;
         }
 
@@ -132,24 +134,25 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         {
             if(dtos is null) throw new ArgumentNullException(nameof(dtos));
 
-            var entities = dtos.MapTo<RentalRecord>();
+            //var entities = dtos.MapTo<RentalRecord>();
 
-            foreach (var item in entities)
+            foreach (var item in dtos)
             {
-                item.Modify();
+                var oldEntity = await _generalRepository.GetQueryable<RentalRecord>().FirstOrDefaultAsync(x=>x.Id.Equals(item.Id));
+                oldEntity.Modify();
+                _mapper.Map(item, oldEntity);
+                await _generalRepository.UpdateAsync(oldEntity);
+                await _generalRepository.SaveAsync();
             }
 
-            await _generalRepository.UpdateAsync(entities);
-            await _generalRepository.SaveAsync();
+            //foreach (var item in entities)
+            //{
+            //    var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(item.CarId));
+            //    car.ElectronicFenceId = null;
+            //    await _generalRepository.UpdateAsync(car);
+            //}
 
-            foreach (var item in entities)
-            {
-                var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(item.CarId));
-                car.ElectronicFenceId = null;
-                await _generalRepository.UpdateAsync(car);
-            }
-
-            await _generalRepository.SaveAsync();
+            //await _generalRepository.SaveAsync();
 
             return Success("归还成功");
         }

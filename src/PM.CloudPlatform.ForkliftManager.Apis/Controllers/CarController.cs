@@ -140,7 +140,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var data = await Cars.FilterDeleted()
                 .Include(x => x.CarType)
                 .Include(x => x.UseRecords)
-                .Include(x => x.RentalRecords!.Where(t => !t.IsReturn))
+                .Include(x => x.RentalRecords)
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
@@ -153,7 +153,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     Brand = x.Brand,
                     SerialNumber = x.SerialNumber,
                     BuyTime = x.BuyTime,
-                    IsReturn = !x.RentalRecords!.Any(),
+                    IsReturn = (x.RentalRecords == null || !x.RentalRecords!.Where(t=>!t.IsReturn).Any()),
                     LengthOfUse = x.UseRecords!.Sum(t => t.LengthOfTime) + x.LengthOfUse,
                 })
                 .AsSplitQuery()

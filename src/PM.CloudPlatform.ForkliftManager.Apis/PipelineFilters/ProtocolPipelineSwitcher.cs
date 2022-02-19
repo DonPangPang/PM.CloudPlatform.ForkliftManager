@@ -25,7 +25,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.PipelineFilters
         {
             if (!reader.TryRead(out byte flag))
             {
-                throw new ProtocolException(@"flag byte cannot be read"); 
+                throw new ProtocolException(@"flag byte cannot be read");
             }
 
             if (flag == _beginMarkA)
