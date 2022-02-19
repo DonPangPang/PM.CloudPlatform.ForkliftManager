@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Lazy.Captcha.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -31,11 +33,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         private readonly IGeneralRepository _generalRepository;
         private PermissionRequirement _tokenParameter;
         private readonly RedisHelper _redisHelper;
+        private readonly ICaptcha _captcha;
 
-        public AuthorizationController(IGeneralRepository generalRepository, RedisHelper redisHelper)
+        public AuthorizationController(IGeneralRepository generalRepository, RedisHelper redisHelper, ICaptcha captcha)
         {
             _generalRepository = generalRepository;
             _redisHelper = redisHelper;
+            _captcha = captcha;
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json")
@@ -76,6 +80,17 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         }
 
         /// <summary>
+        /// 生成验证码
+        /// </summary>
+        [HttpGet]
+        public IActionResult GenerateCaptcha(Guid id)
+        {
+            var info = _captcha.Generate(id.ToString());
+            var stream = new MemoryStream(info.Bytes);
+            return File(stream, "image/gif");
+        }
+
+        /// <summary>
         /// 获取Token
         /// </summary>
         /// <param name="request"> 用户名和密码 </param>
@@ -83,6 +98,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpPost]
         public async Task<IActionResult> RequestToken([FromBody] LoginDto request)
         {
+            var verify = _captcha.Validate(request.VerifyCodeId.ToString(), request.VerifyCode);
+
+            if (!verify)
+            {
+                return Fail("验证码错误");
+            }
+
             if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
                 return Fail("Invalid Request");
 

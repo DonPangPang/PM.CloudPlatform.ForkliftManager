@@ -50,6 +50,10 @@
               "target": "Package",
               "version": "[1.7.0-RC4, )"
             },
+            "Lazy.Captcha.Core": {
+              "target": "Package",
+              "version": "[1.0.6, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[5.0.13, )"

@@ -6,7 +6,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories
 {
     public class TerminalBindRecordsRepository : RepositoryBase<TerminalBindRecord>
     {
-        // <summary>
+        /// <summary>
         ///
         /// </summary>
         /// <param name="dbContext"></param>

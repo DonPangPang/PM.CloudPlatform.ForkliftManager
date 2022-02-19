@@ -1,4 +1,7 @@
-﻿namespace PM.CloudPlatform.ForkliftManager.Apis.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace PM.CloudPlatform.ForkliftManager.Apis.Models
 {
     /// <summary>
     /// 登录
@@ -15,5 +18,10 @@
         /// </summary>
 
         public string Password { get; set; } = null!;
+
+        [Required]
+        public Guid VerifyCodeId { get; set; }
+        [Required]
+        public string VerifyCode { get; set; } = null!;
     }
 }
