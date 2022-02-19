@@ -45,7 +45,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 租借结束时间
         /// </summary>
-        public DateTime RentalEndTime { get; set; } = DateTime.Now;
+        public DateTime RentalEndTime { get; set; }
 
         /// <summary>
         /// 是否归还
@@ -104,10 +104,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         ///// </summary>
         //public Guid RentalRecordId { get; set; }
 
-        /// <summary>
-        /// 租借结束时间
-        /// </summary>
-        public DateTime RentalEndTime { get; set; } = DateTime.Now;
+        ///// <summary>
+        ///// 租借结束时间
+        ///// </summary>
+        //public DateTime RentalEndTime { get; set; } = DateTime.Now;
 
         /// <summary>
         /// 是否归还
