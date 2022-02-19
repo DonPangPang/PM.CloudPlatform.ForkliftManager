@@ -99,27 +99,57 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             return Success("保存成功");
         }
 
-        /// <summary>
-        /// 批量归还车辆
-        /// </summary>
-        /// <param name="dtos"> </param>
-        /// <returns> </returns>
+        ///// <summary>
+        ///// 批量归还车辆
+        ///// </summary>
+        ///// <param name="dtos"> </param>
+        ///// <returns> </returns>
+        //[HttpPost]
+        //[Obsolete("弃用该接口", true)]
+        //public async Task<IActionResult> ReturnCars([FromBody] IEnumerable<RentalRecordAddOrUpdateDto> dtos)
+        //{
+        //    if (dtos == null) throw new ArgumentNullException(nameof(dtos));
+
+        //    var entities = dtos.MapTo<RentalRecord>();
+
+        //    foreach (var item in entities)
+        //    {
+        //        item.Modify();
+        //        var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(item.CarId));
+        //        car.ElectronicFenceId = null;
+        //        await _generalRepository.UpdateAsync(car);
+        //    }
+
+        //    await _generalRepository.UpdateAsync(entities);
+        //    await _generalRepository.SaveAsync();
+
+        //    return Success("归还成功");
+        //}
+
+
         [HttpPost]
-        public async Task<IActionResult> ReturnCars([FromBody] IEnumerable<RentalRecordAddOrUpdateDto> dtos)
+        public async Task<IActionResult> ReturnCars([FromBody] IEnumerable<RentalRecordReturnDto> dtos)
         {
-            if (dtos == null) throw new ArgumentNullException(nameof(dtos));
+            if(dtos is null) throw new ArgumentNullException(nameof(dtos));
 
             var entities = dtos.MapTo<RentalRecord>();
 
             foreach (var item in entities)
             {
-                item.Create();
+                item.Modify();
+            }
+
+            await _generalRepository.UpdateAsync(entities);
+            await _generalRepository.SaveAsync();
+
+            foreach (var item in entities)
+            {
                 var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(item.CarId));
                 car.ElectronicFenceId = null;
                 await _generalRepository.UpdateAsync(car);
             }
 
-            await _generalRepository.UpdateAsync(entities);
+            await _generalRepository.SaveAsync();
 
             return Success("归还成功");
         }
