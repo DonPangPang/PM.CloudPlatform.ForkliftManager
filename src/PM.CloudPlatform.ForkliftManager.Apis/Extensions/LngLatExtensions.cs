@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using PM.CloudPlatform.ForkliftManager.Apis.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
@@ -7,6 +8,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
     /// <summary>
     /// 坐标扩展
     /// </summary>
+    [Obsolete("丢弃", true)]
     public static class LngLatExtensions
     {
         /// <summary>

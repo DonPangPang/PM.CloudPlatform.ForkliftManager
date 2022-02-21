@@ -1,8 +1,11 @@
-﻿namespace PM.CloudPlatform.ForkliftManager.Apis.Enums
+﻿using System;
+
+namespace PM.CloudPlatform.ForkliftManager.Apis.Enums
 {
     /// <summary>
     /// 坐标
     /// </summary>
+    [Obsolete("丢弃", true)]
     public class Location
     {
         /// <summary>
