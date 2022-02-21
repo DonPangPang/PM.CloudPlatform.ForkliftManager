@@ -32,5 +32,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// </summary>
         public Car? Car { get; set; }
+
+        /// <summary>
+        /// 是否存在
+        /// </summary>
+        public bool? IsActive { get; set; }
     }
 }

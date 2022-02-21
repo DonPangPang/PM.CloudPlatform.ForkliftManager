@@ -217,7 +217,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 CarId = carId,
                 TerminalId = terminalId,
                 Description = description,
-                IMEI = terminal.IMEI
+                IMEI = terminal.IMEI,
+                IsActive = true
             };
 
             bindRecord.Create();
@@ -230,16 +231,57 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             return Success("保存成功");
         }
 
+        ///// <summary>
+        ///// 解除车辆与终端的绑定
+        ///// </summary>
+        ///// <param name="carId">      </param>
+        ///// <param name="terminalId"> </param>
+        ///// <returns> </returns>
+        //[HttpGet]
+        //public async Task<IActionResult> SetCarTerminalUnBind(Guid carId, Guid terminalId)
+        //{
+        //    var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(carId) && x.TerminalId.Equals(terminalId));
+
+        //    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+        //    if (car is null)
+        //    {
+        //        return Fail("车辆信息获取失败");
+        //    }
+
+        //    car.TerminalId = null;
+        //    await _generalRepository.UpdateAsync(car);
+        //    await _generalRepository.SaveAsync();
+
+        //    var terminal = await _generalRepository.FindAsync<Terminal>(x => x.Id.Equals(terminalId));
+
+        //    if(terminal is null)
+        //    {
+        //        return Fail("终端信息获取失败, 已接触对应车辆的绑定.");
+        //    }
+
+        //    terminal.CarId = null;
+        //    await _generalRepository.UpdateAsync<Terminal>(terminal);
+        //    await _generalRepository.SaveAsync();
+
+        //    return Success("解除绑定成功");
+        //}
+
         /// <summary>
         /// 解除车辆与终端的绑定
         /// </summary>
-        /// <param name="carId">      </param>
-        /// <param name="terminalId"> </param>
+        /// <param name="bindRecordId"></param>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> SetCarTerminalUnBind(Guid carId, Guid terminalId)
+        public async Task<IActionResult> SetCarTerminalUnBind(Guid bindRecordId)
         {
-            var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(carId) && x.TerminalId.Equals(terminalId));
+            var bindRecord = await _generalRepository.FindAsync<TerminalBindRecord>(x=>x.Id.Equals(bindRecordId));
+            
+            if(bindRecord is null)
+            {
+                return Fail("找不到绑定记录");
+            }
+
+            var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(bindRecord.CarId) && x.TerminalId.Equals(bindRecord.TerminalId));
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             if (car is null)
@@ -251,7 +293,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             await _generalRepository.UpdateAsync(car);
             await _generalRepository.SaveAsync();
 
-            return Success("接触绑定成功");
+            var terminal = await _generalRepository.FindAsync<Terminal>(x => x.Id.Equals(bindRecord.TerminalId));
+
+            if (terminal is null)
+            {
+                return Fail("终端信息获取失败, 已接触对应车辆的绑定.");
+            }
+
+            terminal.CarId = null;
+            await _generalRepository.UpdateAsync<Terminal>(terminal);
+            await _generalRepository.SaveAsync();
+
+            bindRecord.IsActive = false;
+            await _generalRepository.UpdateAsync(bindRecord);
+            await _generalRepository.SaveAsync();
+
+            return Success("解除绑定成功");
         }
 
         /// <summary>

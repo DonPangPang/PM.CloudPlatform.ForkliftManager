@@ -12,6 +12,7 @@ using NbazhGPS.Protocol.Extensions;
 using NbazhGPS.Protocol.MessageBody;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
@@ -161,9 +162,48 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             return Success();
         }
 
-        //TODO: 获取终端绑定车辆的状态
-        //TODO: 获取未绑定的终端
-        //TODO: 获取未绑定的车辆
+        /// <summary>
+        /// 获取终端绑定车辆的状态
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetTerminalStatus([FromQuery] DtoParametersBase parameters)
+        {
+            var terminals = await _generalRepository.GetQueryable<Terminal>()
+                .FilterDeleted()
+                .FilterDisabled()
+                .ApplyPaged(parameters)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.IMEI,
+                    x.EnableMark,
+                    x.DeleteMark,
+                    Binded = (x.CarId == null)
+                })
+                .ToListAsync();
+
+            return Success(terminals);
+        }
+
+        /// <summary>
+        /// 获取未绑定的终端
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetUnbindTerminals()
+        {
+            var terminals = await _generalRepository.GetQueryable<Terminal>()
+                .FilterDeleted()
+                .FilterDisabled()
+                .Where(x=>x.CarId == null)
+                .ToListAsync();
+
+            var returnDto = terminals.MapTo<TerminalDto>();
+
+            return Success(returnDto);
+        }
         //TODO: 改变绑定记录的状态, 加一个IsBind字段
     }
 }
