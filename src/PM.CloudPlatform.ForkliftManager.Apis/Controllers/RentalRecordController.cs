@@ -68,7 +68,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     CarType = x.Car.CarType!.Name,
                     RentalStartTime = x.RentalStartTime,
                     RentalEndTime = x.RentalEndTime,
-                    IsNeedReturn = (x.RentalEndTime > DateTime.Now.Date)
+                    IsNeedReturn = (x.RentalEndTime < DateTime.Now.Date)
                 })
                 .AsSplitQuery()
                 .ToListAsync();
@@ -172,9 +172,26 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> GetNeedReturnCars([FromQuery]DtoParametersBase parameters)
         {
             var result = await _generalRepository.GetQueryable<RentalRecord>()
+                .FilterDeleted()
+                .Where(x => x.RentalEndTime < DateTime.Now.Date)
+                .Include(x => x.RentalCompany)
                 .Include(x => x.Car)
+                .ThenInclude(t => t!.CarType)
                 .ApplyPaged(parameters)
-                .Where(x=> x.RentalEndTime > DateTime.Now.Date)
+                .Select(x => new
+                {
+                    //Source = x.MapTo<RentalRecord>(),
+                    RentalRecordId = x.Id,
+                    CarId = x.Car!.Id,
+                    RentalCompanyName = x.RentalCompany!.Name,
+                    LicensePlateNumber = x.Car!.LicensePlateNumber,
+                    Brand = x.Car!.Brand,
+                    SerialNumber = x.Car!.SerialNumber,
+                    CarType = x.Car.CarType!.Name,
+                    RentalStartTime = x.RentalStartTime,
+                    RentalEndTime = x.RentalEndTime,
+                    IsNeedReturn = (x.RentalEndTime < DateTime.Now.Date)
+                })
                 .AsSplitQuery()
                 .ToListAsync();
 
