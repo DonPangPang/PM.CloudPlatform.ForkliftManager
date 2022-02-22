@@ -63,7 +63,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5.1" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="5.0.0" />
-		<PackageReference Include="Pang.AutoMapperMiddleware" Version="1.0.1" />
+		<PackageReference Include="Pang.AutoMapperMiddleware" Version="1.0.2" />
 		<PackageReference Include="ProjNet" Version="2.0.0" />
 		<PackageReference Include="SuperSocket" Version="2.0.0-beta.8.344" />
 		<PackageReference Include="SuperSocket.Server" Version="2.0.0-beta.8.344" />

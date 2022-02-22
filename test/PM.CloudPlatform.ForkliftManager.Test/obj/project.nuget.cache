@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jcBac0rGFCqBfukIx6MN3Ruu1gBFFvqxBxV9/dudbYAmtpyTB47VC8kPrRrIUY6dJNNb/tEXg9Uj5svT994r0Q==",
+  "dgSpecHash": "TpRmLH+N+gkTmmcomvDz0rvUtRQse0gMboFxPvhIzroh4CMi1g8F0cOfJHq92/wb9+O1iENuPiK7dAM748bghg==",
   "success": true,
   "projectFilePath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
   "expectedPackageFiles": [
@@ -89,7 +89,7 @@
     "C:\\Users\\pm011\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql.nettopologysuite\\5.0.0\\npgsql.entityframeworkcore.postgresql.nettopologysuite.5.0.0.nupkg.sha512",
     "C:\\Users\\pm011\\.nuget\\packages\\npgsql.nettopologysuite\\5.0.0\\npgsql.nettopologysuite.5.0.0.nupkg.sha512",
     "C:\\Users\\pm011\\.nuget\\packages\\nuget.frameworks\\5.0.0\\nuget.frameworks.5.0.0.nupkg.sha512",
-    "C:\\Users\\pm011\\.nuget\\packages\\pang.automappermiddleware\\1.0.1\\pang.automappermiddleware.1.0.1.nupkg.sha512",
+    "C:\\Users\\pm011\\.nuget\\packages\\pang.automappermiddleware\\1.0.2\\pang.automappermiddleware.1.0.2.nupkg.sha512",
     "C:\\Users\\pm011\\.nuget\\packages\\projnet\\2.0.0\\projnet.2.0.0.nupkg.sha512",
     "C:\\Users\\pm011\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\pm011\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",

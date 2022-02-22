@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
@@ -40,8 +41,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="userId">用户Id</param>
         /// <param name="roleIds">角色Id集合</param>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> SetRoles(Guid userId, IEnumerable<Guid> roleIds)
+        [HttpPost]
+        public async Task<IActionResult> SetRoles([FromQuery]Guid userId, [FromBody] IEnumerable<Guid> roleIds)
         {
             var roles = await _generalRepository.GetQueryable<Role>()
                 .Where(x=>roleIds.Contains(x.Id))
@@ -58,6 +59,30 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             await _generalRepository.SaveAsync();
 
             return Success("保存成功");
+        }
+
+        /// <summary>
+        /// 获取用户的角色信息
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        [HttpGet]
+        public async Task<IActionResult> GetUserRoles(Guid userId)
+        {
+            if (userId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            var roles = await _generalRepository.GetQueryable<User>()
+                .Where(user => user.Id.Equals(userId))
+                .SelectMany(t => t.Roles!)
+                .ToListAsync();
+
+            var returnDto = roles.MapTo<RoleDto>();
+
+            return Success(returnDto);
         }
     }
 }

@@ -1466,7 +1466,7 @@
           "lib/netstandard2.0/NuGet.Frameworks.dll": {}
         }
       },
-      "Pang.AutoMapperMiddleware/1.0.1": {
+      "Pang.AutoMapperMiddleware/1.0.2": {
         "type": "package",
         "dependencies": {
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "8.1.1",
@@ -3752,7 +3752,7 @@
           "Newtonsoft.Json": "13.0.1",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "5.0.5.1",
           "Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite": "5.0.0",
-          "Pang.AutoMapperMiddleware": "1.0.1",
+          "Pang.AutoMapperMiddleware": "1.0.2",
           "ProjNet": "2.0.0",
           "SuperSocket": "2.0.0-beta.8.344",
           "SuperSocket.Server": "2.0.0-beta.8.344",
@@ -5663,17 +5663,17 @@
         "nuget.frameworks.nuspec"
       ]
     },
-    "Pang.AutoMapperMiddleware/1.0.1": {
-      "sha512": "ocH+jP/IXjQjPFwDyz8S5twlYfSdPDA4D+iLTyDx41M6Ge20ey5fx98x9Z4gaij5dW6/zutbauleSUMyaNvP6g==",
+    "Pang.AutoMapperMiddleware/1.0.2": {
+      "sha512": "qyip9FcIrAmD9ZAWV9Mt1i0VVtno1Vb3kRjYX/a9Ad7IPZ5pMCOl6i2/LQ24Gv/MKrZsO/bsIOJd6Pin3Xlu3Q==",
       "type": "package",
-      "path": "pang.automappermiddleware/1.0.1",
+      "path": "pang.automappermiddleware/1.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.MD",
         "lib/netstandard2.0/Pang.AutoMapperMiddleware.dll",
         "lib/netstandard2.1/Pang.AutoMapperMiddleware.dll",
-        "pang.automappermiddleware.1.0.1.nupkg.sha512",
+        "pang.automappermiddleware.1.0.2.nupkg.sha512",
         "pang.automappermiddleware.nuspec"
       ]
     },

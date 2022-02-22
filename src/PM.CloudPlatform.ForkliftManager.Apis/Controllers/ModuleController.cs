@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
+using PM.CloudPlatform.ForkliftManager.Apis.Helper;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
 using System;
@@ -39,8 +42,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="roleId"></param>
         /// <param name="moduleIds"></param>
         /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> SetModules(Guid roleId, IEnumerable<Guid> moduleIds)
+        [HttpPost]
+        public async Task<IActionResult> SetModules([FromQuery]Guid roleId, [FromBody]IEnumerable<Guid> moduleIds)
         {
             var role = await _generalRepository.FindAsync<Role>(roleId);
 
@@ -58,6 +61,38 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             await _generalRepository.SaveAsync();
 
             return Success("保存成功");
+        }
+
+        /// <summary>
+        /// 获取角色的模块信息
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        [HttpGet]
+        public async Task<IActionResult> GetRoleModules(Guid roleId)
+        {
+            if(roleId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(roleId));
+            }
+
+
+            var modules = await _generalRepository.GetQueryable<Role>()
+                    .FilterDeleted()
+                    .Where(x=>x.Id.Equals(roleId))
+                    .SelectMany(t => t.Modules!)
+                    .ToListAsync();
+            var returnDto = modules.MapTo<ModuleDto>();
+
+            //var res = await Users.SelectMany(u => u.Roles!.SelectMany(r => r.Modules!.Select(m => new
+            //    {
+            //        u,
+            //        r,
+            //        m
+            //    }))).ToListAsync();
+
+            return Success(returnDto);
         }
     }
 }
