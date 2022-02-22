@@ -67,7 +67,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     SerialNumber = x.Car!.SerialNumber,
                     CarType = x.Car.CarType!.Name,
                     RentalStartTime = x.RentalStartTime,
-                    RentalEndTime = x.RentalEndTime
+                    RentalEndTime = x.RentalEndTime,
+                    IsNeedReturn = (x.RentalEndTime > DateTime.Now.Date)
                 })
                 .AsSplitQuery()
                 .ToListAsync();
@@ -128,7 +129,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         //    return Success("归还成功");
         //}
 
-
+        /// <summary>
+        /// 归还车辆
+        /// </summary>
+        /// <param name="dtos"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         [HttpPost]
         public async Task<IActionResult> ReturnCars([FromBody] IEnumerable<RentalRecordReturnDto> dtos)
         {
@@ -155,6 +161,24 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //await _generalRepository.SaveAsync();
 
             return Success("归还成功");
+        }
+
+        /// <summary>
+        /// 获取已到达归还日期的记录
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetNeedReturnCars([FromQuery]DtoParametersBase parameters)
+        {
+            var result = await _generalRepository.GetQueryable<RentalRecord>()
+                .Include(x => x.Car)
+                .ApplyPaged(parameters)
+                .Where(x=> x.RentalEndTime > DateTime.Now.Date)
+                .AsSplitQuery()
+                .ToListAsync();
+
+            return Success(result);
         }
     }
 }

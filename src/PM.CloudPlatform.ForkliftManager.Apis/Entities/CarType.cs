@@ -9,5 +9,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Entities
     public class CarType : EntityBase
     {
         public ICollection<Car>? Cars { get; set; }
+
+        public int LengthOfMaintenanceTime { get; set; } = 500;
     }
 }

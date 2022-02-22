@@ -14,5 +14,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// 车辆类型
         /// </summary>
         public string Name { get; set; } = null!;
+
+        /// <summary>
+        /// 维护保养时间
+        /// </summary>
+        public int LengthOfMaintenanceTime { get; set; } = 500;
     }
 }
