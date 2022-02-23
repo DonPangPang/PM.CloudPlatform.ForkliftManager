@@ -52,6 +52,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 return Fail("找不到角色");
             }
 
+            _generalRepository.Database.ExecuteSqlRaw($"delete from \"ModuleRole\" where \"RolesId\"='{role.Id}'");
+
+
             var modules = await _generalRepository.GetQueryable<Module>()
                 .Where(x=>moduleIds.Contains(x.Id))
                 .ToListAsync();

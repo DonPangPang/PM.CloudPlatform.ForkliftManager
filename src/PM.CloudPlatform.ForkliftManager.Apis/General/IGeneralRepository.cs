@@ -4,12 +4,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.General
 {
     public interface IGeneralRepository
     {
+        DatabaseFacade Database { get; }
         DbSet<T> GetDbSet<T>() where T : EntityBase;
 
         IQueryable<T> GetQueryable<T>() where T : EntityBase;

@@ -204,6 +204,5 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             return Success(returnDto);
         }
-        //TODO: 改变绑定记录的状态, 加一个IsBind字段
     }
 }

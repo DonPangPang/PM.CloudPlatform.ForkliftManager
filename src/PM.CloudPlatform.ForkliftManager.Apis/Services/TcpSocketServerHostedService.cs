@@ -138,7 +138,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                         {
                             var terminalId = (p.Bodies as Nbazh0X01)!.TerminalId;
                             s["TerminalId"] = terminalId;
-                            // TODO: 终端登录
+                            // 终端登录
                             var terminal = await _generalRepository.GetQueryable<Terminal>()
                                 .FilterDeleted()
                                 .FirstOrDefaultAsync(x => x.IMEI.Equals(terminalId), cancellationToken: cancellationToken);

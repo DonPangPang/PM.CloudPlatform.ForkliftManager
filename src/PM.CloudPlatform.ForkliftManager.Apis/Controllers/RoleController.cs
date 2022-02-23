@@ -17,6 +17,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.Internal.AsyncLock;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 {
@@ -53,6 +54,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 return Fail("找不到用户");
             }
+            _generalRepository.Database.ExecuteSqlRaw($"delete from \"RoleUser\" where \"UsersId\" = '{user.Id}'");
 
             user.Roles = roles;
             await _generalRepository.UpdateAsync(user);
