@@ -21,6 +21,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// <summary>
         /// 管理的模块
         /// </summary>
-        public ICollection<Module>? Modules { get; set; }
+        public ICollection<ModuleDto>? Modules { get; set; }
     }
 }
