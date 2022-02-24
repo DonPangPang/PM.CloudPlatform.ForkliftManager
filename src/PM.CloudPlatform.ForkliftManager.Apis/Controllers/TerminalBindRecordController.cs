@@ -38,13 +38,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="licensePlateNumber"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetBindRecord([FromQuery]DtoParametersBase parameters, string imei, string licensePlateNumber)
+        public async Task<IActionResult> GetBindRecord([FromQuery]DtoParametersBase parameters, string? imei, string? licensePlateNumber)
         {
             var records = await _generalRepository.GetQueryable<TerminalBindRecord>()
                 .ApplyPaged(parameters)
                 .Include(x=>x.Car)
                 .Include(x=>x.Terminal)
-                .Where(x=>x.Terminal!.IMEI.Contains(imei) || x.Car!.LicensePlateNumber!.Contains(licensePlateNumber))
+                .Where(x=>x.Terminal!.IMEI.Contains(imei ?? ""))
+                .Where(x=>x.Car!.LicensePlateNumber!.Contains(licensePlateNumber ?? ""))
                 .Select(x=>new 
                 {
                     Id = x.Id,
