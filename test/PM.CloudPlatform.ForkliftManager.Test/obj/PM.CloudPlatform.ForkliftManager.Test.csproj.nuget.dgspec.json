@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj": {}
+    "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj": {}
   },
   "projects": {
-    "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj": {
+    "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj",
+        "projectUniqueName": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj",
         "projectName": "PM.CloudPlatform.ForkliftManager.Apis",
-        "projectPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj",
+        "projectPath": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj",
         "packagesPath": "C:\\Users\\pm011\\.nuget\\packages\\",
-        "outputPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\obj\\",
+        "outputPath": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pm011\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -157,14 +157,14 @@
         }
       }
     },
-    "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj": {
+    "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
+        "projectUniqueName": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
         "projectName": "PM.CloudPlatform.ForkliftManager.Test",
-        "projectPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
+        "projectPath": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
         "packagesPath": "C:\\Users\\pm011\\.nuget\\packages\\",
-        "outputPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\obj\\",
+        "outputPath": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pm011\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -183,8 +183,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj": {
-                "projectPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj"
+              "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj": {
+                "projectPath": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj"
               }
             }
           }
