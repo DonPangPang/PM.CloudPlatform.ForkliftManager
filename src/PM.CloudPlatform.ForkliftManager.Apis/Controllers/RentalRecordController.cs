@@ -59,7 +59,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Select(x => new
                 {
                     //Source = x.MapTo<RentalRecord>(),
-                    RentalRecordId = x.Id,
+                    Id = x.Id,
                     CarId = x.Car!.Id,
                     RentalCompanyName = x.RentalCompany!.Name,
                     LicensePlateNumber = x.Car!.LicensePlateNumber,
@@ -68,7 +68,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     CarType = x.Car.CarType!.Name,
                     RentalStartTime = x.RentalStartTime,
                     RentalEndTime = x.RentalEndTime,
-                    IsNeedReturn = (x.RentalEndTime < DateTime.Now.Date)
+                    IsNeedReturn = (x.RentalEndTime < DateTime.Now.Date),
+                    x.IsReturn,
+                    x.ReturnTime,
+                    x.RentalEmployeeName,
+                    x.RentalEmployeeTel,
+
                 })
                 .AsSplitQuery()
                 .ToListAsync();
