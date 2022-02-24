@@ -34,6 +34,37 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         }
 
         /// <summary>
+        /// 获取车辆维护的历史记录
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetCarMaintenanceRecords([FromQuery]DtoParametersBase parameters)
+        {
+            var data = await _generalRepository.GetQueryable<CarMaintenanceRecord>()
+                .FilterDeleted()
+                .Include(x => x.Car)
+                .ThenInclude(t => t!.CarType)
+                .ApplyPaged(parameters)
+                .Select(x => new
+                {
+                    x.Id,
+                    x.CarId,
+                    x.Car!.LicensePlateNumber,
+                    x.Car!.CarType!.Name,
+                    x.Maintainer,
+                    x.MaintainerTel,
+                    x.MaintainerContent,
+                    x.Remarks,
+                    x.MaintenanceTime,
+                    x.MaintenanceDateLength
+                })
+                .ToListAsync();
+
+            return Ok(data);
+        }
+
+        /// <summary>
         /// 获取车辆自上次维护后的使用时长
         /// </summary>
         /// <param name="parameters"> </param>
