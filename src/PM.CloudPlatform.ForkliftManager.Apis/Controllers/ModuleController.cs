@@ -45,6 +45,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpPost]
         public async Task<IActionResult> SetModules([FromQuery]Guid roleId, [FromBody]IEnumerable<Guid> moduleIds)
         {
+            var modules = await _generalRepository.GetQueryable<Module>()
+                .Where(x => moduleIds.Contains(x.Id))
+                .ToListAsync();
             var role = await _generalRepository.FindAsync<Role>(roleId);
 
             if(role is null)
@@ -53,11 +56,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             }
 
             _generalRepository.Database.ExecuteSqlRaw($"delete from \"ModuleRole\" where \"RolesId\"='{role.Id}'");
-
-
-            var modules = await _generalRepository.GetQueryable<Module>()
-                .Where(x=>moduleIds.Contains(x.Id))
-                .ToListAsync();
+            
 
             role.Modules = modules;
             await _generalRepository.UpdateAsync(role);
