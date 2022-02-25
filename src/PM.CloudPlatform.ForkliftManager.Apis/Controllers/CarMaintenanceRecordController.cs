@@ -61,7 +61,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 })
                 .ToListAsync();
 
-            return Ok(data);
+            return Success(data);
         }
 
         /// <summary>
