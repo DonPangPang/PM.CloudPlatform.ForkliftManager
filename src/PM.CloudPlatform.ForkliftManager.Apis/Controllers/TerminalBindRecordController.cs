@@ -49,9 +49,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Select(x=>new 
                 {
                     Id = x.Id,
-                    IMIE = x.Terminal!.IMEI,
+                    IMEI = x.Terminal!.IMEI,
                     LicensePlateNumber = x.Car!.LicensePlateNumber,
-                    IsActive = x.IsActive
+                    IsActive = x.IsActive,
+                    Description=x.Description
                 })
                 .ToListAsync();
 
