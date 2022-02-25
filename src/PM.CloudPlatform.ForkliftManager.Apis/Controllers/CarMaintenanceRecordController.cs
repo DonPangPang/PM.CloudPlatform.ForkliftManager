@@ -73,6 +73,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCarUseRecordsMaintenance([FromQuery] DtoParametersBase parameters)
         {
+            #region 移除
             //var maintenanceRecords = await _generalRepository.GetQueryable<CarMaintenanceRecord>()
             //    .GroupBy(x => x.CarId)
             //    .Select(groups => new
@@ -98,6 +99,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //        LengthOfTime = x.UseRecords!.Sum(t => t.LengthOfTime),
             //    })
             //    .ToListAsync();
+            #endregion 移除
 
             var data = await _generalRepository.GetQueryable<Car>()
                 .FilterDeleted()
@@ -138,6 +140,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCarUseRecordsFill([FromQuery] DtoParametersBase parameters)
         {
+            #region 移除
             //var maintenanceRecords = await _generalRepository.GetQueryable<CarMaintenanceRecord>()
             //    .GroupBy(x => x.CarId)
             //    .Select(groups => new
@@ -154,6 +157,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //    .ToListAsync();
 
             //return Success(data);
+            #endregion 移除
 
             var data = await _generalRepository.GetQueryable<Car>()
                 .FilterDeleted()
