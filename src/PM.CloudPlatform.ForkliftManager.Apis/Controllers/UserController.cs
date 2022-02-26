@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
+using PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
@@ -44,6 +45,36 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         {
             _generalRepository = generalRepository;
             Users = _generalRepository.GetDbSet<User>();
+        }
+
+        /// <summary>
+        /// User查询参数
+        /// </summary>
+        public class UserDtoParameters : DtoParametersBase
+        {
+            public string? Username { get; set; }
+
+            public string? Name{get; set;}
+        }
+
+        /// <summary>
+        /// 获取所有用户信息, 附带账号以及姓名的模糊查询
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetUsers([FromQuery]UserDtoParameters parameters)
+        {
+            var users = await _generalRepository.GetQueryable<User>()
+                .Where(x=>x.Name.Contains(parameters.Name ?? ""))
+                .Where(x=>x.Username.Contains(parameters.Username ?? ""))
+                .FilterDeleted()
+                .ApplyPaged(parameters)
+                .ToListAsync();
+
+            var returnDto = users.MapTo<List<UserDto>>();
+
+            return Success(returnDto);
         }
 
         /// <summary>

@@ -23,7 +23,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base
         private const int MaxPageSize = 100;
 
         /// <summary>
-        /// 模糊搜索
+        /// 模糊搜索(Name, CreateUserName, ModifyUserName)
         /// </summary>
         public string? SearchTerm { get; set; }
 
