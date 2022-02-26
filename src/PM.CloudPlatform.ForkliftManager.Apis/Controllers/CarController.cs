@@ -423,6 +423,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> GetMonthlyData()
         {
             var rentalRecords = await _generalRepository.GetQueryable<RentalRecord>()
+                .Where(x=>!x.IsReturn)
                 .Where(x => x.CreateDate > x.CreateDate!.Value.AddMonths(-6))
                 .GroupBy(det => new
                 {

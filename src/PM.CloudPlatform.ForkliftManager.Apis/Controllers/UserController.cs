@@ -72,7 +72,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .ApplyPaged(parameters)
                 .ToListAsync();
 
-            var returnDto = users.MapTo<List<UserDto>>();
+            var returnDto = users.MapTo<UserDto>();
 
             return Success(returnDto);
         }
