@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
@@ -44,6 +45,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .FilterDeleted()
                 .FilterDisabled()
                 .ToListAsync();
+
+            var returnDto = carTypes.MapTo<CarTypeDto>();
+
             return Success(carTypes);
         }
     }
