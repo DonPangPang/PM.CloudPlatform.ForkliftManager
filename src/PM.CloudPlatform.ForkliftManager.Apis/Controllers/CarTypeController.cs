@@ -30,6 +30,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// </summary>
         /// <param name="repository"> </param>
         /// <param name="mapper">     </param>
+        /// <param name="generalRepository"></param>
         public CarTypeController(CarTypeRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(repository, mapper)
         {
             _generalRepository = generalRepository;
