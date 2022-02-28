@@ -39,6 +39,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// 获取未删除以及启用的车辆类型
         /// </summary>
         /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> GetNormalCarTypes()
         {
             var carTypes = await _generalRepository.GetQueryable<CarType>()
