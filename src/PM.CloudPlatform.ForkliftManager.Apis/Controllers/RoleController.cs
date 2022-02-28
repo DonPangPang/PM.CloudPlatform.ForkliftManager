@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Helper;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
@@ -80,6 +81,23 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var roles = await _generalRepository.GetQueryable<User>()
                 .Where(user => user.Id.Equals(userId))
                 .SelectMany(t => t.Roles!)
+                .ToListAsync();
+
+            var returnDto = roles.MapTo<RoleDto>();
+
+            return Success(returnDto);
+        }
+
+        /// <summary>
+        /// 获取未删除或者禁用的角色
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            var roles = await _generalRepository.GetQueryable<Role>()
+                .FilterDeleted()
+                .FilterDisabled()
                 .ToListAsync();
 
             var returnDto = roles.MapTo<RoleDto>();

@@ -96,5 +96,21 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             return Success(returnDto);
         }
+
+        /// <summary>
+        /// 获取未删除以及禁用的模块
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetNormalModules()
+        {
+            var modules = await _generalRepository.GetQueryable<Module>()
+                .FilterDeleted()
+                .FilterDisabled()
+                .ToListAsync();
+            var returnDto = modules.MapTo<ModuleDto>();
+
+            return Success(returnDto);
+        }
     }
 }
