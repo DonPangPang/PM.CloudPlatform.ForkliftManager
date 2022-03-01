@@ -16,13 +16,13 @@
 
 <body>
     <form class="layui-form" action="" style="padding: 20px;" lay-filter="form">
-        <div class="layui-form-item">
+        <!-- <div class="layui-form-item">
             <label class="layui-form-label">需要维护保养的时间</label>
             <div class="layui-input-block">
                 <input type="text" name="lengthOfMaintenanceTime" required lay-verify="required"
                     placeholder="请输入需要维护保养的时间（单位：小时）" autocomplete="off" class="layui-input">
             </div>
-        </div>
+        </div> -->
         <div class="layui-form-item">
             <label class="layui-form-label">超出围栏的距离</label>
             <div class="layui-input-block">
@@ -81,7 +81,7 @@
                         console.log(parentData)
                         form.val('form', {                            
                             //根据name来获取值
-                            lengthOfMaintenanceTime: parentData.lengthOfMaintenanceTime,
+                            // lengthOfMaintenanceTime: parentData.lengthOfMaintenanceTime,
                             beyondFenceDistance: parentData.beyondFenceDistance,
 
                         })

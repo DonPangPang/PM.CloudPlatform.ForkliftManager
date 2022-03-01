@@ -5,25 +5,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>电子围栏管理</title>
+    <title>车辆设备绑定记录</title>
     <link rel="stylesheet" href="../css/layui.css">
     <link rel="stylesheet" id="blue" title="blue" href="../css/openStyleBlue.css" disabled='true'>
     <link rel="stylesheet" id="white" title="white" href="../css/openStyleWhite.css" disabled='true'>
     <link rel="stylesheet" type="text/css" href="../Loading/css/component.css" />
 </head>
 
-
 <body>
     <div id="pagewrap" class="pagewrap">
 
         <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief"">
-        <ul class=" layui-tab-title">
-            <li class="layui-this">电子围栏</li>
+            <ul class=" layui-tab-title">
+                <li class="layui-this">车辆设备绑定记录</li>
+                <li>报警消息</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item  layui-show">
-                    <iframe src="./tra/annualVehicleInspection.html" frameborder="0" height='100%'
-                        width="100%"></iframe>
+                    <iframe src="./tra/DataBindingHistory.html" frameborder="0" height='100%' width="100%"></iframe>
+                </div>
+                <div class="layui-tab-item">
+                    <iframe src="./tra/alarmMagement.html" frameborder="0" height='100%' width="100%"></iframe>
                 </div>
             </div>
         </div>
@@ -41,13 +43,17 @@
     <script src="../Loading/js/svgLoader.js"></script>
     <script>
         var aaa = window.location.href;
-        
+
         layui.use(['element', "laydate", 'jquery', "upload", 'table'], function () {
             var element = layui.element,
                 upload = layui.upload,
                 $ = layui.jquery,
                 laydate = layui.laydate,
                 table = layui.table;
+                element.on('tab(docDemoTabBrief)', function (data) {  // tabcard:过滤器值,lay-filter所绑定的
+                var src = $(".layui-tab-item.layui-show").find("iframe").attr("src");
+                $(".layui-tab-item.layui-show").find("iframe").attr("src", src);
+            });
             (function () {
                 var pageWrap = document.getElementById('pagewrap'),
                     loader = new SVGLoader(document.getElementById('loader'), { speedIn: 300, easingIn: mina.easeinout });

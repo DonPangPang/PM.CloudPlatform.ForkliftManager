@@ -11,17 +11,18 @@
     <link rel="stylesheet" id="white" title="white" href="../css/openStyleWhite.css" disabled='true'>
     <link rel="stylesheet" type="text/css" href="../Loading/css/component.css" />
 </head>
+
 <body>
     <div id="pagewrap" class="pagewrap">
         <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-        <ul class=" layui-tab-title">
-            <li class="layui-this">用户管理</li>
-            <li>角色管理</li>
-            <li>模块管理</li>
-            <li>设备管理</li>
-            <li>车辆类型管理</li>
-            <li>阈值管理</li>
-            <li>终端调试</li>
+            <ul class=" layui-tab-title">
+                <li class="layui-this">用户管理</li>
+                <li>角色管理</li>
+                <li>模块管理</li>
+                <li>设备管理</li>
+                <li>车辆类型管理</li>
+                <li>阈值管理</li>
+                <li>终端调试</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
@@ -67,6 +68,12 @@
                 $ = layui.jquery,
                 laydate = layui.laydate,
                 table = layui.table;
+
+                element.on('tab(docDemoTabBrief)', function (data) {  // tabcard:过滤器值,lay-filter所绑定的
+                var src = $(".layui-tab-item.layui-show").find("iframe").attr("src");
+                $(".layui-tab-item.layui-show").find("iframe").attr("src", src);
+            });
+
             (function () {
                 var pageWrap = document.getElementById('pagewrap'),
                     loader = new SVGLoader(document.getElementById('loader'), { speedIn: 300, easingIn: mina.easeinout });
@@ -78,6 +85,7 @@
                 }
                 init();
             })();
+         
             if (parent.boolean == false) {
                 $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
                 $('link[title="blue"]').removeAttr('disabled');

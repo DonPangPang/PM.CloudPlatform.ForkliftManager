@@ -17,7 +17,7 @@
     <script type="text/html" id="toolbarDemo">
             <div class="layui-inline">
                 <div class="layui-input-inline">
-                    <input type="text" name="username" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+                    <input type="text" name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
                 </div>
             </div>
             <div class="layui-inline">
@@ -30,9 +30,10 @@
     <script src="../../layui.js"></script>
     <script src="../../js/common.js"></script>
     <script>
-        layui.use(['element', 'table', "jquery"], function () {
+        layui.use(['element', 'table', "jquery","form"], function () {
             var $ = layui.jquery,
                 element = layui.element,
+                form=layui.form,
                 table = layui.table;
             var color;
             var style = JSON.parse(sessionStorage.getItem('style'));
@@ -52,15 +53,15 @@
                     , toolbar: '#toolbarDemo'
                     , post: 'get'
                     , headers: { Authorization: "Bearer " + Token }
-                    , url:  requestUrl + 'api/CarMaintenanceRecord/GetEntitiesByPaged' //数据接口
+                    , url:  requestUrl + 'api/CarMaintenanceRecord/GetCarMaintenanceRecords' //数据接口
                     , cols: [[ //表头
-                        { field: 'id', title: '公司ID', }
-                        , { field: 'carId', title: '维护车辆' }
+                         { field: 'licensePlateNumber', title: '维护车辆' }
                         , { field: 'maintainer', title: '维护人' }
                         , { field: 'maintainerTel', title: '手机号' }
                         , { field: 'maintainerContent', title: '维护内容', }
                         , { field: 'maintenanceTime', title: '维护时间', sort: true }
-                        , { field: 'remarks', title: '描述', }
+                       // , {field:'maintenanceDateLength', title: '维护时长'}
+                        , { field: 'remarks', title: '描述'}
                     ]]
                     , page: true //开启分页
                     , limit: 30
@@ -85,9 +86,7 @@
                         countName: 'count',
                         dataName: 'data'
                     }
-                    , done: function () {
-                        tableMerge.render(this)
-                    }
+                   
                 });
             }, 500)
             table.on('toolbar(test)', function (obj) {
@@ -123,6 +122,20 @@
                         }
                         break;
                 };
+            });
+           
+           
+            form.on('submit(data-search-btn)', function (data) {
+                var result = data.field;
+                console.log(result)
+                //执行搜索重载
+                table.reload('test', {
+                    page: {
+                        curr: 1
+                    },
+                    where: result
+                }, 'data');
+                return false;
             });
             var cars = [
                 {

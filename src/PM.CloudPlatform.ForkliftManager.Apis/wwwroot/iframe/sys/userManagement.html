@@ -26,7 +26,12 @@
         <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="pm_delete"> 删除 </button>
         <div class="layui-inline">
             <div class="layui-input-inline">
-                <input type="text" name="id" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+                <input type="text" name="Username" autocomplete="off" class="layui-input" placeholder="请输入要查询账号">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="Name" autocomplete="off" class="layui-input" placeholder="请输入要查询姓名">
             </div>
         </div>
         <div class="layui-inline">
@@ -65,15 +70,12 @@
             }, {
                 title: "启用账户",
                 type: 'pm_enabled'
-            }, 
-            // {
-            //     // title: "重置密码",
-            //     // type: 'pm_resetpassword'
-            // }, {
-            //     // title: "分配角色",
-            //     // type: 'pm_addrole'
-            // }
-        ];
+            }
+                , {
+                title: "分配角色",
+                type: 'pm_addrole'
+            }
+            ];
             let defaultToolbar = [{
                 title: '导出Excel',
                 layEvent: 'pm_export',
@@ -91,7 +93,7 @@
             let defaultToolbarData = ['filter'];
             let moreData = [];
             more.map(function (v) {
-                // 此循环用于判断更多按钮里的内容\
+                // 此循环用于判断更多按钮里的内容
                 moreData.push(v)
             });
             defaultToolbar.map(function (v) {
@@ -127,16 +129,16 @@
                         icon: 'layui-icon-app'
                     }]
                     , headers: { Authorization: "Bearer " + Token }
-                    , url: requestUrl + 'api/User/GetEntitiesByPaged' //数据接口                 
+                    , url: requestUrl + 'api/User/GetUsers' //数据接口                 
                     , cols: [[ //表头
                         { type: 'radio' }
-                        , { field: 'id', title: 'id', sort: true }
+                        // , { field: 'id', title: 'id', sort: true }
                         , { field: 'username', title: '用户账号', sort: true }
                         , { field: 'password', title: '密码' }
-                        // , { field: 'name', title: '姓名' }
-                        //, { field: 'upkeep', title: '租凭次数', sort: true }
-                        //, { field: 'number', title: '租凭车辆数' }
-                        // , { field: 'buy_time', title: '租凭时间', }
+                        , { field: 'name', title: '姓名' }
+                        , { field: 'tel', title: '手机号', sort: true }
+                        //, { field: 'number', title: '租赁车辆数' }
+                        // , { field: 'buy_time', title: '租赁时间', }
                         // , { field: 'use_time', title: '使用时长（h）', }
                         // , { field: 'upkeep', title: '保养次数', sort: true }
                         // , { field: 'time', title: '上一次保养时间', sort: true }
@@ -162,7 +164,7 @@
                         msgName: 'msg',
                         countName: 'count',
                         dataName: 'data'
-                    } 
+                    }
 
                 });
             }, 500)
@@ -198,9 +200,9 @@
                             content: './user/edit.html?boolean=' + aaa,
                             success: function (layero) {
                                 if (style == false) {
-                                $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
-                            } else {
-                            }
+                                    $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                                } else {
+                                }
                             },
                         });
                     } else {
@@ -220,7 +222,7 @@
                             content: '<div style="padding: 20px 100px;">是否删除账户</div>',
                             btn: ['是', '否'],
                             btnAlign: 'r',
-                            yes: function (index,layero) {
+                            yes: function (index, layero) {
                                 ajax("delete", "api/User/DeleteEntity/" + data.id)
                                     .then(function (res) {
                                         if (res.code = 200) {
@@ -234,7 +236,7 @@
                                             });
                                         }
                                     });
-                                    layer.close(index);
+                                layer.close(index);
                             }
                         });
                     } else {
@@ -264,8 +266,8 @@
                                         shade: 0,
                                         yes: function () {
                                             console.log(data.id)
-                                            ajax('get','api/User/Disable?id='+data.id)
-                                             .then( function (data) {
+                                            ajax('get', 'api/User/Disable?id=' + data.id)
+                                                .then(function (data) {
                                                     if (data.code == 200) {
                                                         layer.msg('禁用账号成功', {
                                                             time: 2000
@@ -278,8 +280,8 @@
                                                             time: 2000
                                                         });
                                                     }
-                                               
-                                            });
+
+                                                });
                                             // let forbiddenData = {
                                             //     token: info.token,
                                             //     loginMark: loginMark,
@@ -329,8 +331,8 @@
                                         btnAlign: 'r',
                                         shade: 0,
                                         yes: function () {
-                                           ajax('get','api/User/Enable?id='+data.id)
-                                             .then( function (data) {
+                                            ajax('get', 'api/User/Enable?id=' + data.id)
+                                                .then(function (data) {
                                                     if (data.code == 200) {
                                                         layer.msg('启用账号成功', {
                                                             time: 2000
@@ -343,8 +345,8 @@
                                                             time: 2000
                                                         });
                                                     }
-                                               
-                                            });
+
+                                                });
                                         }
                                     });
                                 } else {
@@ -410,8 +412,8 @@
                                         shade: 0.2,
                                         maxmin: true,
                                         shadeClose: true,
-                                        area: ['600px', '80%'],
-                                        content: './layer/user/allot.html',
+                                        area: ['800px', '80%'],
+                                        content: './user/allot.html',
                                     });
                                 } else {
                                     layer.msg('未选择用户', {
@@ -424,24 +426,35 @@
                 }
             });
 
-            // 监听搜索操作
             form.on('submit(data-search-btn)', function (data) {
-                console.log(data);
-                if (data.field.id != '') {
-                    var result = data.field.id;
-                    // ajax({ type: "get", myurl: "api/User/GetEntityById?id=" + result, data: '', barer: "Bearer " + Barer })
-                    //     .then(function (res) {
-                    //         let data = res;
-                    //         console.log(data);
-                    //         layui.table.reload('demo', { data: [data] });
-                    //     });
-                    // return false;
-                } else {
-                    layer.msg('请输入id', {
-                        time: 2000
-                    });
-                }
+                var result = data.field;
+                //执行搜索重载
+                table.reload('test', {
+                    page: {
+                        curr: 1
+                    },
+                    where: result
+                }, 'data');
+                return false;
             });
+            // 监听搜索操作
+            // form.on('submit(data-search-btn)', function (data) {
+            //     console.log(data);
+            //     if (data.field.id != '') {
+            //         var result = data.field.id;
+            // ajax({ type: "get", myurl: "api/User/GetEntityById?id=" + result, data: '', barer: "Bearer " + Barer })
+            //     .then(function (res) {
+            //         let data = res;
+            //         console.log(data);
+            //         layui.table.reload('demo', { data: [data] });
+            //     });
+            // return false;
+            //     } else {
+            //         layer.msg('请输入id', {
+            //             time: 2000
+            //         });
+            //     }
+            // });
 
 
 

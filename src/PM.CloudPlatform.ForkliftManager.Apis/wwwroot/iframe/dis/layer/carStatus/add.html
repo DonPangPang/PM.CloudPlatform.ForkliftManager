@@ -394,7 +394,6 @@
                         }
                         RentalRecordEntity.push(entity)
                     })
-                    console.log(RentalRecordEntity)
                     ajax('post', 'api/RentalRecord/CreateRentalRecords', RentalRecordEntity)
                         .then(function (res) {
                             if (res.code == 200) {
@@ -412,7 +411,7 @@
                             }
 
                         })
-                    layer.msg(JSON.stringify(selectCoordinate));
+                    // layer.msg(JSON.stringify(selectCoordinate));
                 } else {
                     layer.msg('请选中一个电子围栏后提交', {
                         time: 2000,

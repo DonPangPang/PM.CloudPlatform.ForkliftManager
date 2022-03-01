@@ -338,10 +338,9 @@
         <div lay-event='dispatchManagement' title='调度管理' onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
         <div lay-event='statisticsManagement' title="车辆维护"
-            onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+            onMouseOver='play_over("./video/WindowsNavigationStart.wav")'></div>
+        <div lay-event='trafficManagement' title="历史记录" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
-        <!-- <div lay-event='trafficManagement' title="电子围栏管理" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
-        </div> -->
         <div lay-event='systemManagement' title="系统管理" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
         <!-- <div lay-event='' title="预留" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
@@ -687,7 +686,10 @@
             sidebar = layui.sidebar,
             form = layui.form,
             layer = layui.layer;
-
+        var index;
+        element.on('tab(demo)', function (data) {
+            index = data.index;
+        });
         $('#bottomIframe div').on('click', function () {
             // let event = $(this).attr('lay-event');
             let html = $(this).attr('title');
@@ -717,36 +719,28 @@
         })
         //点击图片和敲回车会提取搜索框字段
         $('#inputImg').on('click', function () {
-            console.log(markerData);
-            var a = markerData[$("#input input").val()]
+            if (index == 0) {
+                $('#allCar').click();
+            } else if (index == 1) {
+                $('#onlineCar').click();
+            }
+            else {
+                $('#NotOnlineCar').click();
+            }
 
-            element.on('tab(demo)', function (data) {
-                console.log(data);
-                if (data.index==0) {
-                    $('#allCar').click();
-                }else if (data.index==1) {
-                    $('#onlineCar').click();
-                }
-                else{
-                    $('#NotOnlineCar').click();
-                }
-            });
         })
 
         $("#input").keyup(function (event) {
             if (event.keyCode == 13) {
                 //map.setFitView([markerData[$("#input input").val()]])
-                element.on('tab(demo)', function (data) {
-                console.log(data);
-                if (data.index==0) {
+                if (index == 0) {
                     $('#allCar').click();
-                }else if (data.index==1) {
+                } else if (index == 1) {
                     $('#onlineCar').click();
                 }
-                else{
+                else {
                     $('#NotOnlineCar').click();
                 }
-            });
             }
         });
         //左侧收缩框
@@ -807,41 +801,56 @@
             }
         });
         $('#allCar').on('click', function () {
+            var a = $("#input input").val()
             ajax("get", "api/Terminal/GetTerminals")
                 .then(function (res) {
                     if (res.code == 200) {
                         $('#allCarMgs').html("")
                         let data = res.data;
                         for (let i = 0; i < data.length; i++) {
-                            $('#allCarMgs').append('<input type="radio" lay-filter="sex" name="sex" value="' + data[i].imei + '" title="' + data[i].imei + '">  ')
-                            form.render();
+                            let imeidata = data[i].imei;
+                            if (imeidata.indexOf(a) >= 0) {
+                                $('#allCarMgs').append('<input type="radio" lay-filter="sex" name="sex" value="' + data[i].imei + '" title="' + data[i].imei + '">  ')
+                                form.render();
+                            }
+
                         }
                     }
                 });
         })
         $('#onlineCar').on('click', function () {
-            ajax("get", "api/Terminal/GetTerminals")
+            var a = $("#input input").val()
+            console.log(a)
+            ajax("get", "api/Terminal/GetOnlineTerminals")
                 .then(function (res) {
                     if (res.code == 200) {
                         $('#onlineCarMgs').html("")
                         let data = res.data;
                         for (let i = 0; i < data.length; i++) {
-                            // $('#onlineCarMgs').append(' <label><input type="radio" name="sex" lay-filter="sex"  title="" lay-skin="primary">' + data[i].imei + '</label>')
-                            $('#onlineCarMgs').append('<input type="radio" lay-filter="sex" name="sex" value="' + data[i].imei + '" title="' + data[i].imei + '">  ')
-                            form.render();
+                            let imeidata = data[i].imei;
+                            if (imeidata.indexOf(a) >= 0) {
+                                // $('#onlineCarMgs').append(' <label><input type="radio" name="sex" lay-filter="sex"  title="" lay-skin="primary">' + data[i].imei + '</label>')
+                                $('#onlineCarMgs').append('<input type="radio" lay-filter="sex" name="sex" value="' + data[i].imei + '" title="' + data[i].imei + '">  ')
+                                form.render();
+                            }
                         }
                     }
                 });
         })
         $('#NotOnlineCar').on('click', function () {
-            ajax("get", "api/Terminal/GetTerminals")
+            var a = $("#input input").val()
+            console.log(a)
+            ajax("get", "api/Terminal/GetOfflineTerminals")
                 .then(function (res) {
                     if (res.code == 200) {
                         $('#NotOnlineCarMgs').html("")
                         let data = res.data;
                         for (let i = 0; i < data.length; i++) {
-                            $('#NotOnlineCarMgs').append('<input type="radio" lay-filter="sex" name="sex" value="' + data[i].imei + '" title="' + data[i].imei + '">  ')
-                            form.render();
+                            let imeidata = data[i].imei;
+                            if (imeidata.indexOf(a) >= 0) {
+                                $('#NotOnlineCarMgs').append('<input type="radio" lay-filter="sex" name="sex" value="' + data[i].imei + '" title="' + data[i].imei + '">  ')
+                                form.render();
+                            }
                         }
                     }
                 });
@@ -908,130 +917,7 @@
 
 
     });
-
-
 </script>
-
-<script>
-    var beginNum = 0;
-    var clickListener;
-    var beginPoints;
-    var beginMarks;
-    var polygonEditor;
-    var resPolygon = [];
-    var resNum = 0;
-    var Polygon;
-    function init() {
-        beginPoints = [];
-        beginMarks = [];
-        beginNum = 0;
-        polygonEditor = '';
-        clickListener = AMap.event.addListener(map, "click", mapOnClick);
-
-        var str = '[{"J":39.91789947393269,"G":116.36744477221691,"lng":116.367445,"lat":39.917899},{"J":39.91184292800211,"G":116.40658356616223,"lng":116.406584,"lat":39.911843},{"J":39.88616249265181,"G":116.37963272998047,"lng":116.379633,"lat":39.886162}]';
-        var arr = json2arr(str);
-        //createPolygon(arr);
-    }
-
-    function mapOnClick(e) {
-        // document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
-        beginMarks.push(addMarker(e.lnglat));
-        beginPoints.push(e.lnglat);
-        beginNum++;
-        //alert(beginNum);				
-        if (beginNum >= 3) {
-            //AMap.event.removeListener(clickListener);  
-            if (beginNum > 3) {
-                //清除前一次的多边形
-                map.remove(Polygon);
-            }
-            Polygon = createPolygon(beginPoints);
-            //polygonEditor = createEditor(polygon);
-            clearMarks();
-        }
-
-    };
-
-
-    function createPolygon(arr) {
-        var polygon = new AMap.Polygon({
-            map: map,
-            path: arr,
-            strokeColor: "#0000ff",
-            strokeOpacity: 1,
-            strokeWeight: 3,
-            fillColor: "#f5deb3",
-            fillOpacity: 0.35
-        });
-        return polygon;
-    }
-
-    function startDrawPolygon() {
-        init();
-    }
-
-    function endDrawPolygon() {
-        AMap.event.removeListener(clickListener);
-
-    }
-
-    function createEditor(polygon) {
-        var polygonEditor = new AMap.PolyEditor(map, polygon);
-        polygonEditor.open();
-        AMap.event.addListener(polygonEditor, 'end', polygonEnd);
-        return polygonEditor;
-    }
-
-    function closeEditPolygon() {
-        polygonEditor.close();
-    }
-
-    function polygonEnd(res) {
-        resPolygon.push(res.target);
-        alert(resPolygon[resNum].contains([116.386328, 39.913818]));
-        appendHideHtml(resNum, res.target.getPath());
-
-        resNum++;
-        init();
-    }
-
-    function appendHideHtml(index, arr) {
-        var strify = JSON.stringify(arr);
-        var html = '<input type="hidden" id="index' + index + '" name="paths[]" value="' + strify + '">';
-        $('body').append(html);
-    }
-
-
-
-    function clearMarks() {
-        map.remove(beginMarks);
-    }
-
-    function json2arr(json) {
-        var arr = JSON.parse(json);
-        var res = [];
-        for (var i = 0; i < arr.length; i++) {
-            var line = [];
-            line.push(arr[i].lng);
-            line.push(arr[i].lat);
-            res.push(line);
-        };
-        return res;
-    }
-
-
-    // 实例化点标记
-    function addMarker(lnglat) {
-        var marker = new AMap.Marker({
-            icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-            position: lnglat
-        });
-        marker.setMap(map);
-        return marker;
-    }
-
-</script>
-
 <script>
     // marker.on('click', function () {
     //     alert("123")

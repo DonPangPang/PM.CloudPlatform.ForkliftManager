@@ -41,7 +41,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="mapper">                   </param>
         /// <param name="generalRepository">        </param>
         /// <param name="gpsTrackerSessionManager"> </param>
-        public CarController(CarRepository repository, IMapper mapper, IGeneralRepository generalRepository, TerminalSessionManager gpsTrackerSessionManager) : base(repository, mapper)
+        public CarController(CarRepository repository, IMapper mapper, IGeneralRepository generalRepository, TerminalSessionManager gpsTrackerSessionManager) : base(repository, mapper, generalRepository)
         {
             _repository = repository;
             _mapper = mapper;

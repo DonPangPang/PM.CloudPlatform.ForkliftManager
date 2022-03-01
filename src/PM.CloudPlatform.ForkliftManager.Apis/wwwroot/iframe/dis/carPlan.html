@@ -47,39 +47,40 @@
         background-color: #f50707;
         border-radius: 3px;
     }
-
-
 </style>
 
 <body>
-
-    <script type="text/html" id="toolbarDemo">
-                    <div class="layui-inline">
-                        <div class="layui-input-inline">
-                            <input type="text"  name="username" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
-                        </div>
-                    </div>
-                    <div class="layui-inline">
-                        <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
-                            搜 索</button>
-                    </div>
-    </script>
     <table id="demo" lay-filter="test"></table>
+    <script type="text/html" id="toolbarDemo">
+        <button class="layui-btn  layui-btn-sm " lay-event="restless"> 归还车辆 </button>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text"  name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+                搜 索</button>
+        </div>
+    </script>
+
     <script type="text/html" id="F_CategoryBar">
-        {{#  if(d.warn == 0){ }}
+        {{#  if(!d.isNeedReturn ){ }}
             <span  class="category category-admin">未逾期</span>
-        {{#  } else if(d.warn== 1){ }}
-            <span  class="category category-tixing" lay-event="tixing">逾期提醒</span>
-        {{#  } else {  }}
-            <span  class="category category-tixing" lay-event="tixing">逾期提醒</span>
-            <span  class="category category-gen" lay-event="outage">远程断电</span>
-            <span  class="category category-again" lay-event="again">再次租凭</span>
+        {{#  } else { }}
+            <span  class="category category-tixing" lay-event="tixing">已逾期</span>
+        {{#  } }}
+    </script>
+    <script type="text/html" id="F_isReturn">
+        {{#  if(!d.isReturn ){ }}
+            <span  class="category category-admin">已归还</span>
+        {{#  } else { }}
+            <span  class="category category-tixing" lay-event="tixing">未归还</span>
         {{#  } }}
     </script>
     <input style="display: none" id="guid" name="guid" />
-    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
     <script src="../../layui.js"></script>
+    <script src="../..//js/jquery-3.5.1.min.js"></script>
     <script src="../../js/common.js"></script>
     <script>
         var html;
@@ -99,62 +100,32 @@
                 $('link[title="blue"]').attr('disabled', 'true');
                 var color = 'color:#000;background-color:#FFF;'
             }
-            // new Vue({
-            //     el: '.block',
-            //     data() {
-            //         return {
-            //             reverse: true,
-            //             activities: [{
-            //                 content: '8月14日09点41分 申请',
-            //                 size: 'large',
-            //                 type: 'primary',
-            //                 icon: 'el-icon-more'
-            //             }, {
-            //                 content: '8月14日10点41分 分配车辆',
-            //                 color: '#0bbd87'
-            //             }, {
-            //                 content: '8月15日11点41分 审核',
-            //                 color: '#0bbd87'
-            //                 // size: 'large'
-            //             }, {
-            //                 content: '8月15日12点41分 审核',
-            //                 color: '#0bbd87'
-            //             }, {
-            //                 content: '等待审核',
-            //             }, {
-            //                 content: '等待审核',
-            //             }]
-            //         };
-            //     }
-            // })
+
             setTimeout(function () {
                 table.render({
                     elem: '#demo'
                     , height: 'full-20'
-                    ,headers: { Authorization: "Bearer " + Token }
-                    ,url:requestUrl+'api/RentalRecord/GetEntitiesByPaged' //数据接口                 
+                    , headers: { Authorization: "Bearer " + Token }
+                    , url: requestUrl + 'api/RentalRecord/GetRentalCars' //数据接口                 
                     , toolbar: '#toolbarDemo'
                     // , limit: 15
                     , cols: [[ //表头
-                        // { type: "checkbox" },
-                        { field: 'id', width: 60, title: 'ID' }
+                        { type: "checkbox" }
+                        ,{field: 'licensePlateNumber', title: '车牌号'}
                         , { field: 'rentalEmployeeName', title: '处理人' }
-                        // , { field: 'company', title: '租赁单位' }
-                        // , { field: 'name', title: '法定人' }
-                        // , { field: 'tel', title: '电话', }
-                        // , { field: 'car_type', title: '车辆类型', sort: true }
-                        // , { field: 'car_num', title: '车辆数量', }
+                        , { field: 'rentalEmployeeTel', title: '处理人电话' }
                         , { field: 'rentalStartTime', title: '开始时间', }
                         , { field: 'rentalEndTime', title: '结束时间', sort: true }
                         , { field: 'returnTime', title: '归还时间', }
-                        // , { field: 'warn', title: '逾期提醒', toolbar: '#F_CategoryBar', width: 300, align: "center", }
+                        , { field: 'isReturn', title: '是否归还',toolbar: '#F_isReturn', align: "center",  }
+                        , { field: 'isNeedReturn', title: '是否逾期', toolbar: '#F_CategoryBar', align: "center", }
                     ]]
                     , page: true //开启分页
-                    ,limit: 30
-                    ,limits: [10, 30, 50, 70, 100]
-                    ,request: {
+                    , limit: 30
+                    , limits: [10, 30, 50, 70, 100]
+                    , request: {
                         pageName: 'PageNumber' //页码的参数名称，默认：page
-                        ,limitName: 'PageSize' //每页数据量的参数名，默认：limit
+                        , limitName: 'PageSize' //每页数据量的参数名，默认：limit
                     }
                     , parseData: function (res) {
                         console.log()
@@ -174,139 +145,92 @@
                     }
                 });
             }, 500)
-            table.on('tool(test)', function (obj) {
-                var data = obj.data;
-                if (obj.event === 'tixing') {
-                    layer.msg('已向租凭公司发出提醒', {
-                        time: 2000
-                    });
-                } else if (obj.event === 'outage') {
-                    let _this = $(this)
-                    if (!_this.hasClass("category-off")) {
-                        layer.msg('是否断电', {
+            table.on('toolbar(test)', function (obj) {
+                if (obj.event === 'restless') {
+                    var selectData = layui.table.checkStatus('demo').data;
+                    data = selectData;
+                    sessionStorage.setItem('carData', JSON.stringify(data));
+                    if (data) {
+                        layer.msg('是否归还车辆', {
                             time: 0 //不自动关闭
                             , btn: ['确定', '取消']
                             , yes: function (index) {
-                                _this.addClass('category-off')
-                                layer.msg('已断电', {
-                                    time: 2000
+                                // layer.close(index);
+                                // let result = [];
+                                // data.forEach(item => {
+                                //     let a = {
+                                //         rentalRecordId: item.id,                                      
+                                //         RentalEmployeeName:item.rentalEmployeeName,
+                                //         RentalEmployeeTel:item.rentalEmployeeTel,
+                                //         IsReturn:true,
+                                //         CarId:item.carId
+                                //     };
+                                //     result.push(a)
+                                // });
+                                // if (result) {
+                                //     ajax('Post', 'api/RentalRecord/ReturnCars', result)
+                                //         .then(function (res) {
+                                //             console.log(res)
+                                //             if (res.code = 200) {
+                                //                 layer.msg('归还成功', {
+                                //                     time: 2000
+                                //                 });
+                                //                 table.reload('test');
+                                //             }
+                                //         })
+                                // }
+                                sessionStorage.setItem('againData', JSON.stringify(data));
+                                var again = layer.open({
+                                    title: ['再次租赁', color],
+                                    type: 2,
+                                    shade: 0.2,
+                                    maxmin: true,
+                                    shadeClose: true,
+                                    area: ['90%', '90%'],
+                                    content: './layer/carPlan/restless.html?data=' + data,
+                                    maxmin: false, //最大化最小化
+                                    success: function (layero) {
+                                        if (style == false) {
+                                            $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                                        } else {
+                                        }
+                                    },
                                 });
                                 layer.close(index);
+
                             }
-                        });
+                        })
                     } else {
-                        layer.msg('已断电,不可以二次断电', {
+                        layer.msg('请选中数据后执行操作', {
                             time: 2000
                         });
                     }
-                } else if (obj.event === 'again') {
-                    let _this = $(this)
-                    html = _this.parent()
-                    layer.msg('是否再次租凭', {
-                        time: 0 //不自动关闭
-                        , btn: ['确定', '取消']
-                        , yes: function (index) {
-                            sessionStorage.setItem('againData', JSON.stringify(data));
-                            var again = layer.open({
-                                title: ['再次租凭', color],
-                                type: 2,
-                                shade: 0.2,
-                                maxmin: true,
-                                shadeClose: true,
-                                area: ['90%', '90%'],
-                                content: './layer/carPlan/detail.html?type=again',
-                                maxmin: false, //最大化最小化
-                                success: function (layero) {
-                                    if (style == false) {
-                                        $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
-                                    } else {
-                                    }
-                                },
-                            });
-                            layer.close(index);
-                        }
-                    });
                 }
             });
-            table.on('rowDouble', function (obj) {
-                let data = obj.data;
-                let type = $('.pm-nav-item-active').attr('data-value');
-                sessionStorage.setItem('detail', JSON.stringify(data));
-                window.clockDetail = data;
-                var index = layer.open({
-                    title: ['租凭信息详情', color],
-                    type: 2,
-                    shade: 0.2,
-                    maxmin: true,
-                    shadeClose: true,
-                    area: ['90%', '90%'],
-                    content: './layer/carPlan/detail.html?type=detail',
-                    maxmin: false, //最大化最小化
-                    success: function (layero) {
-                        if (style == false) {
-                            $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
-                        } else {
-                        }
+            form.on('submit(data-search-btn)', function (data) {
+                var result = data.field;
+                console.log(result)
+                //执行搜索重载
+                table.reload('demo', {
+                    page: {
+                        curr: 1
                     },
-                });
-            });
-            var people = ['李雷', '莉莉', '小张'];
-            function random(min, max) {
-                return parseInt(Math.random() * (max - min + 1) + min, 10);
-            }
-            function dateTime() {
-                var date = new Date();
-                return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
-            }
-            var cars = [
-                {
-                    type: '叉车',
-                },
-                {
-                    type: '托盘车',
-                },
-                {
-                    type: '堆垛车',
-                },
-            ];
-
-            function getData() {
-                var data = []
-
-                for (var i = 0; i < 100; i++) {
-                    var item = {
-                        id: i,
-                        people: people[random(0, 2)],
-                        company: 'xxxx公司' + i,
-                        name: people[random(0, 2)],
-                        car_type: cars[random(0, 2)].type,
-                        car_num: random(5, 20),
-                        begin_time: dateTime(),
-                        end_time: dateTime(),
-                        tel: '137' + random(10000000, 19999999),
-                        return_time: dateTime(),
-                        warn: random(0, 2),
-                    }
-
-                    data.push(item);
-                }
-
-                return data;
-            }
-
-
-            //监听行单击事件（双击事件为：rowDouble，单击事件为：row）
-            table.on('row', function (obj) {
-                var data = obj.data;
-                //标注单选框
-                obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
-                //标注选中样式
-                obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
-            });
-            form.on('submit(formDemo)', function (data) {
-                layer.msg(JSON.stringify(data.field));
+                    where: result
+                }, 'data');
                 return false;
             });
+            //监听行单击事件（双击事件为：rowDouble，单击事件为：row）
+            // table.on('row', function (obj) {
+            //     var data = obj.data;
+            //     //标注单选框
+            //     obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
+            //     //标注选中样式
+            //     obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
+            // });
+            // form.on('submit(formDemo)', function (data) {
+            //     layer.msg(JSON.stringify(data.field));
+            //     return false;
+            // });
         });
     </script>
 </body>

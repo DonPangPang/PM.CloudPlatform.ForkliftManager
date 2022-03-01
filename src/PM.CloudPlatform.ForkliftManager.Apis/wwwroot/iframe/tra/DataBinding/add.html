@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>编辑车辆类型</title>
+    <title>添加终端设备</title>
     <link rel="stylesheet" href="../../../css/layui.css">
     <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
     <link rel="stylesheet" id="blue" title="blue" href="../../../css/openStyleBlue.css" disabled='true'>
@@ -15,19 +15,27 @@
 <body>
     <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
         <div class="layui-form-item">
-            <label class="layui-form-label">类型名称</label>
+            <label class="layui-form-label">请选择终端设备</label>
             <div class="layui-input-block">
-                <input type="text" name="name" required lay-verify="required" placeholder="请输入类型名称" autocomplete="off"
-                    class="layui-input">
-            </div>
-        </div>   
-        <div class="layui-form-item">
-            <label class="layui-form-label">需要维护保养的时间</label>
-            <div class="layui-input-block">
-                <input type="text" name="lengthOfMaintenanceTime" required lay-verify="required"
-                    placeholder="请输入需要维护保养的时间（单位：小时）" autocomplete="off" class="layui-input">
+                <select name="terminalId" id="terminalId" lay-verify="terminalId">
+                    <option value=""></option>
+                </select>
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">请选择绑定车辆</label>
+            <div class="layui-input-block">
+                <select name="carId" id="carId" lay-verify="carId">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-block">
+              <textarea name="description"  id="description" placeholder="请输入描述" class="layui-textarea"></textarea>
+            </div>
+          </div>
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
@@ -44,30 +52,55 @@
                 $ = layui.jquery,
                 form = layui.form;
             let Barer = JSON.parse(sessionStorage.getItem('userInfo'));
-            var parentData =  JSON.parse(sessionStorage.getItem('firmData'));
+
             // var boolean = getCaption(aaa);
             function getCaption(obj) {  //提取boolean
                 var index = obj.lastIndexOf("=");
                 obj = obj.substring(index + 1, obj.length);
                 return obj;
             }
-            form.val('overTimeForm', {
-                //根据name来获取值
-                name: parentData.name, 
-                lengthOfMaintenanceTime:parentData.lengthOfMaintenanceTime          
-            })
+           
+
+            //车辆下拉框
+            ajax('get', 'api/Car/GetEntities')
+                .then(function (res) {
+                    console.log(res)
+                    if (res.code = 200) {
+                        console.log(2)
+                        let Typedata = res.data
+                        $.each(Typedata, function (index, value) {
+                            $('#carId').append(new Option(value.licensePlateNumber, value.id))
+                        })
+                        // $('#carId').val(parentData.carId)
+                        layui.form.render("select")
+                    }
+                })
+            //设备下拉框
+            ajax('get', 'api/Terminal/GetEntities')
+                .then(function (res) {
+                    console.log(res)
+                    if (res.code = 200) {
+                        console.log(2)
+                        let Typedata = res.data
+                        $.each(Typedata, function (index, value) {
+                            $('#terminalId').append(new Option(value.imei, value.id))
+                        })
+                        // $('#carId').val(parentData.carId)
+                        layui.form.render("select")
+                    }
+                })
+
             form.on('submit(formDemo)', function (data) {
                 var result = data.field;
-                data.field.id = parentData.id;
-                ajax("put", "api/CarType/UpdateEntity/"+parentData.id,result)
+                console.log(result)
+                ajax("get", "api/Car/SetCarTerminalBind" , result)
                     .then(function (res) {
-                        layer.msg('修改成功', {
+                        layer.msg('绑定成功', {
                             time: 2000
                         }, function () {
                             parent.layui.table.reload('test')
                             var iframeIndex = parent.layer.getFrameIndex(window.name);
                             parent.layer.close(iframeIndex);
-                          
                         });
                     });
                 return false;

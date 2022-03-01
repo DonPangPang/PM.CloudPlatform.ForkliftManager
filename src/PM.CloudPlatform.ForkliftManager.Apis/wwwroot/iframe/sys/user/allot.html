@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>角色管理添加成员</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <!-- <link rel="stylesheet" href="../../../../css/public.css" media="all">
+	<link rel="stylesheet" href="../../../../js/lay-module/step-lay/step.css">
+	<link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_2336083_s9f4hcijvig.css"> -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+        .layui-form-item .layui-input-inline {
+            width: 330px;
+        }
+        .tree-hide {
+            display: none;
+        }
+        .tree-show {
+            display: block;
+        }
+        #test1,
+        #test2 {
+            width: 30%;
+            box-sizing: border-box;
+            height: 100vh;
+            padding-bottom: 50px;
+            overflow-y: scroll;
+            z-index: 1000;
+            border-right: 1px solid #999999;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE 10+ */
+        }
+        #test2::-webkit-scrollbar {
+            display: none;
+            /* Chrome Safari */
+        }
+        #masking {
+            width: 100%;
+            height: 80vh;
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        .layui-col-md3 {
+            width: 30%;
+        }
+
+        .layui-col-md9 {
+            width: 65%;
+        }
+
+        .layui-col-md12 {
+            width: 100%;
+        }
+
+        .da {
+            box-sizing: border-box;
+            height: 85vh;
+            padding-bottom: 50px;
+            overflow-y: scroll;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            align-content: flex-start;
+        }
+
+        .da::-webkit-scrollbar {
+            display: none
+        }
+
+        .minbox {
+            width: 30%;
+            background-color: #fff;
+            height: 75px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            margin: 10px 6px;
+            display: flex;
+            justify-content: center;
+            border: 2px solid #CCCCCC;
+            position: relative;
+        }
+
+        .minbox>div:nth-child(1) {
+            width: 40%;
+            height: 71px;
+            line-height: 75px;
+            text-align: center;
+            background-color: #ebebeb;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .minbox>div:nth-child(1)>img {
+            width: 46px;
+            height: 52px;
+            border-radius: 52px;
+            vertical-align: middle;
+        }
+
+        .minbox>div:nth-child(2) {
+            width: 60%;
+            height: 100%;
+        }
+
+        .minbox>div:nth-child(2)>p {
+            line-height: 25px;
+            padding-left: 10px;
+            font-size: 12px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            word-break: break-all;
+        }
+
+        .icon-duihao1 {
+            position: absolute;
+            font-size: 24px;
+            width: 16px;
+            height: 16px;
+            z-index: 100;
+            top: -5px;
+            right: 7px;
+            color: #d81e06;
+        }
+
+        .border {
+            border: 2px solid #d81e06;
+        }
+
+        .layui-footer {
+            width: 100%;
+            left: 0px !important;
+            height: 50px !important;
+            z-index: 1000;
+            background-color: #fff;
+            border-top: 1px solid #999999;
+        }
+
+        .btn {
+            margin-left: 590px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-form layuimini-form">
+        <div class="layui-row">
+            <div class="layui-layout layui-layout-admin">
+                <div class="" style="display: flex;justify-content:space-between">
+                    <!-- <div class="tree-box demo-tree demo-tree-box" id="test2">
+
+					</div> -->
+                    <div class="layui-col-md12 da">
+                        <!-- <div class="minbox">
+						<div>
+							<img src="./img/touxiang.jpg" >
+						</div>
+						<div>
+							<p>账户:00001</p>
+							<p>姓名:李总</p>
+							<p>部门:环卫营养部</p>
+						</div>
+						<i class="iconfont icon-duihao1 tree-hide"></i> -->
+                    </div>
+                </div>
+            </div>
+            <div class="layui-footer">
+                <!-- 底部固定区域 -->
+                <div class="btn">
+                    <button type="button" class="layui-btn submit ">确认</button>
+                    <button type="button" class="layui-btn layui-btn-primary close">关闭</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="../../../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="../../../js/lay-config.js"></script>
+    <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script>
+        layui.use(['layer', 'table', 'form', 'tree'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                //layarea = layui.layarea,
+                tree = layui.tree,
+                table = layui.table;
+            var parentData = JSON.parse(sessionStorage.getItem('role-allot'));
+
+            let a;
+            let arr = []; // 选中状态
+            ajax('Get', 'api/Role/GetUserRoles?UserId=' + parentData.id)
+                .then(function (data) {
+                    console.log(data)
+                    let roles = data.data;
+                    roles.forEach(item => {
+                        arr.push(item.id)
+                    })
+                    return ajax('Get', 'api/Role/GetEntities')
+                })
+                .then(function (data) {
+                    a = data.data;
+                    console.log(a)
+                    $(".da").html('');
+                    a.forEach(function (v, i) {
+                        if (arr.indexOf(v.id) > -1) {
+                            let htmls =
+                                `<div class="minbox border" userid =${v.id} >
+                                            <div>
+                                                <img src=${v.sex == 0 ? '../../../../images/UserCard02.png' : '../../../../images/UserCard01.png'} >
+                                            </div>
+                                            <div>
+                                                <p>账户:${v.name}</p>                                               
+                                                <i class="iconfont icon-duihao1 tree-show"></i>
+                                            </div>
+                                        </div>`;
+                            $(".da").append(htmls);
+                        } else {
+                            let htmls =
+                                `<div class="minbox" userid =${v.id} >
+                                        <div>
+                                            <img src=${v.sex == 0 ? '../../../../images/UserCard02.png' : '../../../../images/UserCard01.png'} >
+                                        </div>
+                                        <div>
+                                            <p>账户:${v.name}</p>
+                                            
+                                            <i class="iconfont icon-duihao1 tree-hide"></i>
+                                        </div>
+                                    </div>`;
+                            $(".da").append(htmls);
+                        }
+                    })
+                    $('.minbox').on('click', function (v, i) {
+                        //获取所点击的userid
+
+                        var a = $(this).attr("userid");
+                        var b = arr.indexOf(a);
+                        console.log(arr)
+                        console.log(a)
+                        console.log(b)
+                        if (b == -1) {
+                            arr.push(a);
+                        } else {
+                            arr.splice(b, 1);
+                           // obj.splice(b, 1);
+                        }
+                        console.log(arr)
+                        //最后的arr是所有被选中的元素userid数组
+                        $(this).toggleClass('border');
+                        $(this).find(".icon-duihao1").toggleClass('tree-hide').toggleClass('tree-show');
+                    })
+                })
+            $('.submit').on('click', function () {
+                ajax('post', 'api/Role/SetRoles?userId=' + parentData.id, arr)
+                    .then(function (res) {
+                        layer.msg('添加成功', { time: 2000 }, function () {
+                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                            parent.layer.close(iframeIndex);
+                        });
+                    })
+            })
+            $('.close').on('click', function () {
+                //关闭键
+                arr = null;
+                objData = null;
+                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(iframeIndex);
+            })
+        });
+    </script>
+</body>
+
+</html>

@@ -147,7 +147,7 @@
                 });
                 // 
                 //车辆类型
-                ajax('get', 'api/CarType/GetEntities')
+                ajax('get', 'api/CarType/GetNormalCarTypes')
                     .then(function (res) {
                         if (res.code = 200) {
                             console.log(2)
@@ -200,7 +200,7 @@
                 // depPeo()
             } else if (obj.type == 'add') {
                 //车辆类型
-                ajax('get', 'api/CarType/GetEntities')
+                ajax('get', 'api/CarType/GetNormalCarTypes')
                     .then(function (res) {
                         if (res.code = 200) {
                             console.log(2)

@@ -93,6 +93,8 @@
                 var result = fromval.field;
                 ajax("post", "api/User/CreateEntity", result)
                     .then(function (res) {
+                        console.log(res)
+                        
                         layer.msg('添加成功', {
                             time: 2000
                         }, function () {

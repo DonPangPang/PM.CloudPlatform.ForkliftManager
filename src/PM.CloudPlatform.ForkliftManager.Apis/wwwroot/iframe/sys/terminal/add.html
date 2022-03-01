@@ -21,14 +21,14 @@
                     class="layui-input">
             </div>
         </div>   
-        <div class="layui-form-item">
+        <!-- <div class="layui-form-item">
             <label class="layui-form-label">绑定车辆</label>
             <div class="layui-input-block">
                 <select name="carId" id="carId" lay-verify="carId">
                     <option value=""></option>
                 </select>
             </div>
-        </div>
+        </div> -->
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
@@ -55,18 +55,18 @@
                 $('link[title="white"]').removeAttr('disabled');
                 $('link[title="blue"]').attr('disabled', 'true');
             }
-                        //上级模块
-             ajax('get', 'api/Car/GetNoBindCars')
-                    .then(function (res) {
-                        if (res.code = 200) {
-                            console.log(2)
-                            let Typedata = res.data
-                            $.each(Typedata, function (index, value) {
-                                $('#carId').append(new Option(value.licensePlateNumber, value.id))
-                            })
-                            layui.form.render("select")
-                        }
-                    })
+            //             //上级模块
+            //  ajax('get', 'api/Car/GetNoBindCars')
+            //         .then(function (res) {
+            //             if (res.code = 200) {
+            //                 console.log(2)
+            //                 let Typedata = res.data
+            //                 $.each(Typedata, function (index, value) {
+            //                     $('#carId').append(new Option(value.licensePlateNumber, value.id))
+            //                 })
+            //                 layui.form.render("select")
+            //             }
+            //         })
 
             //监听提交
             form.on('submit(formDemo)', function (fromval) {

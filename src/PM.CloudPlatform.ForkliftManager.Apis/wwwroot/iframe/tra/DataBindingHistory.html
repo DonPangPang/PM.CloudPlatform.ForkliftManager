@@ -5,20 +5,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>模块管理</title>
+    <title>车辆设备绑定记录</title>
     <link rel="stylesheet" href="../../css/layui.css">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
-    <link rel="stylesheet" id="blue" title="blue" href="../../css/openStyleBlue.css" disabled='true'>
+    <link rel="stylesheet" id="blue" title="blue" href="../../css/openStyleBlue.css">
     <link rel="stylesheet" id="white" title="white" href="../../css/openStyleWhite.css" disabled='true'>
-    <link rel="stylesheet" id="blue" title="blue" href="../../css/indexStyleBlue.css" disabled='true'>
-    <link rel="stylesheet" id="white" title="white" href="../../css/indexStyleWhite.css" disabled='true'>
 </head>
 
 <body>
     <script type="text/html" id="toolbarDemo">
-        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 编辑 </button>
-        <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 车辆绑定 </button>
+        <!-- <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 编辑 </button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 详情 </button> -->
+        <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 解除绑定 </button>
         <div class="layui-inline">
             <div class="layui-input-inline">
                 <input type="text" name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
@@ -28,13 +26,15 @@
             <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
                 搜 索</button>
         </div>
-    </script>
+</body>
+</html>
+</script>
     <table id="test" lay-filter="test"></table>
     <script src="../../layui.js"></script>
+    <!-- <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script> -->
+    <script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
     <script src="../../js/common.js"></script>
-    <script src="../../js/jquery-3.5.1.min.js"></script>
     <script>
-        // var aaa = window.location.href;
         layui.use(['element', 'jquery', 'table','form'], function () {
             var element = layui.element,
                 $ = layui.jquery,
@@ -58,14 +58,14 @@
                     , toolbar: '#toolbarDemo'
                     , post: 'get'
                     , headers: { Authorization: "Bearer " + Token }
-                    , url: requestUrl + 'api/Module/GetEntitiesByPaged' //数据接口
+                    , url: requestUrl + 'api/TerminalBindRecord/GetBindRecord' //数据接口
                     , cols: [[ //表头
                         { type: 'radio' }
-                        // , { field: 'id', title: 'ID', sort: true }                    
-                        , { field: 'name', title: '模块名称' }
-                        , { field: 'url', title: '模块路径', }
-                        , { field: 'description', title: '模块描述', sort: true }
-                        , { field: 'enableMark', title: '有效', }
+                        // , { field: 'id', title: 'ID', sort: true }
+                        , { field: 'imei', title: '设备名称' }
+                        , { field: 'licensePlateNumber', title: '绑定车辆', }
+                        , { field: 'isActive', title: '有效', }
+                        , { field: 'description', title: '描述' }
                     ]]
                     , page: true //开启分页
                     , limit: 30
@@ -74,7 +74,7 @@
                         pageName: 'PageNumber' //页码的参数名称，默认：page
                         , limitName: 'PageSize' //每页数据量的参数名，默认：limit
                     }
-                    , parseData: function (res) {             
+                    , parseData: function (res) {
                         return {
                             'code': res.code,
                             'count': res.total,
@@ -100,7 +100,7 @@
                 //标注选中样式
                 obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             });
-         
+
             table.on('toolbar(test)', function (obj) {
                 let checkStatus = table.checkStatus('test'),
                     data = checkStatus.data[0];
@@ -108,13 +108,13 @@
                     case 'add':
                         sessionStorage.setItem('carData', JSON.stringify(data));
                         var index = layer.open({
-                            title: ['新增模块', color],
+                            title: ['关联设备', color],
                             type: 2,
                             shade: 0.2,
                             maxmin: true,
                             shadeClose: true,
                             area: ['500px', '80%'],
-                            content: './module/add.html?type=add',
+                            content: './DataBinding/add.html?type=add',
                             maxmin: false, //最大化最小化
                             success: function (layero) {
                                 if (style == false) {
@@ -124,52 +124,14 @@
                             },
                         });
                         break;
-                    case 'edit':
-                        if (data) {
-                            sessionStorage.setItem('firmData', JSON.stringify(data));
-                            var index = layer.open({
-                                title: ['修改模块', color],
-                                type: 2,
-                                shade: 0.2,
-                                maxmin: true,
-                                shadeClose: true,
-                                area: ['500px', '80%'],
-                                content: './module/edit.html?type=edit',
-                                maxmin: false, //最大化最小化
-                                success: function (layero) {
-                                    if (style == false) {
-                                        $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
-                                    } else {
-                                    }
-                                },
-                                cancel: function (index, layero) {
-                                        // var result = data.field;
-                                        // console.log(result)
-                                        //执行搜索重载
-                                        table.reload('test', {
-                                            page: {
-                                                curr: 1
-                                            },
-                                        }, 'data');
-                                       // return false;
-                                }
-                            });
-                            break;
-                        } else {
-                            layer.msg('请选中数据后执行操作', {
-                                time: 2000
-                            });
-                        }
-                        break;
+
                     case 'delete':
                         if (data) {
-                            console.log(data.id)
-                            // layer.msg(JSON.stringify(data));
-                            ajax('delete','api/Module/DeleteEntity/'+ data.id)
+                            ajax("get", "api/Car/SetCarTerminalUnBind?bindRecordId="+ data.id)
                                 .then(function (res) {
                                     console.log(res)
                                     if (res.code = 200) {
-                                        layer.msg('删除成功', {
+                                        layer.msg('解除绑定成功', {
                                             time: 2000
                                         });
                                         table.reload('test');
@@ -196,8 +158,4 @@
                 return false;
             });
         });
-       
     </script>
-</body>
-
-</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>功能授权</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../../lib/layui-v2.5.5/css/layui.css" media="all">
+    <!-- <link rel="stylesheet" href="../../../../css/public.css" media="all">
+	<link rel="stylesheet" href="../../../../js/lay-module/step-lay/step.css">
+	<link rel="stylesheet" type="text/css" href="//at.alicdn.com/t/font_2336083_s9f4hcijvig.css"> -->
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        .layui-form-item .layui-input-inline {
+            width: 330px;
+        }
+
+        .tree-hide {
+            display: none;
+        }
+
+        .tree-show {
+            display: block;
+        }
+
+        #test1,
+        #test2 {
+            width: 30%;
+            box-sizing: border-box;
+            height: 100vh;
+            padding-bottom: 50px;
+            overflow-y: scroll;
+            z-index: 1000;
+            border-right: 1px solid #999999;
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE 10+ */
+        }
+
+        #test2::-webkit-scrollbar {
+            display: none;
+            /* Chrome Safari */
+        }
+
+        #masking {
+            width: 100%;
+            height: 80vh;
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        .layui-col-md3 {
+            width: 30%;
+        }
+
+        .layui-col-md9 {
+            width: 65%;
+        }
+
+        .layui-col-md12 {
+            width: 100%;
+        }
+
+        .da {
+            box-sizing: border-box;
+            height: 80vh;
+            padding-bottom: 50px;
+            overflow-y: scroll;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            align-content: flex-start;
+        }
+
+        .da::-webkit-scrollbar {
+            display: none
+        }
+
+        .minbox {
+            width: 30%;
+            background-color: #fff;
+            height: 75px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            margin: 10px 6px;
+            display: flex;
+            justify-content: center;
+            border: 2px solid #CCCCCC;
+            position: relative;
+        }
+
+        .minbox>div:nth-child(1) {
+            width: 40%;
+            height: 71px;
+            line-height: 75px;
+            text-align: center;
+            background-color: #ebebeb;
+            border-radius: 5px 0 0 5px;
+        }
+
+        .minbox>div:nth-child(1)>img {
+            width: 46px;
+            height: 52px;
+            border-radius: 52px;
+            vertical-align: middle;
+        }
+
+        .minbox>div:nth-child(2) {
+            width: 60%;
+            height: 100%;
+        }
+
+        .minbox>div:nth-child(2)>p {
+            line-height: 25px;
+            padding-left: 10px;
+            font-size: 12px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            word-break: break-all;
+        }
+
+        .icon-duihao1 {
+            position: absolute;
+            font-size: 24px;
+            width: 16px;
+            height: 16px;
+            z-index: 100;
+            top: -5px;
+            right: 7px;
+            color: #d81e06;
+        }
+
+        .border {
+            border: 2px solid #d81e06;
+        }
+
+        .layui-footer {
+            width: 100%;
+            left: 0px !important;
+            height: 50px !important;
+            z-index: 1000;
+            background-color: #fff;
+            border-top: 1px solid #999999;
+        }
+
+        .btn {
+            margin-top: 10px;
+            margin-left: 590px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layui-form layuimini-form">
+        <div class="layui-row">
+            <div class="layui-layout layui-layout-admin">
+                <div class="layui-col-md12 da">
+                    <div id="test12" class="demo-tree-more"></div>
+                </div>
+            </div>
+            <div class="layui-footer">
+                <!-- 底部固定区域 -->
+                <div class="btn">
+                    <div class="layui-btn-container">
+                        <button type="button" class="layui-btn  submit" lay-demo="getChecked">功能授权</button>
+                        <button type="button" class="layui-btn layui-btn-primary close">关闭</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="../../../../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
+    <script src="../../../js/lay-config.js"></script>
+    <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script>
+        layui.use(['layer', 'table', 'form', 'tree', 'util'], function () {
+            var form = layui.form,
+                layer = layui.layer,
+                //layarea = layui.layarea,
+                tree = layui.tree,
+                table = layui.table,
+                util = layui.util;
+            var parentData = JSON.parse(sessionStorage.getItem('data-edit'));
+
+            let data = [{
+                title: '一级1'
+                , id: 1
+                , field: 'name1'
+                , checked: true
+                , spread: true
+                , children: [{
+                    title: '二级1-1 可允许跳转'
+                    , id: 3
+                    , field: 'name11'
+                    , href: 'https://www.layui.com/'
+                    , children: [{
+                        title: '三级1-1-3'
+                        , id: 23
+                        , field: ''
+                        , children: [{
+                            title: '四级1-1-3-1'
+                            , id: 24
+                            , field: ''
+                            , children: [{
+                                title: '五级1-1-3-1-1'
+                                , id: 30
+                                , field: ''
+                            }, {
+                                title: '五级1-1-3-1-2'
+                                , id: 31
+                                , field: ''
+                            }]
+                        }]
+                    }, {
+                        title: '三级1-1-1'
+                        , id: 7
+                        , field: ''
+                        , children: [{
+                            title: '四级1-1-1-1 可允许跳转'
+                            , id: 15
+                            , field: ''
+                            , href: 'https://www.layui.com/doc/'
+                        }]
+                    }, {
+                        title: '三级1-1-2'
+                        , id: 8
+                        , field: ''
+                        , children: [{
+                            title: '四级1-1-2-1'
+                            , id: 32
+                            , field: ''
+                        }]
+                    }]
+                }, {
+                    title: '二级1-2'
+                    , id: 4
+                    , spread: true
+                    , children: [{
+                        title: '三级1-2-1'
+                        , id: 9
+                        , field: ''
+                        , disabled: true
+                    }, {
+                        title: '三级1-2-2'
+                        , id: 10
+                        , field: ''
+                    }]
+                }, {
+                    title: '二级1-3'
+                    , id: 20
+                    , field: ''
+                    , children: [{
+                        title: '三级1-3-1'
+                        , id: 21
+                        , field: ''
+                    }, {
+                        title: '三级1-3-2'
+                        , id: 22
+                        , field: ''
+                    }]
+                }]
+            }, {
+                title: '一级2'
+                , id: 2
+                , field: ''
+                , spread: true
+                , children: [{
+                    title: '二级2-1'
+                    , id: 5
+                    , field: ''
+                    , spread: true
+                    , children: [{
+                        title: '三级2-1-1'
+                        , id: 11
+                        , field: ''
+                    }, {
+                        title: '三级2-1-2'
+                        , id: 12
+                        , field: ''
+                    }]
+                }, {
+                    title: '二级2-2'
+                    , id: 6
+                    , field: ''
+                    , children: [{
+                        title: '三级2-2-1'
+                        , id: 13
+                        , field: ''
+                    }, {
+                        title: '三级2-2-2'
+                        , id: 14
+                        , field: ''
+                        , disabled: true
+                    }]
+                }]
+            }, {
+                title: '一级3'
+                , id: 16
+                , field: ''
+                , children: [{
+                    title: '二级3-1'
+                    , id: 17
+                    , field: ''
+                    , fixed: true
+                    , children: [{
+                        title: '三级3-1-1'
+                        , id: 18
+                        , field: ''
+                    }, {
+                        title: '三级3-1-2'
+                        , id: 19
+                        , field: ''
+                    }]
+                }, {
+                    title: '二级3-2'
+                    , id: 27
+                    , field: ''
+                    , children: [{
+                        title: '三级3-2-1'
+                        , id: 28
+                        , field: ''
+                    }, {
+                        title: '三级3-2-2'
+                        , id: 29
+                        , field: ''
+                    }]
+                }]
+            }]
+            //设置树
+            ajax('get', 'api/Module/GetEntities')
+                .then(function (res) {
+                    console.log(res)
+                    if (res.code == 200) {
+                        let Module = [];
+                        let ResDate = res.data;
+                        ResDate.forEach(item => {
+                            let ModuleData = {
+                                title: item.name
+                                , id: item.id
+                                , spread: false
+                            }
+                            Module.push(ModuleData)
+                        });
+                        tree.render({
+                            elem: '#test12'
+                            , data: Module
+                            , showCheckbox: true  //是否显示复选框
+                            , id: 'demoId1'
+                            , isJump: true //是否允许点击节点时弹出新窗口跳转
+                            , click: function (obj) {
+                                // var data = obj.data;  //获取当前点击的节点数据
+                                // layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+                            }
+                        });
+                    }
+                })
+
+            //树结构回显
+            ajax('get', 'api/Module/GetRoleModules?roleId=' + parentData.id)
+                .then(function (res) {
+                    console.log(res)
+                    let arr = [];
+                    let Moduledata = res.data;
+                    Moduledata.forEach(item => {
+                        arr.push(item.id)
+                    });
+                    console.log(arr)
+                    tree.setChecked('demoId1', arr);
+
+                })
+
+            //功能授权按钮事件
+            util.event('lay-demo', {
+                getChecked: function (othis) {
+                    var checkedData = tree.getChecked('demoId1'); //获取选中节点的数据
+                    console.log(checkedData);
+                    let rules = []
+                    checkedData.forEach(item => {
+                        rules.push(item.id)
+                    });
+                    console.log(rules)
+                    ajax('post', 'api/Module/SetModules?roleId=' + parentData.id, rules)
+                        .then(function (res) {
+                            layer.msg('添加成功', { time: 2000 }, function () {
+                                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(iframeIndex);
+                            });
+                        })
+
+                }
+            })
+            //关闭按钮时间
+            $('.close').on('click', function () {
+                //关闭键
+                arr = null;
+                objData = null;
+                var iframeIndex = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(iframeIndex);
+            })
+        });
+    </script>
+</body>
+
+</html>

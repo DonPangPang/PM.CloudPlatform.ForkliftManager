@@ -61,16 +61,14 @@
                     , url: requestUrl + 'api/Car/GetCars' //数据接口
                     , cols: [[ //表头
                         { type: 'radio' }
-                        , { field: 'id', title: 'ID', width: 50 }
                         , { field: 'licensePlateNumber', title: '车牌号' }
                         , { field: 'brand', title: '品牌', }
                         , { field: 'serialNumber', title: '编号', sort: true }
                         , { field: 'carTypeName', title: '车辆类型' }
-                        // , { field: 'zhonglei', title: '种类' }
                         , { field: 'buyTime', title: '购买时间', }
                         , { field: 'lengthOfUse', title: '使用时长（h）', }
-                        , { field: 'numberOfMaintenance', title: '保养次数', sort: true }
-                        , { field: 'lastMaintenanceOfTime', title: '上一次保养时间', sort: true }
+                        // , { field: 'numberOfMaintenance', title: '保养次数', sort: true }
+                        // , { field: 'lastMaintenanceOfTime', title: '上一次保养时间', sort: true }
                     ]]
                     , page: true //开启分页
                     , limit: 30
@@ -147,9 +145,8 @@
                         break;
                     case 'delete':
                         if (data) {
-                            console.log(data.id)
-                            // layer.msg(JSON.stringify(data));
-                            ajax('delete', 'api/Car/DeleteEntity/' +data.id)
+                            console.log(data)
+                            ajax('delete', 'api/Car/DeleteEntityVirtual/' +data.carId)
                                 .then(function (res) {
                                    console.log(res)
                                    if (res.code=200) {

@@ -19,7 +19,7 @@
         </div> -->
         <!-- <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief"">
             <ul class=" layui-tab-title">
-            <li class="layui-this">公司租凭信息</li>
+            <li class="layui-this">公司租赁信息</li>
             <li>公司信息</li>
             </ul>
             <div class="layui-tab-content">
@@ -33,19 +33,19 @@
         </div> -->
         <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief"">
             <ul class=" layui-tab-title">
-                <li class="layui-this">车辆维护状态</li>
-                <li>车辆维护历史记录</li>            
-                </ul>
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">
-                        <iframe src="./sta/drivingReport.html" frameborder="0" height='100%' width="100%"></iframe>
-                    </div>
-                    <div class="layui-tab-item">
-                        <iframe src="./sta/alarmReport.html" frameborder="0" height='100%' width="100%"></iframe>
-                    </div>
-                
+            <li class="layui-this">车辆维护状态</li>
+            <li>车辆维护历史记录</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <iframe src="./sta/drivingReport.html" frameborder="0" height='100%' width="100%"></iframe>
                 </div>
+                <div class="layui-tab-item">
+                    <iframe src="./sta/alarmReport.html" frameborder="0" height='100%' width="100%"></iframe>
+                </div>
+
             </div>
+        </div>
         <div id="loader" class="pageload-overlay"
             data-opening="M 40 -21.875 C 11.356078 -21.875 -11.875 1.3560784 -11.875 30 C -11.875 58.643922 11.356078 81.875 40 81.875 C 68.643922 81.875 91.875 58.643922 91.875 30 C 91.875 1.3560784 68.643922 -21.875 40 -21.875 Z">
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 80 60"
@@ -59,11 +59,15 @@
     <script src="../Loading/js/classie.js"></script>
     <script src="../Loading/js/svgLoader.js"></script>
     <script>
-        
+
         layui.use(['element', 'jquery', 'table'], function () {
             var element = layui.element,
-            $ = layui.jquery,
-            table = layui.table;
+                $ = layui.jquery,
+                table = layui.table;
+            element.on('tab(docDemoTabBrief)', function (data) {  // tabcard:过滤器值,lay-filter所绑定的
+                var src = $(".layui-tab-item.layui-show").find("iframe").attr("src");
+                $(".layui-tab-item.layui-show").find("iframe").attr("src", src);
+            });
             (function () {
                 var pageWrap = document.getElementById('pagewrap'),
                     loader = new SVGLoader(document.getElementById('loader'), { speedIn: 300, easingIn: mina.easeinout });

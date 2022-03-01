@@ -34,7 +34,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="repository">        </param>
         /// <param name="mapper">            </param>
         /// <param name="generalRepository"> </param>
-        public RentalCompanyController(RentalCompanyRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(repository, mapper)
+        public RentalCompanyController(RentalCompanyRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(repository, mapper, generalRepository)
         {
             _generalRepository = generalRepository;
         }

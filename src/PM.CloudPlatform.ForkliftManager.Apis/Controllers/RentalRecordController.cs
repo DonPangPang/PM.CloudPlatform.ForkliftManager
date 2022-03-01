@@ -86,12 +86,28 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// </summary>
         /// <param name="dtos"> </param>
         /// <returns> </returns>
+        //TODO: 验证车辆是否已经处于租赁状态
         [HttpPost]
         public async Task<IActionResult> CreateRentalRecords([FromBody] IEnumerable<RentalRecordAddOrUpdateDto> dtos)
         {
             if (dtos == null) throw new ArgumentNullException(nameof(dtos));
 
             var entities = dtos.MapTo<RentalRecord>();
+
+            foreach(var item in entities)
+            {
+                var car = await _generalRepository.GetQueryable<Car>()
+                    .Where(x => x.Id.Equals(item.CarId))
+                    .FilterDeleted()
+                    .FilterDisabled()
+                    .Include(x=>x.RentalRecords.Where(t=>!t.IsReturn))
+                    .FirstOrDefaultAsync();
+
+                if(car.RentalRecords is null || car.RentalRecords.Any())
+                {
+                    return Fail($"车辆{car.LicensePlateNumber}已经被租赁");
+                }
+            }
 
             foreach (var item in entities)
             {

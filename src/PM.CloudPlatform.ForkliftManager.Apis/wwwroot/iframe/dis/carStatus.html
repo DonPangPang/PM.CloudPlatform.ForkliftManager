@@ -38,32 +38,35 @@
 <body>
     <table id="demo" lay-filter="test"></table>
     <script type="text/html" id="toolbarDemo">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增租赁</button>
         <div class="layui-inline">
             <div class="layui-input-inline">
-                <input type="text" name="username" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+                <input type="text" name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
             </div>
         </div>
         <div class="layui-inline">
-            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i
+                    class="layui-icon"></i>
                 搜 索</button>
         </div>
-        <button class="layui-btn layui-btn-sm" lay-event="add">新增租凭</button>
+        
     </script>
     <script type="text/html" id="F_CategoryBar">
-        {{#  if(d.car_state ){ }}
-            <span data-state=  {{ d.car_state }} class="category category-admin">空闲</span>
+        {{#  if(d.isReturn ){ }}
+            <span data-state=  {{ d.isReturn }} class="category category-admin">空闲</span>
         {{#  } else {  }}
-            <span data-state=  {{ d.car_state }} class="category category-gen">租凭</span>
+            <span data-state=  {{ d.isReturn }} class="category category-gen">租赁</span>
         {{#  } }}
     </script>
     <script src="../../layui.js"></script>
     <script src="../../js/common.js"></script>
     <!-- <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script> -->
     <script>
-        layui.use(['element', 'table', 'jquery', 'layer'], function () {
+        layui.use(['element', 'table', 'jquery', 'layer','form'], function () {
             var element = layui.element,
                 layer = layui.layer,
                 $ = layui.jquery,
+                form=layui.form,
                 table = layui.table;
             var style = JSON.parse(sessionStorage.getItem('style'));
             var arr = [];
@@ -85,8 +88,7 @@
                     , url: requestUrl + 'api/Car/GetCarArchives' //数据接口
                     , toolbar: '#toolbarDemo'
                     , cols: [[ //表头
-                        { type: "checkbox" }
-                        , { field: 'id', title: 'ID', width: 80, sort: true }
+                          { type: "checkbox" }
                         , { field: 'licensePlateNumber', title: '车牌号', sort: true }
                         , { field: 'carTypeName', title: '车辆类型' }
                         , { field: 'serialNumber', title: '车辆编号', sort: true }
@@ -97,7 +99,6 @@
                     , page: false //开启分页
                     , parseData: function (res) {
                         console.log(res)
-
                         return {
                             'code': res.code,
                             'count': res.total,
@@ -121,46 +122,46 @@
                 switch (obj.event) {
                     case 'add':
                         if (arr.length != 0) {
-                            console.log(arr)
-                            let bool=true;
+                            let bool = true;
                             arr.forEach(item => {
                                 if (!item.isReturn) {
-                                bool=false;
-                            }
-                            });
-                          if (bool) {
-                            layer.msg('是否将' + number + '辆车租凭', {
-                                time: 0 //不自动关闭
-                                , btn: ['确定', '取消']
-                                , yes: function (index) {
-                                    layer.close(index);
-                                    sessionStorage.setItem('data-add', JSON.stringify(arr));
-                                    var index = layer.open({
-                                        title: ['新增租凭', color],
-                                        type: 2,
-                                        shade: 0.2,
-                                        maxmin: true,
-                                        shadeClose: true,
-                                        area: ['90%', '80%'],
-                                        content: './layer/carStatus/add.html',
-                                        maxmin: false, //最大化最小化
-                                        success: function (layero) {
-                                            if (style == false) {
-                                                $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
-                                            } else {
-                                            }
-                                        },
-                                    });
+                                    bool = false;
                                 }
                             });
-                            break;
-                          }
-                          else{
-                            layer.msg('请重新选择车辆后执行操作', {
-                                time: 2000
-                            });
-                          }
-                            
+                            if (bool) {
+                                layer.msg('是否将' + number + '辆车租赁', {
+                                    time: 0 //不自动关闭
+                                    , btn: ['确定', '取消']
+                                    , yes: function (index) {
+                                        layer.close(index);
+                                        sessionStorage.setItem('data-add', JSON.stringify(arr));
+                                        var index = layer.open({
+                                            title: ['新增租赁', color],
+                                            type: 2,
+                                            shade: 0.2,
+                                            maxmin: true,
+                                            shadeClose: true,
+                                            area: ['90%', '80%'],
+                                            content: './layer/carStatus/add.html',
+                                            maxmin: false, //最大化最小化
+                                            success: function (layero) {
+                                                if (style == false) {
+                                                    $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                                                } else {
+                                                    
+                                                }
+                                            },
+                                        });
+                                    }
+                                });
+                                break;
+                            }
+                            else {
+                                layer.msg('请重新选择车辆后执行操作', {
+                                    time: 2000
+                                });
+                            }
+
                         } else {
                             layer.msg('请选中车辆后执行操作', {
                                 time: 2000
@@ -169,6 +170,18 @@
                 };
             });
 
+            form.on('submit(data-search-btn)', function (data) {
+                var result = data.field;
+                console.log(result)
+                //执行搜索重载
+                table.reload('demo', {
+                    page: {
+                        curr: 1
+                    },
+                    where: result
+                }, 'data');
+                return false;
+            });
             $(document).on("click", ".layui-table-body table.layui-table tbody tr", function () {
                 let obj = event ? event.target : event.srcElement;
                 let tag = obj.tagName;
@@ -193,6 +206,8 @@
             $(document).on("click", "td div.laytable-cell-checkbox div.layui-form-checkbox", function (e) {
                 e.stopPropagation();
             });
+
+           
 
             var cars = [
                 {

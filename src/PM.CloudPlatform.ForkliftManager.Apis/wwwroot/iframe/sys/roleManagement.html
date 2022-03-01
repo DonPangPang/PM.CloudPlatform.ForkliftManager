@@ -11,9 +11,31 @@
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" id="blue" title="blue" href="../../css/openStyleBlue.css" disabled='true'>
     <link rel="stylesheet" id="white" title="white" href="../../css/openStyleWhite.css" disabled='true'>
-
 </head>
+<style>
+    .category {
+        padding: 5px;
+    }
 
+    .category-admin {
+        color: #FFFFFF;
+        background-color: #5CB85C;
+        border-radius: 3px;
+    }
+
+    .category-tixing {
+        color: #FFFFFF;
+        background-color: #8f54b1;
+        border-radius: 3px;
+    }
+
+
+    .category-gen {
+        color: #FFFFFF;
+        background-color: #631b0f;
+        border-radius: 3px;
+    }
+</style>
 <body>
     <script type="text/html" id="toolbarDemo">
         <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="pm_add"> 添加 </button>
@@ -21,7 +43,7 @@
         <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="pm_delete"> 删除 </button>
         <div class="layui-inline">
             <div class="layui-input-inline">
-                <input type="text" name="username" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+                <input type="text" name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
             </div>
         </div>
         <div class="layui-inline">
@@ -29,18 +51,28 @@
                 搜 索</button>
         </div>
     </script>
-    <table id="test" lay-filter="currentTableFilter"></table>
+    <table id="test" lay-filter="test"></table>
     <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" lay-event="details">功能授权</a>
+        <a class="layui-btn layui-btn-xs" lay-event="Capabilities">功能授权</a>
+        <a class="layui-btn layui-btn-xs" lay-event="enable">启用</a>
+        <a class="layui-btn layui-btn-xs" lay-event="forbidden">禁用</a>       
+    </script>
+    <script type="text/html" id="enable">
+          {{#  if( d.enableMark) { }}
+        <span class="category category-admin">有效</span>
+    {{#  } else  {  }}
+        <span  class="category category-gen" lay-event="again">无效</span>
+    {{#  } }}   
     </script>
     <script src="../../layui.js"></script>
     <script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
     <script src="../../js/common.js"></script>
     <script>
         // var aaa = window.location.href;
-        layui.use(['element', 'jquery', 'table'], function () {
+        layui.use(['element', 'jquery', 'table', 'form'], function () {
             var element = layui.element,
                 $ = layui.jquery,
+                form = layui.form,
                 table = layui.table;
             var boolean = window.parent.aaa;
             var aaa = getCaption(boolean);
@@ -71,13 +103,11 @@
                     , url: requestUrl + 'api/Role/GetEntitiesByPaged' //数据接口                 
                     , cols: [[ //表头
                         { type: 'radio' }
-                        , { field: 'id', title: 'id', sort: true }
+                        // , { field: 'id', title: 'id', sort: true }
                         , { field: 'name', title: '角色', sort: true }
                         , { field: 'createDate', title: '创建时间' }
                         , { field: 'createUserName', title: '创建人', }
-                        , { field: 'enableMark', title: '是否有效', sort: true }
-                        // , { field: 'sign', title: '角色描述', }
-                        // , { field: 'experience', title: '分类', sort: true }
+                        , { field: 'enableMark', title: '是否有效', sort: true, toolbar: '#enable' }
                         , { fixed: 'right', title: '操作', toolbar: '#barDemo', align: "center" }
                     ]]
                     , page: true //开启分页
@@ -106,7 +136,8 @@
             }, 500)
 
             //监听行单击事件（双击事件为：rowDouble，单击事件为：row）
-            table.on('toolbar(currentTableFilter)', function (obj) {
+            table.on('toolbar(test)', function (obj) {
+                console.log(obj)
                 let checkStatus = table.checkStatus('test'),
                     data = checkStatus.data[0];
                 sessionStorage.setItem('data-edit', JSON.stringify(data));
@@ -149,7 +180,7 @@
                             },
                         });
                     } else {
-                        layer.msg('未选择用户', {
+                        layer.msg('未选择数据', {
                             time: 2000
                         });
                     }
@@ -162,11 +193,11 @@
                             title: ['提示', color],
                             offset: 'auto',
                             id: 'layerDemo',
-                            content: '<div style="padding: 20px 100px;">是否删除账户</div>',
+                            content: '<div style="padding: 20px 100px;">是否删除该角色</div>',
                             btn: ['是', '否'],
                             btnAlign: 'r',
                             yes: function (index, layero) {
-                                ajax("delete", "api/Role/DeleteEntity/" + data.id)
+                                ajax("delete", "api/Role/DeleteEntity?id=" + data.id)
                                     .then(function (res) {
                                         if (res.code = 200) {
                                             table.reload('test');
@@ -177,51 +208,113 @@
                                             layer.msg(res.info, {
                                                 time: 2000
                                             });
-                                        }                                      
+                                        }
                                     });
-                                    layer.close(index);
+                                layer.close(index);
                             }
                         });
                     } else {
-                        layer.msg('未选择用户', {
+                        layer.msg('请选中数据后执行操作', {
                             time: 2000
                         });
                     }
                 }
             });
 
-            // table.on('tool(test)', function (obj) {
-            //     var data = obj.data;
-            //     if (obj.event === 'details') {
-            //         var index = layer.open({
-            //             title: ['照片', color],
-            //             type: 2,
-            //             shade: 0.2,
-            //             maxmin: false,
-            //             shadeClose: true,
-            //             area: ["950px", '100%'],
-            //             content: '../tra/car1/index.html?boolean=' + aaa,
-            //             success: function (layero) {
-            //                 if (aaa == "false") {
-            //                     $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
-            //                 } else {
-            //                     layero.find('.layui-layer-setwin .layui-layer-min cite ').css('background-color', '#000');
-            //                 }
+            table.on('tool(test)', function (obj) {
+                console.log(obj)
+                var data = obj.data;
+                if (obj.event === 'Capabilities') {
+                    sessionStorage.setItem('data-edit', JSON.stringify(data));
+                    var index = layer.open({
+                        title: ['功能授权', color],
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: false,
+                        shadeClose: true,
+                        area: ['800px', '80%'],
+                        content: './Role/Capabilities.html?boolean=' + aaa,
+                        success: function (layero) {
+                            if (style == false) {
+                                $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                            } else {
+                            }
+                        },
+                    });
+                } else if (obj.event === 'forbidden') {
+                    layer.open({
+                        type: 1,
+                        shade: 0.2,
+                        shadeClose: true,
+                        title: ['提示', color],
+                        offset: 'auto',
+                        id: 'layerDemo',
+                        content: '<div style="padding: 20px 100px;">是否禁用该角色</div>',
+                        btn: ['是', '否'],
+                        btnAlign: 'r',
+                        yes: function (index, layero) {
+                            ajax("get", "api/Role/Disable?id=" + data.id)
+                                .then(function (res) {
+                                    if (res.code = 200) {
+                                        table.reload('test');
+                                        layer.msg('禁用成功', {
+                                            time: 2000
+                                        });
+                                    } else {
+                                        layer.msg(res.info, {
+                                            time: 2000
+                                        });
+                                    }
+                                });
+                            layer.close(index);
+                        }
+                    });
+                }
+                if (obj.event === 'enable') {
+                    layer.open({
+                        type: 1,
+                        shade: 0.2,
+                        shadeClose: true,
+                        title: ['提示', color],
+                        offset: 'auto',
+                        id: 'layerDemo',
+                        content: '<div style="padding: 20px 100px;">是否启用该角色</div>',
+                        btn: ['是', '否'],
+                        btnAlign: 'r',
+                        yes: function (index, layero) {
+                            ajax("get", "api/Role/Enable?id=" + data.id)
+                                .then(function (res) {
+                                    if (res.code = 200) {
+                                        table.reload('test');
+                                        layer.msg('启用成功', {
+                                            time: 2000
+                                        });
+                                    } else {
+                                        layer.msg(res.info, {
+                                            time: 2000
+                                        });
+                                    }
+                                });
+                            layer.close(index);
+                        }
+                    });
+                }
 
-            //             },
-            //         });
-            //     } else if (obj.event === 'edit') {
-            //         layer.prompt({
-            //             formType: 2
-            //             , value: data.email
-            //         }, function (value, index) {
-            //             obj.update({
-            //                 email: value
-            //             });
-            //             layer.close(index);
-            //         });
-            //     }
-            // });
+            });
+
+            form.on('submit(data-search-btn)', function (data) {
+                var result = data.field;
+                console.log(result)
+                //执行搜索重载
+                table.reload('test', {
+                    page: {
+                        curr: 1
+                    },
+                    where: result
+                }, 'data');
+                return false;
+            });
+
         });
     </script>
 </body>
