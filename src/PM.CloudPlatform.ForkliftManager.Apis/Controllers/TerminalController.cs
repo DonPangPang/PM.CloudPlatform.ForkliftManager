@@ -187,6 +187,28 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             return Success(terminals);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetTerminalsBindStatus([FromQuery]DtoParametersBase parameters)
+        {
+            var data = await _generalRepository.GetQueryable<Terminal>()
+                .FilterDeleted()
+                .FilterDisabled()
+                .Include(x=>x.Car)
+                .ApplyPaged(parameters)
+                .Select(x => new
+                {
+                    x.Id,
+                    CarId = x.Car!.Id,
+                    x.IMEI,
+                    x.Car!.LicensePlateNumber,
+                    x.EnableMark,
+                    x.DeleteMark,
+                    Binded = (x.CarId == null)
+                })
+                .ToListAsync();
+            return Success(data);
+        }
+
         /// <summary>
         /// 获取未绑定的终端
         /// </summary>
