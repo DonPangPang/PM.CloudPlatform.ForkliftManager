@@ -31,10 +31,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// </summary>
         public string LngLats { get; set; } = null!;
 
-        // [JsonIgnore]
-        // public Polygon Border => LngLats.ToGeometry_Transform_GCJ02_To_WGS84<Polygon>();
         [JsonIgnore]
-        public Polygon Border => LngLats.ToGeometry<Polygon>();
+        public Polygon Border => LngLats.ToGeometry_Transform_GCJ02_To_WGS84<Polygon>();
+        // [JsonIgnore]
+        // public Polygon Border => LngLats.ToGeometry<Polygon>();
 
         /// <summary>
         /// 租借公司
