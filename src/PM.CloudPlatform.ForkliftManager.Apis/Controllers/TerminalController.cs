@@ -187,6 +187,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             return Success(terminals);
         }
 
+        /// <summary>
+        /// 获取终端信息以及绑定车辆
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetTerminalsBindStatus([FromQuery]DtoParametersBase parameters)
         {
