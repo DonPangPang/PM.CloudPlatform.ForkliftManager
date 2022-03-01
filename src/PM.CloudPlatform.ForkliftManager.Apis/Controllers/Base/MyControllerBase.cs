@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
+using Microsoft.EntityFrameworkCore;
+using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
 {
@@ -199,7 +201,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
             {
                 if (item is Car && _generalRepository is not null)
                 {
-                    var car = await _generalRepository.FindAsync<Car>(x => x.LicensePlateNumber!.Equals((item as Car)!.LicensePlateNumber));
+                    var car = await _generalRepository.GetQueryable<Car>()
+                            .Where(x => x.LicensePlateNumber!.Equals((item as Car)!.LicensePlateNumber))
+                            .FilterDeleted()
+                            .FilterDisabled()
+                            .FirstOrDefaultAsync();
                     if (car is not null)
                     {
                         return Fail("车牌号已存在");
@@ -208,7 +214,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
 
                 if (item is RentalCompany && _generalRepository is not null)
                 {
-                    var company = await _generalRepository.FindAsync<RentalCompany>(x => x.Name!.Equals((item as RentalCompany)!.Name));
+                    var company = await _generalRepository.GetQueryable<RentalCompany>()
+                            .Where(x => x.Name!.Equals((item as RentalCompany)!.Name))
+                            .FilterDeleted()
+                            .FilterDisabled()
+                            .FirstOrDefaultAsync();
                     if (company is not null)
                     {
                         return Fail("公司已存在");
@@ -217,7 +227,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
 
                 if (item is User && _generalRepository is not null)
                 {
-                    var user = await _generalRepository.FindAsync<User>(x => x.Username!.Equals((item as User)!.Username));
+                    var user = await _generalRepository.GetQueryable<User>()
+                            .Where(x => x.Username!.Equals((item as User)!.Username))
+                            .FilterDeleted()
+                            .FilterDisabled()
+                            .FirstOrDefaultAsync();
                     if (user is not null)
                     {
                         return Fail("用户名已存在");
@@ -263,31 +277,43 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
                 var addEntity = _mapper.Map<TEntity>(model);
 
                 if (addEntity is Car && _generalRepository is not null)
-                {
-                    var car = await _generalRepository.FindAsync<Car>(x => x.LicensePlateNumber!.Equals((addEntity as Car)!.LicensePlateNumber));
-                    if (car is not null)
                     {
-                        return Fail("车牌号已存在");
+                        var car = await _generalRepository.GetQueryable<Car>()
+                            .Where(x => x.LicensePlateNumber!.Equals((addEntity as Car)!.LicensePlateNumber))
+                            .FilterDeleted()
+                            .FilterDisabled()
+                            .FirstOrDefaultAsync();
+                        if (car is not null)
+                        {
+                            return Fail("车牌号已存在");
+                        }
                     }
-                }
 
-                if (addEntity is RentalCompany && _generalRepository is not null)
-                {
-                    var company = await _generalRepository.FindAsync<RentalCompany>(x => x.Name!.Equals((addEntity as RentalCompany)!.Name));
-                    if (company is not null)
+                    if (addEntity is RentalCompany && _generalRepository is not null)
                     {
-                        return Fail("公司已存在");
+                        var company = await _generalRepository.GetQueryable<RentalCompany>()
+                            .Where(x => x.Name!.Equals((addEntity as RentalCompany)!.Name))
+                            .FilterDeleted()
+                            .FilterDisabled()
+                            .FirstOrDefaultAsync();
+                        if (company is not null)
+                        {
+                            return Fail("公司已存在");
+                        }
                     }
-                }
 
-                if (addEntity is User && _generalRepository is not null)
-                {
-                    var user = await _generalRepository.FindAsync<User>(x => x.Username!.Equals((addEntity as User)!.Username));
-                    if (user is not null)
+                    if (addEntity is User && _generalRepository is not null)
                     {
-                        return Fail("用户名已存在");
+                        var user = await _generalRepository.GetQueryable<User>()
+                            .Where(x => x.Username!.Equals((addEntity as User)!.Username))
+                            .FilterDeleted()
+                            .FilterDisabled()
+                            .FirstOrDefaultAsync();
+                        if (user is not null)
+                        {
+                            return Fail("用户名已存在");
+                        }
                     }
-                }
 
                 addEntity.Create();
                 addEntity.Modify();
@@ -364,7 +390,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
                     var addEntity = _mapper.Map<TEntity>(model);
                     if (addEntity is Car && _generalRepository is not null)
                     {
-                        var car = await _generalRepository.FindAsync<Car>(x => x.LicensePlateNumber!.Equals((addEntity as Car)!.LicensePlateNumber));
+                        var car = await _generalRepository.GetQueryable<Car>()
+                            .Where(x => x.LicensePlateNumber!.Equals((addEntity as Car)!.LicensePlateNumber))
+                            .FilterDeleted()
+                            .FilterDisabled()
+                            .FirstOrDefaultAsync();
                         if (car is not null)
                         {
                             return Fail("车牌号已存在");
@@ -373,7 +403,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
 
                     if (addEntity is RentalCompany && _generalRepository is not null)
                     {
-                        var company = await _generalRepository.FindAsync<RentalCompany>(x => x.Name!.Equals((addEntity as RentalCompany)!.Name));
+                        var company = await _generalRepository.GetQueryable<RentalCompany>()
+                            .Where(x => x.Name!.Equals((addEntity as RentalCompany)!.Name))
+                            .FilterDeleted()
+                            .FilterDisabled()
+                            .FirstOrDefaultAsync();
                         if (company is not null)
                         {
                             return Fail("公司已存在");
@@ -382,7 +416,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
 
                     if (addEntity is User && _generalRepository is not null)
                     {
-                        var user = await _generalRepository.FindAsync<User>(x => x.Username!.Equals((addEntity as User)!.Username));
+                        var user = await _generalRepository.GetQueryable<User>()
+                            .Where(x => x.Username!.Equals((addEntity as User)!.Username))
+                            .FilterDeleted()
+                            .FilterDisabled()
+                            .FirstOrDefaultAsync();
                         if (user is not null)
                         {
                             return Fail("用户名已存在");
