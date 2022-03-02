@@ -156,7 +156,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     Brand = x.Brand,
                     SerialNumber = x.SerialNumber,
                     BuyTime = x.BuyTime,
-                    IsReturn = (x.RentalRecords == null || !x.RentalRecords!.Where(t=>!t.IsReturn).Any()),
+                    IsReturn = (x.RentalRecords == null || !x.RentalRecords!.Where(t => !t.IsReturn).Any()),
                     LengthOfUse = x.UseRecords!.Sum(t => t.LengthOfTime) + x.LengthOfUse,
                 })
                 .AsSplitQuery()
@@ -234,40 +234,45 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             return Success("保存成功");
         }
 
-        ///// <summary>
-        ///// 解除车辆与终端的绑定
-        ///// </summary>
-        ///// <param name="carId">      </param>
-        ///// <param name="terminalId"> </param>
-        ///// <returns> </returns>
-        //[HttpGet]
-        //public async Task<IActionResult> SetCarTerminalUnBind(Guid carId, Guid terminalId)
-        //{
-        //    var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(carId) && x.TerminalId.Equals(terminalId));
+        /// <summary>
+        /// 解除车辆与终端的绑定
+        /// </summary>
+        /// <param name="carId">      </param>
+        /// <param name="terminalId"> </param>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> SetCarTerminalUnBind(Guid carId, Guid terminalId)
+        {
+            var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(carId) && x.TerminalId.Equals(terminalId));
 
-        //    // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-        //    if (car is null)
-        //    {
-        //        return Fail("车辆信息获取失败");
-        //    }
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+            if (car is null)
+            {
+                return Fail("车辆信息获取失败");
+            }
 
-        //    car.TerminalId = null;
-        //    await _generalRepository.UpdateAsync(car);
-        //    await _generalRepository.SaveAsync();
+            car.TerminalId = null;
+            await _generalRepository.UpdateAsync(car);
+            await _generalRepository.SaveAsync();
 
-        //    var terminal = await _generalRepository.FindAsync<Terminal>(x => x.Id.Equals(terminalId));
+            var terminal = await _generalRepository.FindAsync<Terminal>(x => x.Id.Equals(terminalId));
 
-        //    if(terminal is null)
-        //    {
-        //        return Fail("终端信息获取失败, 已接触对应车辆的绑定.");
-        //    }
+            if (terminal is null)
+            {
+                return Fail("终端信息获取失败, 已接触对应车辆的绑定.");
+            }
 
-        //    terminal.CarId = null;
-        //    await _generalRepository.UpdateAsync<Terminal>(terminal);
-        //    await _generalRepository.SaveAsync();
+            terminal.CarId = null;
+            await _generalRepository.UpdateAsync<Terminal>(terminal);
+            await _generalRepository.SaveAsync();
 
-        //    return Success("解除绑定成功");
-        //}
+            var bindRecord = await _generalRepository.FindAsync<TerminalBindRecord>(x => x.CarId.Equals(carId) && x.TerminalId.Equals(terminalId) && (x.IsActive ?? false));
+            bindRecord.IsActive = false;
+            await _generalRepository.UpdateAsync(bindRecord);
+            await _generalRepository.SaveAsync();
+
+            return Success("解除绑定成功");
+        }
 
         /// <summary>
         /// 解除车辆与终端的绑定
@@ -275,11 +280,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="bindRecordId"></param>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> SetCarTerminalUnBind(Guid bindRecordId)
+        public async Task<IActionResult> SetCarTerminalUnBindByRecord(Guid bindRecordId)
         {
-            var bindRecord = await _generalRepository.FindAsync<TerminalBindRecord>(x=>x.Id.Equals(bindRecordId));
-            
-            if(bindRecord is null)
+            var bindRecord = await _generalRepository.FindAsync<TerminalBindRecord>(x => x.Id.Equals(bindRecordId));
+
+            if (bindRecord is null)
             {
                 return Fail("找不到绑定记录");
             }
@@ -384,15 +389,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var onlines = await _generalRepository.GetQueryable<Car>()
                 .FilterDeleted()
                 .FilterDisabled()
-                .Include(x=>x.Terminal)
-                .Where(x=>x.TerminalId != null)
-                .Where(x=>terminalOnlines.Keys.Contains(x.Terminal!.IMEI))
+                .Include(x => x.Terminal)
+                .Where(x => x.TerminalId != null)
+                .Where(x => terminalOnlines.Keys.Contains(x.Terminal!.IMEI))
                 .CountAsync();
 
             var unbind = await _generalRepository.GetQueryable<Car>()
                 .FilterDeleted()
                 .FilterDisabled()
-                .Where(x=>x.TerminalId == null)
+                .Where(x => x.TerminalId == null)
                 .CountAsync();
 
 
@@ -423,7 +428,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         public async Task<IActionResult> GetMonthlyData()
         {
             var rentalRecords = await _generalRepository.GetQueryable<RentalRecord>()
-                .Where(x=>!x.IsReturn)
+                .Where(x => !x.IsReturn)
                 .Where(x => x.CreateDate > x.CreateDate!.Value.AddMonths(-6))
                 .GroupBy(det => new
                 {
