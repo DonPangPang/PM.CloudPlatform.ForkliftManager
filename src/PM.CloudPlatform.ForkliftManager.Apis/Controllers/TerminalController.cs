@@ -203,7 +203,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Select(x => new
                 {
                     x.Id,
-                    CarId = x.Car == null ? Guid.Empty : x.Car.Id,
+                    CarId = x.Car == null ? "" : x.Car.Id.ToString(),
                     x.IMEI,
                     LicensePlateNumber = x.Car == null ? null : x.Car.LicensePlateNumber,
                     x.EnableMark,
