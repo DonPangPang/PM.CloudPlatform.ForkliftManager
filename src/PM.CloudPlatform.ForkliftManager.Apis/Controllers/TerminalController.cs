@@ -203,12 +203,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Select(x => new
                 {
                     x.Id,
-                    CarId = x.Car!.Id,
+                    CarId = x.Car == null ? Guid.Empty : x.Car.Id,
                     x.IMEI,
-                    x.Car!.LicensePlateNumber,
+                    LicensePlateNumber = x.Car == null ? null : x.Car.LicensePlateNumber,
                     x.EnableMark,
                     x.DeleteMark,
-                    Binded = (x.CarId == null)
+                    Binded = !(x.CarId == null)
                 })
                 .ToListAsync();
             return Success(data);
