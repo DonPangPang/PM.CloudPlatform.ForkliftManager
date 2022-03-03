@@ -399,7 +399,6 @@
         }
         //围栏保存
         var save = function () {
-            // $("#record").removeClass('dn')
             if (nood != []) {
                 mapCoordLat.push({ name: "围栏", lngLats: nood });
                 nood = [];
@@ -530,11 +529,6 @@
                 F_Id = data.id,
                     //编辑文本框赋值
                     form.val('overTimeForm', {
-                        // firm: data.firm,
-                        // name: data.name,
-                        // car_plate: data.car_plate,
-                        // location: data.location,
-
                         name: data.name,
                         contact: data.contact,
                         tel: data.tel,
@@ -546,11 +540,11 @@
                 electronicFence.forEach(item => {
 
                     let lngLats = JSON.parse(item.lngLats)
-                    let coordinates=lngLats.coordinates[0]
-                  coordinates.length=coordinates.length-1
+                    let coordinates = lngLats.coordinates[0]
+                    coordinates.length = coordinates.length - 1
                     console.log(coordinates)
 
-                    mapCoordLat.push({ id: item.id, name: item.name, lngLats:coordinates})
+                    mapCoordLat.push({ id: item.id, name: item.name, lngLats: coordinates })
                 })
 
 
@@ -586,65 +580,71 @@
                 mapCoordLat.forEach(item => {
                     item.lngLats.push(item.lngLats[0])
                     console.log(item.lngLats)
-                    let lngLats=[item.lngLats]
+                    let lngLats = [item.lngLats]
                     let list = {
                         "id": item.id,
                         "name": item.name,
                         "lngLats": JSON.stringify({
-                            type:'Polygon',
-                            coordinates:lngLats
+                            type: 'Polygon',
+                            coordinates: lngLats
                         })
                     }
 
                     electronicFences.push(list)
                 });
-                var result = fromval.field;
-                let datas = {
-                    "name": result.name,
-                    "contact": result.contact,
-                    "tel": result.tel,
-                    "address": result.address,
-                    "electronicFences": electronicFences
-                }
-                console.log(datas)
-                if (!!F_Id) {
-                    ajax('put', 'api/RentalCompany/UpdateEntity/' + F_Id, datas)
-                        .then(function (res) {
-                            if (res.code == 200) {
-                                F_Id = '';
-                                layer.msg('编辑成功', {
-                                    time: 2000
-                                },
-                                    function () {
-                                        parent.layui.table.reload('test')
-                                        var iframeIndex = parent.layer.getFrameIndex(window.name);
-                                        parent.layer.close(iframeIndex);
-                                    }
-                                );
-                            }
-                        })
-
+                if ($("#add").hasClass("dn")) {
+                    layer.msg('请将当前电子围栏绘制完成后提交', {
+                        time: 2000,
+                    })
                 } else {
+                    var result = fromval.field;
+                    let datas = {
+                        "name": result.name,
+                        "contact": result.contact,
+                        "tel": result.tel,
+                        "address": result.address,
+                        "electronicFences": electronicFences
+                    }
 
-                    ajax('post', 'api/RentalCompany/CreateEntity', datas)
-                        .then(function (res) {
-                            if (res.code == 200) {
+                    if (!!F_Id) {
+                        ajax('put', 'api/RentalCompany/UpdateEntity/' + F_Id, datas)
+                            .then(function (res) {
+                                if (res.code == 200) {
+                                    F_Id = '';
+                                    layer.msg('编辑成功', {
+                                        time: 2000
+                                    },
+                                        function () {
+                                            parent.layui.table.reload('test')
+                                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                            parent.layer.close(iframeIndex);
+                                        }
+                                    );
+                                }
+                            })
 
-                                layer.msg('添加成功', {
+                    } else {
+                        ajax('post', 'api/RentalCompany/CreateEntity', datas)
+                            .then(function (res) {
+                                if (res.code == 200) {
 
-                                    time: 2000
-                                },
-                                    function () {
-                                        parent.layui.table.reload('test')
-                                        var iframeIndex = parent.layer.getFrameIndex(window.name);
-                                        parent.layer.close(iframeIndex);
-                                    }
-                                );
-                               
+                                    layer.msg('添加成功', {
 
-                            }
+                                        time: 2000
+                                    },
+                                        function () {
+                                            parent.layui.table.reload('test')
+                                            var iframeIndex = parent.layer.getFrameIndex(window.name);
+                                            parent.layer.close(iframeIndex);
+                                        }
+                                    );
 
-                        })
+
+                                }
+
+                            })
+                    }
+
                 }
 
 

@@ -193,8 +193,6 @@
     <script src="./js/lay-config.js"></script>
     <script>
         layui.use(['form', 'jquery'], function () {
-            var baseUrl = "http://localhost:10808";
-
             var form = layui.form,
                 $ = layui.jquery,
                 layer = layui.layer
@@ -210,10 +208,10 @@
 
             $(function () {
                 var guids = guid();
-                $('#canvas').attr('src', baseUrl + "/Authorization/GenerateCaptcha?id=" + guids)
+                $('#canvas').attr('src', "http://192.168.31.39:10808/Authorization/GenerateCaptcha?id=" + guids)
                 $('#canvas').click(function () {
                     guids = guid();
-                    $(this)[0].src = baseUrl + "/Authorization/GenerateCaptcha?id=" + guids
+                    $(this)[0].src = "http://192.168.31.39:10808/Authorization/GenerateCaptcha?id=" + guids
                 })
                 form.on('submit(login)', function (data) {
 
@@ -250,8 +248,8 @@
                         }
                         $.ajax({
                             type: 'post',
-                            //url: 'http://192.168.31.39:10808/Authorization/RequestToken',
-                            url: baseUrl + '/Authorization/RequestToken',
+                            url: 'http://192.168.31.39:10808/Authorization/RequestToken',
+                            //url: 'https://localhost:44352/Authorization/RequestToken',
                             data: JSON.stringify(loginData),
                             contentType: "application/json;charset=UTF-8",
                             success: function (data) {
@@ -273,7 +271,7 @@
                                             
                                             guids = guid();
                                             console.log(guids)
-                                            $('#canvas')[0].src = baseUrl + "/Authorization/GenerateCaptcha?id=" + guids
+                                            $('#canvas')[0].src = "http://192.168.31.39:10808/Authorization/GenerateCaptcha?id=" + guids
                                         }                                
                                     });
                                 }

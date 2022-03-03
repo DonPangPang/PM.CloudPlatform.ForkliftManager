@@ -62,7 +62,7 @@
            
 
             //车辆下拉框
-            ajax('get', 'api/Car/GetEntities')
+            ajax('get', 'api/Car/GetNoBindCars')
                 .then(function (res) {
                     console.log(res)
                     if (res.code = 200) {
@@ -76,7 +76,7 @@
                     }
                 })
             //设备下拉框
-            ajax('get', 'api/Terminal/GetEntities')
+            ajax('get', 'api/Terminal/GetUnbindTerminals')
                 .then(function (res) {
                     console.log(res)
                     if (res.code = 200) {

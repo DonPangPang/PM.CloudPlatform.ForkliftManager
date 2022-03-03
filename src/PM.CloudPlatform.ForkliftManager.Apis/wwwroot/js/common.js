@@ -6,16 +6,17 @@
 
 
 // 以下为公共参数
-var  requestUrl = 'http://localhost:10808/'; //请求地址公共前缀
-//var  requestUrl = 'http://192.168.31.39:10808/'; //请求地址公共前缀
+//var  requestUrl = 'https://localhost:44352/'; //请求地址公共前缀
+var  requestUrl = 'http://192.168.31.39:10808/'; //请求地址公共前缀
 var loginMark = localStorage.getItem('loginMark');   //loginMark
 var userInfo = sessionStorage.getItem('userInfo');
 
 var Token = JSON.parse(sessionStorage.getItem('Token'));
+
 // //登录判断
-// if(!userInfo && document.getElementsByTagName('title')[0].innerHTML != '后台管理-登陆'){
-//     // window.location = '/layui/login.html';
-// }
+if(!Token){
+    window.location = '../login.html';
+}
 
 // 以下为封装方法
 /**
@@ -82,13 +83,13 @@ var ajax = function(methods, url, param, dataType) {
                         layer.msg('授权过期!', {
                             time: 2000
                         },function () {
-                            window.top.location.href = '/login.html';
+                            window.top.location.href = '../login.html';
                         });
                     } else if (error.status== 403) {
                         layer.msg('授权过期!', {
                             time: 2000
                         },function () {
-                            window.top.location.href = '/login.html';
+                            window.top.location.href = '../login.html';
                         });
                     } else{
                         layer.msg('请求错误：错误状态' + error.status+ '，错误信息：' + error.msg)
@@ -133,13 +134,13 @@ var ajax = function(methods, url, param, dataType) {
                         layer.msg('授权过期!', {
                             time: 2000
                         },function () {
-                            window.top.location.href = '/login.html';
+                            window.top.location.href = '../login.html';
                         });
                     } else if (error.status== 403) {
                         layer.msg('授权过期!', {
                             time: 2000
                         },function () {
-                            window.top.location.href = '/login.html';
+                            window.top.location.href = '../login.html';
                         });
                     } else{
                         layer.msg('请求错误：错误状态' + error.status+ '，错误信息：' + error.msg)
@@ -384,12 +385,12 @@ function authorize(url){
                     }
                 }else if(data.code == 410){
                     layer.msg('登录过期，请从新登陆',function(){
-                        window.location = '/login.html';
+                        window.location = '../login.html';
                     });
                 }
                 else{
                     layer.msg('登录过期，请从新登陆',function(){
-                        window.location = '/login.html';
+                        window.location = '../login.html';
                     });
                 }
             }

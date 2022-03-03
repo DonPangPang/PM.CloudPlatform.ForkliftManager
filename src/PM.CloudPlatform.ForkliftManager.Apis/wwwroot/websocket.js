@@ -1,4 +1,4 @@
-var url ="ws://127.0.0.1:28081"
+var url ="ws://192.168.31.39:28081"
 var userId;
 var isGps = false;
 // $("#input input").val("868120278343194")

@@ -28,14 +28,14 @@
                     class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
+        <!-- <div class="layui-form-item">
             <label class="layui-form-label">上级模块</label>
             <div class="layui-input-block">
                 <select name="parentId" id="parentId" lay-verify="parentId">
                     <option value=""></option>
                 </select>
             </div>
-        </div>
+        </div> -->
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
@@ -73,18 +73,18 @@
                 description:parentData.description,
             })
              //上级模块
-             ajax('get','api/Module/GetEntities')
-                    .then(function (res) {
-                        if (res.code = 200) {
-                            console.log(2)
-                            let Typedata = res.data
-                            $.each(Typedata, function (index, value) {
-                                $('#parentId').append(new Option(value.name, value.id))
-                            })
-                            $('#parentId').val(parentData.parentId)
-                            layui.form.render("select")
-                        }
-                    })
+            //  ajax('get','api/Module/GetEntities')
+            //         .then(function (res) {
+            //             if (res.code = 200) {
+            //                 console.log(2)
+            //                 let Typedata = res.data
+            //                 $.each(Typedata, function (index, value) {
+            //                     $('#parentId').append(new Option(value.name, value.id))
+            //                 })
+            //                 $('#parentId').val(parentData.parentId)
+            //                 layui.form.render("select")
+            //             }
+            //         })
 
             // let color;
             // if (boolean == "false") {

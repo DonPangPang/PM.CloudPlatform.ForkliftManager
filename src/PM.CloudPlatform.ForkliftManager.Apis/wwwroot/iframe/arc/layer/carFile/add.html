@@ -79,13 +79,13 @@
                     class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
+        <!-- <div class="layui-form-item">
             <label class="layui-form-label">保养次数</label>
             <div class="layui-input-block">
                 <input type="text" name="numberOfMaintenance" required placeholder="请输入结保养次数" id="numberOfMaintenance"
                     class="layui-input">
             </div>
-        </div>
+        </div> -->
         <div class="layui-form-item">
             <label class="layui-form-label">上一次保养时间</label>
             <div class="layui-input-block">
@@ -121,7 +121,7 @@
                 form = layui.form,
                 laydate = layui.laydate;
             var style = JSON.parse(sessionStorage.getItem('style'));
-
+          
             if (style == false) {
                 $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
                 $('link[title="blue"]').removeAttr('disabled');
@@ -133,7 +133,8 @@
             if (obj.type == 'edit') {
 
                 var data = JSON.parse(sessionStorage.getItem('carData'));
-                F_Id = data.id;
+                console.log(data)
+                F_Id = data.carId;
                 form.val('overTimeForm', {
                     licensePlateNumber: data.licensePlateNumber,
                     brand: data.brand,
@@ -141,16 +142,14 @@
                     buyTime: data.buyTime,
                     lengthOfUse: data.lengthOfUse,
                     carModel: data.carModel,
-                    numberOfMaintenance: data.numberOfMaintenance,
-                    lastMaintenanceOfTime: data.lastMaintenanceOfTime,
+                    //numberOfMaintenance: data.numberOfMaintenance,
+                    lastMaintenanceOfTime: data.lastOfMaintenanceTime,
 
                 });
-                // 
                 //车辆类型
                 ajax('get', 'api/CarType/GetNormalCarTypes')
                     .then(function (res) {
                         if (res.code = 200) {
-                            console.log(2)
                             let Typedata = res.data
                             $.each(Typedata, function (index, value) {
                                 $('#carTypeId').append(new Option(value.name, value.id))
@@ -162,48 +161,11 @@
 
 
                 $('.none').css('display', 'block');
-                // $('#unselect').css('display', 'none');
-                // ajax('get', 'Simple/Areas/PMOrganization/User/getlist', {
-                //     token: info.token,
-                //     loginMark: loginMark,
-                //     data: JSON.stringify({
-                //         companyId: info.companyId,
-                //         departmentId: parentData.F_CreateDate,
-                //         keyword: ''
-                //     }),
-                // }).then(function(data) {
-                //     if (data.data.length > 0) {
-                //         $('#F_Category').html('');
-                //         $('#F_Category').prepend(`<option value=""></option>`);
-                //         data.data.map(function(v, i) {
-                //             $('#F_Category').append(`<option value="` + v.F_UserId + `">` + v.F_RealName + `</option>`);
-                //         })
-                //         $("#F_DepartmentId").val(parentData.F_DepartmentId);
-                //         // $("#modules").siblings().find('input').val("其他");
-                //         // $(":input[ value ='5']").val();
-                //         $('#Reason').css("display", "block")
-                //         form.render();
-                //         form.val('overTimeForm', {
-                //             F_FullNamed1: parentData.F_DepartmentId,
-                //             F_Category: parentData.F_CreateUserId,
-                //             F_ApplyStart: parentData.F_ApplyStart,
-                //             F_ApplyEnd: parentData.F_ApplyEnd,
-                //             F_CountDay1: parentData.F_CountDay,
-                //             F_Region: parentData.F_Region,
-                //             F_CountDay: parentData.F_CountDay,
-                //             F_CheckMark: parentData.F_CheckMark,
-                //             F_ApplyReason: parentData.F_ApplyReason,
-                //         })
-
-                //     }
-                // })
-                // depPeo()
             } else if (obj.type == 'add') {
                 //车辆类型
                 ajax('get', 'api/CarType/GetNormalCarTypes')
                     .then(function (res) {
                         if (res.code = 200) {
-                            console.log(2)
                             let data = res.data
                             $.each(data, function (index, value) {
                                 $('#carTypeId').append(new Option(value.name, value.id))
@@ -212,17 +174,7 @@
                         }
                     })
                 $('.none').find("input").removeAttr("required")
-                // display: none;
-                // depPeo()
-                // $('#resend').css('display', 'none');
-                // $('#delete').css('display', 'none');
-                // $(this).prop("selected", false);
-                // laydate.render({
-                //     elem: '#F_ApplyStart',
-                //     value: date.toLocaleDateString().replace(/\//g, "-"),
-                //     isInitValue: true
-                // });
-                // $('#Reason').css("display", "block");
+              
             }
 
 
@@ -247,7 +199,7 @@
             form.on('submit(formDemo)', function (fromval) {
                 //layer.msg(JSON.stringify(data.field));
                 var result = fromval.field;
-
+                console.log(F_Id)
                 if (!!F_Id) {
                     ajax('put', 'api/Car/UpdateEntity/' + F_Id, result)
                         .then(function (res) {
@@ -267,7 +219,6 @@
                         })
 
                 } else {
-
                     ajax('post', 'api/Car/CreateEntity', result)
                         .then(function (res) {
                             console.log(res)

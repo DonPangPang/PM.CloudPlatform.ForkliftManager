@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <form class="layui-form" action="" lay-filter="form">
+    <form class="layui-form" action="" style="padding: 20px;" lay-filter="form">
         <div class="layui-form-item">
             <label class="layui-form-label">账号</label>
             <div class="layui-input-block">
@@ -25,7 +25,7 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">密码</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
                     autocomplete="off" class="layui-input">
             </div>
@@ -63,6 +63,7 @@
                 form = layui.form;
             let Barer = JSON.parse(sessionStorage.getItem('userInfo'));
             var parentData = JSON.parse(sessionStorage.getItem('data-edit'));
+            var style = JSON.parse(sessionStorage.getItem('style'));
             console.log(parentData);
             var boolean = getCaption(aaa);
             function getCaption(obj) {  //提取boolean
@@ -81,7 +82,7 @@
 
 
             let color;
-            if (boolean == "false") {
+            if (style == false) {
                 $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
                 $('link[title="blue"]').removeAttr('disabled');
                 color = 'color:#fff;background-color:#033447;'

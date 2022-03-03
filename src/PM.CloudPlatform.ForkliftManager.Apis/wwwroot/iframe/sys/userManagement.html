@@ -18,7 +18,30 @@
         }
     </style> -->
 </head>
+<style>
+    .category {
+        padding: 5px;
+    }
 
+    .category-admin {
+        color: #FFFFFF;
+        background-color: #5CB85C;
+        border-radius: 3px;
+    }
+
+    .category-tixing {
+        color: #FFFFFF;
+        background-color: #8f54b1;
+        border-radius: 3px;
+    }
+
+
+    .category-gen {
+        color: #FFFFFF;
+        background-color: #631b0f;
+        border-radius: 3px;
+    }
+</style>
 <body>
     <script type="text/html" id="toolbarDemo">
         <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="pm_add"> 添加 </button>
@@ -39,6 +62,13 @@
                 搜 索</button>
         </div>
     </script>
+    <script type="text/html" id="enable">
+        {{#  if( d.enableMark) { }}
+      <span class="category category-admin">正常</span>
+  {{#  } else  {  }}
+      <span  class="category category-gen" lay-event="again">禁用</span>
+  {{#  } }}   
+  </script>
     <table id="test" lay-filter="currentTableFilter"></table>
 
     <script src="../../layui.js"></script>
@@ -137,6 +167,7 @@
                         , { field: 'password', title: '密码' }
                         , { field: 'name', title: '姓名' }
                         , { field: 'tel', title: '手机号', sort: true }
+                        , { field: 'enableMark', title: '账号状态', toolbar:'#enable' }
                         //, { field: 'number', title: '租赁车辆数' }
                         // , { field: 'buy_time', title: '租赁时间', }
                         // , { field: 'use_time', title: '使用时长（h）', }
@@ -281,36 +312,7 @@
                                                         });
                                                     }
 
-                                                });
-                                            // let forbiddenData = {
-                                            //     token: info.token,
-                                            //     loginMark: loginMark,
-                                            //     data: JSON.stringify({
-                                            //         id: data.id,
-                                            //     })
-                                            // }
-                                            // $.ajax({
-                                            //     type: 'get',
-                                            //     url: requestUrl + '/api/User/Disable',
-                                            //     data: forbiddenData,
-                                            //     success: function (data) {
-                                            //         if (data.code == 200) {
-                                            //             layer.msg('禁用账号成功', {
-                                            //                 time: 2000
-                                            //             }, function () {
-                                            //                 table.reload('currentTableId');
-                                            //                 layer.closeAll();
-                                            //             });
-                                            //         } else {
-                                            //             layer.msg(res.info, {
-                                            //                 time: 2000
-                                            //             });
-                                            //         }
-                                            //     },
-                                            //     error: function (error) {
-                                            //         console.log(error)
-                                            //     }
-                                            // });
+                                                });                                          
                                         }
                                     });
                                 } else {

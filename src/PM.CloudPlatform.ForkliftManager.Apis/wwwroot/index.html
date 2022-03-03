@@ -337,8 +337,7 @@
         </div>
         <div lay-event='dispatchManagement' title='调度管理' onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
-        <div lay-event='statisticsManagement' title="车辆维护"
-            onMouseOver='play_over("./video/WindowsNavigationStart.wav")'></div>
+        <div lay-event='statisticsManagement' title="车辆维护" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'></div>
         <div lay-event='trafficManagement' title="历史记录" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
         <div lay-event='systemManagement' title="系统管理" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
@@ -360,7 +359,6 @@
 
 <!-- 参数配置 -->
 <script>
-
     ajax('get', 'api/Car/GetCarStatus')
         .then(function (res) {
             if (res.code == 200) {

@@ -10,13 +10,36 @@
     <link rel="stylesheet" id="blue" title="blue" href="../../css/openStyleBlue.css">
     <link rel="stylesheet" id="white" title="white" href="../../css/openStyleWhite.css" disabled='true'>
 </head>
+<style>
+    .category {
+        padding: 5px;
+    }
 
+    .category-admin {
+        color: #FFFFFF;
+        background-color: #5CB85C;
+        border-radius: 3px;
+    }
+
+    .category-tixing {
+        color: #FFFFFF;
+        background-color: #8f54b1;
+        border-radius: 3px;
+    }
+
+
+    .category-gen {
+        color: #FFFFFF;
+        background-color: #631b0f;
+        border-radius: 3px;
+    }
+</style>
 <body>
     <script type="text/html" id="toolbarDemo">
-        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 车辆绑定 </button>
-        <!-- <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 编辑 </button>
-        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 详情 </button> -->
-        <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 解除绑定 </button>
+        <!-- <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 车辆绑定 </button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 编辑 </button>
+        <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 详情 </button>
+        <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 解除绑定 </button> -->
         <div class="layui-inline">
             <div class="layui-input-inline">
                 <input type="text" name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
@@ -29,7 +52,15 @@
 </body>
 </html>
 </script>
+
     <table id="test" lay-filter="test"></table>
+    <script type="text/html" id="enable">
+        {{#  if( d.enableMark) { }}
+      <span class="category category-admin">有效</span>
+  {{#  } else  {  }}
+      <span  class="category category-gen" lay-event="again">无效</span>
+  {{#  } }}  
+    </script>
     <script src="../../layui.js"></script>
     <!-- <script src="../../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script> -->
     <script src="../../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
@@ -61,10 +92,9 @@
                     , url: requestUrl + 'api/TerminalBindRecord/GetBindRecord' //数据接口
                     , cols: [[ //表头
                         { type: 'radio' }
-                        // , { field: 'id', title: 'ID', sort: true }
                         , { field: 'imei', title: '设备名称' }
                         , { field: 'licensePlateNumber', title: '绑定车辆', }
-                        , { field: 'isActive', title: '有效', }
+                        , { field: 'isActive', title: '有效', toolbar:'#enable'}
                         , { field: 'description', title: '描述' }
                     ]]
                     , page: true //开启分页
@@ -101,50 +131,7 @@
                 obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
             });
 
-            table.on('toolbar(test)', function (obj) {
-                let checkStatus = table.checkStatus('test'),
-                    data = checkStatus.data[0];
-                switch (obj.event) {
-                    case 'add':
-                        sessionStorage.setItem('carData', JSON.stringify(data));
-                        var index = layer.open({
-                            title: ['关联设备', color],
-                            type: 2,
-                            shade: 0.2,
-                            maxmin: true,
-                            shadeClose: true,
-                            area: ['500px', '80%'],
-                            content: './DataBinding/add.html?type=add',
-                            maxmin: false, //最大化最小化
-                            success: function (layero) {
-                                if (style == false) {
-                                    $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
-                                } else {
-                                }
-                            },
-                        });
-                        break;
-
-                    case 'delete':
-                        if (data) {
-                            ajax("get", "api/Car/SetCarTerminalUnBind?bindRecordId="+ data.id)
-                                .then(function (res) {
-                                    console.log(res)
-                                    if (res.code = 200) {
-                                        layer.msg('解除绑定成功', {
-                                            time: 2000
-                                        });
-                                        table.reload('test');
-                                    }
-                                })
-                        } else {
-                            layer.msg('请选中数据后执行操作', {
-                                time: 2000
-                            });
-                        }
-                        break;
-                };
-            });
+           
             form.on('submit(data-search-btn)', function (data) {
                 var result = data.field;
                 console.log(result)

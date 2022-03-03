@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <form class="layui-form" action="" lay-filter="form">
+    <form class="layui-form" action=""   style="padding: 20px;" lay-filter="form">
 
         <div class="layui-form-item">
             <label class="layui-form-label">角色名称</label>
@@ -41,7 +41,7 @@
                 form = layui.form;
             let Barer = JSON.parse(sessionStorage.getItem('userInfo'));
             var parentData = JSON.parse(sessionStorage.getItem('data-edit'));
-            console.log(parentData);
+            var style = JSON.parse(sessionStorage.getItem('style'));
             var boolean = getCaption(aaa);
             function getCaption(obj) {  //提取boolean
                 var index = obj.lastIndexOf("=");
@@ -53,7 +53,7 @@
                 name:parentData.name,
             })
             let color;
-            if (boolean == "false") {
+            if (style == false) {
                 $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
                 $('link[title="blue"]').removeAttr('disabled');
                 color = 'color:#fff;background-color:#033447;'

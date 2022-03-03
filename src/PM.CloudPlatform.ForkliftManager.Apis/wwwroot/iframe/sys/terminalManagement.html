@@ -13,7 +13,30 @@
     <link rel="stylesheet" id="blue" title="blue" href="../../css/indexStyleBlue.css" disabled='true'>
     <link rel="stylesheet" id="white" title="white" href="../../css/indexStyleWhite.css" disabled='true'>
 </head>
+<style>
+    .category {
+        padding: 5px;
+    }
 
+    .category-admin {
+        color: #FFFFFF;
+        background-color: #5CB85C;
+        border-radius: 3px;
+    }
+
+    .category-tixing {
+        color: #FFFFFF;
+        background-color: #8f54b1;
+        border-radius: 3px;
+    }
+
+
+    .category-gen {
+        color: #FFFFFF;
+        background-color: #631b0f;
+        border-radius: 3px;
+    }
+</style>
 <body>
     <script type="text/html" id="toolbarDemo">
         <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
@@ -29,6 +52,13 @@
             <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
                 搜 索</button>
         </div>
+    </script>
+    <script type="text/html" id="enable">
+        {{#  if( d.enableMark) { }}
+      <span class="category category-admin">有效</span>
+  {{#  } else  {  }}
+      <span  class="category category-gen" lay-event="again">无效</span>
+  {{#  } }}  
     </script>
     <table id="test" lay-filter="test"></table>
     <script src="../../layui.js"></script>
@@ -65,7 +95,7 @@
                        // , { field: 'id', title: 'ID', sort: true }                    
                         , { field: 'imei', title: '设备名称' }
                         // , { field: 'carId', title: '绑定车辆', }
-                        , { field: 'enableMark', title: '有效', }
+                        , { field: 'enableMark', title: '有效',toolbar:'#enable' }
                     ]]
                     , page: true //开启分页
                     , limit: 30
