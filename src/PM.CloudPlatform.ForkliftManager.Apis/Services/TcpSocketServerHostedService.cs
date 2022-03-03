@@ -107,19 +107,32 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                          if (!string.IsNullOrEmpty(s["TerminalId"].ToString()))
                          {
-                             var terminal =
-                                 await _generalRepository.FindAsync<Terminal>(x =>
-                                     x.IMEI.Equals(s["TerminalId"].ToString()));
+                            //  var terminal =
+                            //      await _generalRepository.FindAsync<Terminal>(x =>
+                            //          x.IMEI.Equals(s["TerminalId"].ToString()));
 
-                             var record = new UseRecord()
+                             #region 关闭使用记录
+                             // 如果使用记录不为空,则更新记录
+                             var UseRecord = await _generalRepository.FindAsync<UseRecord>(x =>
+                                 x.TerminalId.Equals(s["TerminalId"].ToString()) &&
+                                 x.EndTime == null);
+                             if (UseRecord != null)
                              {
-                                 TerminalId = (Guid)terminal.Id!,
-                                 StartTime = s.StartTime.DateTime,
-                                 EndTime = DateTime.Now,
-                                 LengthOfTime = s.StartTime.DateTime.HourDiff(DateTime.Now)
-                             };
-                             record.Create();
-                             await _generalRepository.InsertAsync(record);
+                                 UseRecord.EndTime = DateTime.Now;
+                                 await _generalRepository.UpdateAsync(UseRecord);
+                                 await _generalRepository.SaveAsync();
+                             }
+
+                             //  var record = new UseRecord()
+                             //  {
+                             //      TerminalId = (Guid)terminal.Id!,
+                             //      StartTime = s.StartTime.DateTime,
+                             //      EndTime = DateTime.Now,
+                             //      LengthOfTime = s.StartTime.DateTime.HourDiff(DateTime.Now)
+                             //  };
+                             //  record.Create();
+                             //  await _generalRepository.InsertAsync(record);
+                             #endregion 关闭使用记录
                          }
                      }
                      catch
@@ -133,6 +146,49 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                     {
                         Console.WriteLine($"{((NbazhGpsMessageIds)p.Header.MsgId).ToString()}:{p.ToJson()}");
                         Console.WriteLine(p.OriginalPackage.ToHexString());
+
+                        // TODO: 更改UseRecord相关方法
+                        /***
+                         * 相关思路:
+                         * 1. ACC选择 (1)心跳包 (2)定位包
+                         * 2. Session和定位包作为辅助记录停止使用时间
+                         * 3. 心跳包只作为关闭UseRecord的辅助记录
+                        */
+                        if (p.Header.MsgId.Equals(NbazhGpsMessageIds.心跳包.ToByteValue()))
+                        {
+                            /***
+                             * 1. 检查ACC状态
+                             * 2. 检查是否有未关闭的UseRecord
+                             * 3. 如果有, 则关闭
+                            */
+
+                            var UseRecord = await _generalRepository.FindAsync<UseRecord>(x =>
+                                 x.TerminalId.Equals(s["TerminalId"].ToString()) &&
+                                 x.EndTime == null);
+
+                            if (UseRecord != null)
+                            {
+                                UseRecord.EndTime = DateTime.Now;
+                                UseRecord.LengthOfTime = UseRecord.StartTime.HourDiff(DateTime.Now);
+                                await _generalRepository.UpdateAsync(UseRecord);
+                            }
+                            // else
+                            // {
+                            //     var terminal =
+                            //         await _generalRepository.FindAsync<Terminal>(x =>
+                            //             x.IMEI.Equals(s["TerminalId"].ToString()));
+
+                            //     var record = new UseRecord()
+                            //     {
+                            //         TerminalId = (Guid)terminal.Id!,
+                            //         StartTime = s.StartTime.DateTime,
+                            //         EndTime = DateTime.Now,
+                            //         LengthOfTime = s.StartTime.DateTime.HourDiff(DateTime.Now)
+                            //     };
+                            //     record.Create();
+                            //     await _generalRepository.InsertAsync(record);
+                            // }
+                        }
 
                         if (p.Header.MsgId.Equals(NbazhGpsMessageIds.登陆包.ToByteValue()))
                         {
@@ -171,6 +227,35 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     .Include(x => x.AlarmRecords.Where(t => !t.IsReturn))
                                     .Where(x => x.IMEI.Equals(s["TerminalId"].ToString()))
                                     .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+                            #region 使用记录
+                            await Task.Run(async () =>
+                            {
+                                var UseRecord = await _generalRepository.FindAsync<UseRecord>(x =>
+                                    x.TerminalId.Equals(s["TerminalId"].ToString()) &&
+                                    x.EndTime == null);
+
+                                if (UseRecord is null && gpsPositionRecord.AccState == AccState.高)
+                                {
+                                    var record = new UseRecord()
+                                    {
+                                        TerminalId = (Guid)terminal.Id!,
+                                        StartTime = s.StartTime.DateTime,
+                                    };
+                                    record.Create();
+                                    await _generalRepository.InsertAsync(record);
+                                }
+
+                                if (UseRecord is not null && gpsPositionRecord.AccState == AccState.低)
+                                {
+                                    UseRecord.EndTime = DateTime.Now;
+                                    UseRecord.LengthOfTime = UseRecord.StartTime.HourDiff(DateTime.Now);
+                                    await _generalRepository.UpdateAsync(UseRecord);
+                                    await _generalRepository.SaveAsync();
+                                }
+                            }, cancellationToken);
+
+                            #endregion 使用记录
 
                             gpsPositionRecord.Create(terminal.Id, s["TerminalId"].ToString());
 
