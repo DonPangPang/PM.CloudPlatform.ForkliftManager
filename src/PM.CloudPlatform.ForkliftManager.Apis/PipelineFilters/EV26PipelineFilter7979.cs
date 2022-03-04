@@ -2,6 +2,7 @@
 using System.Buffers;
 using NbazhGPS.Protocol;
 using NbazhGPS.Protocol.Enums;
+using NbazhGPS.Protocol.Extensions;
 using SuperSocket.ProtoBase;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.PipelineFilters
@@ -25,7 +26,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.PipelineFilters
         protected override NbazhGpsPackage DecodePackage(ref ReadOnlySequence<byte> buffer)
         {
             NextFilter = SwitchFilter;
-            return _nbazhGpsSerializer.Deserialize(buffer.ToArray(), PackageType.Type2);
+            try
+            {
+                return _nbazhGpsSerializer.Deserialize(buffer.ToArray(), PackageType.Type2);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"0x79 0x79: {ex.Message}");
+                Console.WriteLine($"{buffer.ToArray().ToHexString()}");
+                return null;
+            }
         }
     }
 }

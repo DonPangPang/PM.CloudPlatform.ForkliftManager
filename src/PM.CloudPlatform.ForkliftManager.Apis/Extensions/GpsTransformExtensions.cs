@@ -16,7 +16,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
         {
             var res = GpsHelper.WGS84_to_GCJ02(point.X, point.Y);
 
-            return new Point(res[0], res[1]);
+            return new Point(res[0], res[1]) { SRID = 4326 };
         }
 
         public static Coordinate Transform_GCJ02_To_WGS84(this Coordinate point)
@@ -31,6 +31,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
             var res = GpsHelper.WGS84_to_GCJ02(point.X, point.Y);
 
             return new Coordinate(res[0], res[1]);
+        }
+
+        public static Polygon Tranform_GCJ02_To_WGS84(this Polygon polygon)
+        {
+            for (var i = 0; i < polygon.Coordinates.Length; i++)
+            {
+                polygon.Coordinates[i] = polygon.Coordinates[i].Transform_GCJ02_To_WGS84();
+            }
+
+            return polygon;
         }
 
         public static double ShapeDistance(this double distance)

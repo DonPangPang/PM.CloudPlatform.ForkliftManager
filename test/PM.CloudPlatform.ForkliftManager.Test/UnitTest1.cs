@@ -20,11 +20,8 @@ namespace PM.CloudPlatform.ForkliftManager.Test
             _testOutputHelper = testOutputHelper;
         }
 
-        // [Fact]
-        // public async Task Test1()
-        // {
-        //     //var res = await AddressHelper.GetAddress(116.481488M, 39.990464M);
-        // }
+        // [Fact] public async Task Test1() { //var res = await
+        // AddressHelper.GetAddress(116.481488M, 39.990464M); }
 
         [Fact]
         public void GeoJsonTest()
@@ -102,6 +99,40 @@ namespace PM.CloudPlatform.ForkliftManager.Test
         }
 
         [Fact]
+        public void DistanceTest3_2()
+        {
+            var geoJson =
+                "{\"type\":\"Polygon\",\"coordinates\":[[[113.437446,34.315514],[113.661979,34.31835],[113.671592,34.282047],[113.457359,34.27921],[113.437446,34.315514]]]}";
+
+            var border = geoJson.ToGeometry<Geometry>();
+
+            var point1 = new Point(new Coordinate(116.368904, 39.923423)).Transform_GCJ02_To_WGS84();
+            var point2 = new Point(new Coordinate(116.387271, 39.922501)).Transform_GCJ02_To_WGS84();
+
+            var distance = point1.Transform_WGS84_To_GCJ02().Distance(border.ProjectTo(2855));
+
+            _testOutputHelper.WriteLine(distance.ShapeDistance().ToString());
+        }
+
+        [Fact]
+        public void DistanceTest3_3()
+        {
+            var geoJson =
+                "{\"type\":\"Polygon\",\"coordinates\":[[[113.437446,34.315514],[113.661979,34.31835],[113.671592,34.282047],[113.457359,34.27921],[113.437446,34.315514]]]}";
+
+            Polygon border = geoJson.ToGeometry<Polygon>();
+
+            var point1 = new Point(new Coordinate(116.368904, 39.923423)).Transform_GCJ02_To_WGS84();
+            var point2 = new Point(new Coordinate(116.387271, 39.922501)).Transform_WGS84_To_GCJ02();
+
+            _testOutputHelper.WriteLine(point2.SRID.ToString());
+
+            var distance = point1.ProjectTo(2855).Distance(border.Tranform_GCJ02_To_WGS84().ProjectTo(2855));
+
+            _testOutputHelper.WriteLine(distance.ShapeDistance().ToString());
+        }
+
+        [Fact]
         public void DistanceTest4()
         {
             var geoJson =
@@ -164,7 +195,7 @@ namespace PM.CloudPlatform.ForkliftManager.Test
         public void DistanceTest8_1()
         {
             var gps = new Point(113.55408888888888888888888889, 34.831737777777777777777777778);
-             var gps1 = new Point(113.55508888888888888888888889, 34.831737777777777777777777778);
+            var gps1 = new Point(113.55508888888888888888888889, 34.831737777777777777777777778);
 
             var distance = gps.Transform_GCJ02_To_WGS84().ProjectTo(2855).Distance(gps1.Transform_GCJ02_To_WGS84().ProjectTo(2855));
 
@@ -186,7 +217,17 @@ namespace PM.CloudPlatform.ForkliftManager.Test
                 _testOutputHelper.WriteLine($"res2 = {res2}");
                 _testOutputHelper.WriteLine($"res3 = {res3}");
             }
-            
+        }
+
+        [Fact]
+        public void DistanceTest9()
+        {
+            var point = "{\"type\":\"Point\",\"coordinates\":[113.55784810930275,34.82570795145946]}".ToGeometry<Point>();
+            var border = "{\"type\":\"Polygon\",\"coordinates\":[[[113.542468,34.834959],[113.556716,34.834606],[113.551502,34.827209],[113.542296,34.827631],[113.542468,34.834959]]]}".ToGeometry<Polygon>();
+
+            var distance = point.ProjectTo(2855).Distance(border.ProjectTo(2855));
+
+            _testOutputHelper.WriteLine($"Distance is: {distance.ToString()}");
         }
     }
 }

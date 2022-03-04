@@ -38,6 +38,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Helper
             //var res = _httpContextAccessor.HttpContext!.Session.GetString("UserInfo");
             try
             {
+                if (_httpContextAccessor.HttpContext is null || _httpContextAccessor.HttpContext.User is null)
+                {
+                    return null;
+                }
+
                 var id = Guid.Parse(_httpContextAccessor.HttpContext!.User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name))!.Value);
                 var res = _generalRepository.GetQueryable<T>().FirstOrDefault(x => x.Id.Equals(id));
 

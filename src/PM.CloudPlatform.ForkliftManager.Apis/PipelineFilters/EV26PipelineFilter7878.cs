@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NbazhGPS.Protocol;
+using NbazhGPS.Protocol.Extensions;
 using SuperSocket.ProtoBase;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.PipelineFilters
@@ -35,7 +36,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.PipelineFilters
             //buff.CopyTo(data, 2);
             //EndMark.CopyTo(data, data.Length - 1);
 
-            return _nbazhGpsSerializer.Deserialize(buffer.ToArray());
+            try
+            {
+                return _nbazhGpsSerializer.Deserialize(buffer.ToArray());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"0x78 0x78: {e.Message}");
+                Console.WriteLine($"{buffer.ToArray().ToHexString()}");
+                return null;
+            }
         }
     }
 }

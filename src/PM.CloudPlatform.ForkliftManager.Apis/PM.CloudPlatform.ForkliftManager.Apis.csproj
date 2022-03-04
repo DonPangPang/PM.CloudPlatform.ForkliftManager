@@ -3,9 +3,10 @@
 		<TargetFramework>net5.0</TargetFramework>
 		<UserSecretsId>9f314fd9-a04f-4cc7-be93-9c6cab946863</UserSecretsId>
 		<Nullable>enable</Nullable>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile>F:\LE-workspace\PMPlatform\01Code\0101NET\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\PM.CloudPlatform.ForkliftManager.Apis.xml</DocumentationFile>
+		<DocumentationFile>F:\LE-workspace\PMPlatform\01Code\0101NET\PM.CloudPlatform.ForkliftManager\src\PM.CloudPlatform.ForkliftManager.Apis\PM.CloudPlatform.ForkliftManager.Apis.XML</DocumentationFile>
 		<NoWarn>1701;1702;1591;8603;8618;0168;0108</NoWarn>
 	</PropertyGroup>
 	<ItemGroup>

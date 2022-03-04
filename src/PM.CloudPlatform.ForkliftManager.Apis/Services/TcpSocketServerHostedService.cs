@@ -107,14 +107,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                          if (!string.IsNullOrEmpty(s["TerminalId"].ToString()))
                          {
-                            //  var terminal =
-                            //      await _generalRepository.FindAsync<Terminal>(x =>
-                            //          x.IMEI.Equals(s["TerminalId"].ToString()));
+                             var terminal = await _generalRepository.FindAsync<Terminal>(x => x.IMEI.Equals(s["TerminalId"].ToString()));
 
                              #region 关闭使用记录
+
                              // 如果使用记录不为空,则更新记录
                              var UseRecord = await _generalRepository.FindAsync<UseRecord>(x =>
-                                 x.TerminalId.Equals(s["TerminalId"].ToString()) &&
+                                 x.TerminalId.Equals(terminal.Id) &&
                                  x.EndTime == null);
                              if (UseRecord != null)
                              {
@@ -123,15 +122,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                  await _generalRepository.SaveAsync();
                              }
 
-                             //  var record = new UseRecord()
-                             //  {
-                             //      TerminalId = (Guid)terminal.Id!,
-                             //      StartTime = s.StartTime.DateTime,
-                             //      EndTime = DateTime.Now,
-                             //      LengthOfTime = s.StartTime.DateTime.HourDiff(DateTime.Now)
-                             //  };
-                             //  record.Create();
-                             //  await _generalRepository.InsertAsync(record);
+                             // var record = new UseRecord() { TerminalId = (Guid)terminal.Id!,
+                             // StartTime = s.StartTime.DateTime, EndTime = DateTime.Now,
+                             // LengthOfTime = s.StartTime.DateTime.HourDiff(DateTime.Now) };
+                             // record.Create(); await _generalRepository.InsertAsync(record);
+
                              #endregion 关闭使用记录
                          }
                      }
@@ -162,9 +157,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                              * 3. 如果有, 则关闭
                             */
 
-                            var UseRecord = await _generalRepository.FindAsync<UseRecord>(x =>
-                                 x.TerminalId.Equals(s["TerminalId"].ToString()) &&
-                                 x.EndTime == null);
+                            //var UseRecord = await _generalRepository.FindAsync<UseRecord>(x =>
+                            //     x.TerminalId.Equals(s["TerminalId"].ToString()) &&
+                            //     x.EndTime == null);
+
+                            var UseRecord = await _generalRepository.GetQueryable<UseRecord>()
+                                .Include(x => x.Terminal)
+                                .Where(x => x.Terminal != null && x.Terminal.IMEI.Equals(s["TerminalId"].ToString()) && x.EndTime == null)
+                                .FirstOrDefaultAsync();
 
                             if (UseRecord != null)
                             {
@@ -172,22 +172,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                 UseRecord.LengthOfTime = UseRecord.StartTime.HourDiff(DateTime.Now);
                                 await _generalRepository.UpdateAsync(UseRecord);
                             }
-                            // else
-                            // {
-                            //     var terminal =
-                            //         await _generalRepository.FindAsync<Terminal>(x =>
-                            //             x.IMEI.Equals(s["TerminalId"].ToString()));
+                            // else { var terminal = await _generalRepository.FindAsync<Terminal>(x
+                            // => x.IMEI.Equals(s["TerminalId"].ToString()));
 
-                            //     var record = new UseRecord()
-                            //     {
-                            //         TerminalId = (Guid)terminal.Id!,
-                            //         StartTime = s.StartTime.DateTime,
-                            //         EndTime = DateTime.Now,
-                            //         LengthOfTime = s.StartTime.DateTime.HourDiff(DateTime.Now)
-                            //     };
-                            //     record.Create();
-                            //     await _generalRepository.InsertAsync(record);
-                            // }
+                            // var record = new UseRecord() { TerminalId = (Guid)terminal.Id!,
+                            // StartTime = s.StartTime.DateTime, EndTime = DateTime.Now,
+                            // LengthOfTime = s.StartTime.DateTime.HourDiff(DateTime.Now) };
+                            // record.Create(); await _generalRepository.InsertAsync(record); }
                         }
 
                         if (p.Header.MsgId.Equals(NbazhGpsMessageIds.登陆包.ToByteValue()))
@@ -224,16 +215,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     .FilterDeleted()
                                     .FilterDisabled()
                                     .Include(x => x.Car)
+                                    .ThenInclude(t => t.ElectronicFence)
                                     .Include(x => x.AlarmRecords.Where(t => !t.IsReturn))
                                     .Where(x => x.IMEI.Equals(s["TerminalId"].ToString()))
                                     .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
                             #region 使用记录
+
                             await Task.Run(async () =>
                             {
-                                var UseRecord = await _generalRepository.FindAsync<UseRecord>(x =>
-                                    x.TerminalId.Equals(s["TerminalId"].ToString()) &&
-                                    x.EndTime == null);
+                                var UseRecord = await _generalRepository.GetQueryable<UseRecord>()
+                                .Include(x => x.Terminal)
+                                .Where(x => x.Terminal != null && x.Terminal.IMEI.Equals(s["TerminalId"].ToString()) && x.EndTime == null)
+                                .FirstOrDefaultAsync();
 
                                 if (UseRecord is null && gpsPositionRecord.AccState == AccState.高)
                                 {
@@ -261,6 +255,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                             #region GPS转换坐标系
 
+                            var tempPoint = gpsPositionRecord.Point;
+
                             gpsPositionRecord.Point = gpsPositionRecord.Point.Transform_WGS84_To_GCJ02();
                             gpsPositionRecord.Lat = (decimal)gpsPositionRecord.Point.X;
                             gpsPositionRecord.Lon = (decimal)gpsPositionRecord.Point.Y;
@@ -273,77 +269,90 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                             // 记录定位, 超出围栏计算
                             await Task.Run(async () =>
                             {
-                                if (terminal.Car is null)
+                                try
                                 {
-                                    return;
+                                    if (terminal.Car is null || terminal.Car.ElectronicFence is null)
+                                    {
+                                        return;
+                                    }
+                                    // var distance = gpsPositionRecord.Point!.ProjectTo(2855) .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855)).ShapeDistance();
+                                    var border = terminal.Car?.ElectronicFence!.LngLats.ToGeometry<Polygon>();
+                                    var point = new Point((double)gpsPositionRecord.Lon, (double)gpsPositionRecord.Lat)
+                                    .Transform_WGS84_To_GCJ02();
+                                    var distance = point
+                                        .ProjectTo(2855)
+                                        .Distance(border.ProjectTo(2855))
+                                        .ShapeDistance();
+                                    // 超出围栏计算
+                                    var fence = await _generalRepository.GetQueryable<SystemConfig>()
+                                        .FilterDeleted()
+                                        .FilterDisabled()
+                                        .OrderByDescending(x => x.CreateDate)
+                                        .Where(x => x.EnableMark)
+                                        .FirstOrDefaultAsync(cancellationToken: cancellationToken) ?? new SystemConfig();
+
+                                    Console.WriteLine(@$"--------------{Environment.NewLine}距离:{distance};阈值:{fence.BeyondFenceDistance};围栏编号:{terminal.Car.ElectronicFence.Id};{Environment.NewLine}--------------");
+
+                                    if (distance > fence.BeyondFenceDistance)
+                                    {
+                                        if (terminal.AlarmRecords is null || !terminal.AlarmRecords!.Any())
+                                        {
+                                            await Task.Run(async () =>
+                                            {
+                                                var alarm = new AlarmRecord()
+                                                {
+                                                    TerminalId = terminal.Id,
+                                                    CarId = terminal.CarId,
+                                                    IMEI = terminal.IMEI,
+                                                    ElectronFenceId = terminal.Car.ElectronicFenceId
+                                                };
+                                                alarm.Create();
+                                                await _generalRepository.InsertAsync(alarm);
+                                                await _generalRepository.SaveAsync();
+                                            }, cancellationToken);
+                                        }
+
+                                        foreach (var client in _clientSessionManager.Sessions)
+                                        {
+                                            var msg = new ClientPackage()
+                                            {
+                                                PackageType = PackageType.Alarm,
+                                                Data = new
+                                                {
+                                                    // 终端Id
+                                                    TerminalId = s["TerminalId"].ToString(),
+                                                    // 车牌号
+                                                    LicensePlateNumber = terminal.Car!.LicensePlateNumber,
+                                                    // 超出距离
+                                                    Distance = distance,
+                                                    // 提示信息
+                                                    Msg = $"{terminal.Car!.LicensePlateNumber}超出围栏{distance}米"
+                                                }
+                                            }.ToJson();
+                                            await client.Value.SendAsync(msg);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (terminal.AlarmRecords != null && terminal.AlarmRecords!.Any())
+                                        {
+                                            await Task.Run(async () =>
+                                            {
+                                                foreach (var item in terminal.AlarmRecords)
+                                                {
+                                                    item.IsReturn = true;
+                                                    await _generalRepository.UpdateAsync(item);
+                                                }
+
+                                                await _generalRepository.SaveAsync();
+                                            }, cancellationToken);
+                                        }
+                                    }
                                 }
-                                // var distance = gpsPositionRecord.Point!.ProjectTo(2855) .Distance(terminal.Car?.ElectronicFence!.Border!.ProjectTo(2855)).ShapeDistance();
-                                var distance = new Point((double)gpsPositionRecord.Lon, (double)gpsPositionRecord.Lat)
-                                    .Transform_WGS84_To_GCJ02()
-                                    .ProjectTo(2855)
-                                    .Distance(terminal.Car?.ElectronicFence!.Border.ProjectTo(2855))
-                                    .ShapeDistance();
-                                // 超出围栏计算
-                                var fence = await _generalRepository.GetQueryable<SystemConfig>()
-                                    .FilterDeleted()
-                                    .FilterDisabled()
-                                    .OrderByDescending(x => x.CreateDate)
-                                    .Where(x => x.EnableMark)
-                                    .FirstOrDefaultAsync(cancellationToken: cancellationToken) ?? new SystemConfig();
-
-                                if (distance > fence.BeyondFenceDistance)
+                                catch (Exception ex)
                                 {
-                                    if (!terminal.AlarmRecords!.Any())
-                                    {
-                                        await Task.Run(async () =>
-                                        {
-                                            var alarm = new AlarmRecord()
-                                            {
-                                                TerminalId = terminal.Id,
-                                                CarId = terminal.CarId,
-                                                ElectronFenceId = terminal.Car.ElectronicFenceId
-                                            };
-                                            alarm.Create();
-                                            await _generalRepository.InsertAsync(alarm);
-                                            await _generalRepository.SaveAsync();
-                                        }, cancellationToken);
-                                    }
-
-                                    foreach (var client in _clientSessionManager.Sessions)
-                                    {
-                                        var msg = new ClientPackage()
-                                        {
-                                            PackageType = PackageType.Alarm,
-                                            Data = new
-                                            {
-                                                // 终端Id
-                                                TerminalId = s["TerminalId"].ToString(),
-                                                // 车牌号
-                                                LicensePlateNumber = terminal.Car!.LicensePlateNumber,
-                                                // 超出距离
-                                                Distance = distance,
-                                                // 提示信息
-                                                Msg = $"{terminal.Car!.LicensePlateNumber}超出围栏{distance}米"
-                                            }
-                                        }.ToJson();
-                                        await client.Value.SendAsync(msg);
-                                    }
-                                }
-                                else
-                                {
-                                    if (terminal.AlarmRecords!.Any())
-                                    {
-                                        await Task.Run(async () =>
-                                        {
-                                            foreach (var item in terminal.AlarmRecords)
-                                            {
-                                                item.IsReturn = true;
-                                                await _generalRepository.UpdateAsync(item);
-                                            }
-
-                                            await _generalRepository.SaveAsync();
-                                        }, cancellationToken);
-                                    }
+                                    Console.WriteLine($"distance 无法计算, {ex.Message}");
+                                    Console.WriteLine($"{ex}");
                                 }
                             }, cancellationToken);
 
