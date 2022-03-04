@@ -426,6 +426,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
                             return Fail("用户名已存在");
                         }
                     }
+
+                    if(addEntity is Terminal && _generalRepository is not null)
+                    {
+                        var terminal = await _generalRepository.GetQueryable<Terminal>()
+                          .Where(x => x.IMEI!.Equals((addEntity as Terminal)!.IMEI))
+                          .FilterDeleted()
+                          .FilterDisabled()
+                          .FirstOrDefaultAsync();
+                        if (terminal is not null)
+                        {
+                            return Fail("设备已存在");
+                        }
+                    }
                     addEntity.Create();
                     addEntity.Modify();
                     addEntity.Id = model.Id;

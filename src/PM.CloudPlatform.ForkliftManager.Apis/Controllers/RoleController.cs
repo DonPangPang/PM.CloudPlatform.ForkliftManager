@@ -32,7 +32,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     public class RoleController : MyControllerBase<RoleRepository, Role, RoleDto, RoleAddOrUpdateDto>
     {
         private readonly IGeneralRepository _generalRepository;
-        public RoleController(RoleRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(repository, mapper)
+        public RoleController(RoleRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(repository, mapper, generalRepository)
         {
             _generalRepository = generalRepository;
         }

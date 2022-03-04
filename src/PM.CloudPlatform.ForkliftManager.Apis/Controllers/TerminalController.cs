@@ -37,7 +37,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
         private readonly IGeneralRepository _generalRepository;
 
-        public TerminalController(TerminalRepository repository, IMapper mapper, TerminalSessionManager gpsTrackerSessionManager, IGeneralRepository generalRepository) : base(repository, mapper)
+        public TerminalController(TerminalRepository repository, IMapper mapper, TerminalSessionManager gpsTrackerSessionManager, IGeneralRepository generalRepository) : base(repository, mapper, generalRepository)
         {
             _gpsTrackerSessionManager = gpsTrackerSessionManager;
             _generalRepository = generalRepository;
@@ -167,7 +167,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet] 
         public async Task<IActionResult> GetTerminalStatus([FromQuery] DtoParametersBase parameters)
         {
             var terminals = await _generalRepository.GetQueryable<Terminal>()

@@ -41,7 +41,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="mapper">            </param>
         /// <param name="generalRepository"> </param>
         public UserController(UserRepository repository, IMapper mapper, IGeneralRepository generalRepository) : base(
-            repository, mapper)
+            repository, mapper, generalRepository)
         {
             _generalRepository = generalRepository;
             Users = _generalRepository.GetDbSet<User>();
