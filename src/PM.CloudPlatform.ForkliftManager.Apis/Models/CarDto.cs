@@ -79,6 +79,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Models
         /// 电子围栏的Id
         /// </summary>
         public Guid? ElectronicFence { get; set; }
+        /// <summary>
+        /// 电子围栏的Id
+        /// </summary>
+        public Guid? ElectronicFenceId { get; set; }
 
         public ICollection<ElectronicFence>? ElectronicFences { get; set; }
 

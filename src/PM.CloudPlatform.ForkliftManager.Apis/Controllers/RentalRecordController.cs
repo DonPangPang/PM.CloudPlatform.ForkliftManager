@@ -56,11 +56,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Include(x => x.Car)
                 .ThenInclude(t => t!.CarType)
                 .ApplyPaged(parameters)
+                .OrderBy(x=>x.RentalCompany!.Name)
                 .Select(x => new
                 {
                     //Source = x.MapTo<RentalRecord>(),
                     Id = x.Id,
-                    CarId = x.Car!.Id,
+                    CarId = x.Car!.Id,                   
                     RentalCompanyName = x.RentalCompany!.Name,
                     LicensePlateNumber = x.Car!.LicensePlateNumber,
                     Brand = x.Car!.Brand,
@@ -69,6 +70,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     RentalStartTime = x.RentalStartTime,
                     RentalEndTime = x.RentalEndTime,
                     IsNeedReturn = (x.RentalEndTime < DateTime.Now.Date),
+                    x.ElectronicFenceId,
                     x.IsReturn,
                     x.ReturnTime,
                     x.RentalEmployeeName,

@@ -58,6 +58,21 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         }
 
         /// <summary>
+        ///  获取所有租聘公司
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> GetRentalCompanylist( )
+        {
+            var data = await _generalRepository.GetQueryable<RentalCompany>()
+                .FilterDeleted()
+                .Include(x => x.ElectronicFences)
+                .ToListAsync();
+            var returnDto = data.MapTo<RentalCompanyDto>();
+
+            return Success(returnDto);
+        }
+        /// <summary>
         /// 获取某一个租赁单位数据(带围栏)
         /// </summary>
         /// <param name="id"> </param>

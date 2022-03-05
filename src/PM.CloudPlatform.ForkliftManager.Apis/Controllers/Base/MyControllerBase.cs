@@ -104,9 +104,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         {
             var data = await _repository.GetEntityByIdAsync(id);
 
-            //var returnDto = _mapper.Map<TModel>(data);
+            var returnDto = _mapper.Map<TModel>(data);
 
-            return Success(data);
+            return Success(returnDto);
         }
 
         /// <summary>
