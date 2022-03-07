@@ -69,7 +69,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     CarType = x.Car.CarType!.Name,
                     RentalStartTime = x.RentalStartTime,
                     RentalEndTime = x.RentalEndTime,
-                    IsNeedReturn = (x.RentalEndTime < DateTime.Now.Date),
+                    IsNeedReturn = ((x.RentalEndTime < DateTime.Now.Date && x.IsReturn == false)|| (x.RentalEndTime < x.ReturnTime && x.IsReturn == true)),
                     x.ElectronicFenceId,
                     x.IsReturn,
                     x.ReturnTime,
