@@ -64,6 +64,9 @@
         </div>
     </script>
 
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-xs" lay-event="setFence">查看围栏</a>    
+    </script>
     <script type="text/html" id="F_CategoryBar">
         {{#  if(!d.isNeedReturn ){ }}
             <span  class="category category-admin">未逾期</span>
@@ -111,14 +114,15 @@
                     // , limit: 15
                     , cols: [[ //表头
                         { type: "checkbox" }
-                        ,{field: 'licensePlateNumber', title: '车牌号'}
-                        , { field: 'rentalEmployeeName', title: '处理人' }
-                        , { field: 'rentalEmployeeTel', title: '处理人电话' }
+                        , { field: 'licensePlateNumber', title: '车牌号' }
+                        , { field: 'rentalEmployeeName', title: '租赁人' }
+                        , { field: 'rentalEmployeeTel', title: '租赁人电话' }
                         , { field: 'rentalStartTime', title: '开始时间', }
                         , { field: 'rentalEndTime', title: '结束时间', sort: true }
                         , { field: 'returnTime', title: '归还时间', }
-                        , { field: 'isReturn', title: '是否归还',toolbar: '#F_isReturn', align: "center",  }
+                        , { field: 'isReturn', title: '是否归还', toolbar: '#F_isReturn', align: "center", }
                         , { field: 'isNeedReturn', title: '是否逾期', toolbar: '#F_CategoryBar', align: "center", }
+                        , { fixed: 'right', title: '操作', toolbar: '#barDemo', align: "center" }
                     ]]
                     , page: true //开启分页
                     , limit: 30
@@ -155,33 +159,10 @@
                             time: 0 //不自动关闭
                             , btn: ['确定', '取消']
                             , yes: function (index) {
-                                // layer.close(index);
-                                // let result = [];
-                                // data.forEach(item => {
-                                //     let a = {
-                                //         rentalRecordId: item.id,                                      
-                                //         RentalEmployeeName:item.rentalEmployeeName,
-                                //         RentalEmployeeTel:item.rentalEmployeeTel,
-                                //         IsReturn:true,
-                                //         CarId:item.carId
-                                //     };
-                                //     result.push(a)
-                                // });
-                                // if (result) {
-                                //     ajax('Post', 'api/RentalRecord/ReturnCars', result)
-                                //         .then(function (res) {
-                                //             console.log(res)
-                                //             if (res.code = 200) {
-                                //                 layer.msg('归还成功', {
-                                //                     time: 2000
-                                //                 });
-                                //                 table.reload('test');
-                                //             }
-                                //         })
-                                // }
+
                                 sessionStorage.setItem('againData', JSON.stringify(data));
                                 var again = layer.open({
-                                    title: ['再次租赁', color],
+                                    title: ['归还车辆', color],
                                     type: 2,
                                     shade: 0.2,
                                     maxmin: true,
@@ -205,8 +186,32 @@
                             time: 2000
                         });
                     }
-                }
+                }              
             });
+            table.on('tool(test)', function (obj) {
+                console.log(obj)
+                var data = obj.data;
+                if (obj.event === 'setFence') {
+                    sessionStorage.setItem('FenceData', JSON.stringify(data));
+                    var index = layer.open({
+                        title: ['查看围栏', color],
+                            type: 2,
+                            shade: 0.2,
+                            maxmin: true,
+                            shadeClose: true,
+                            area: ['90%', '90%'],
+                            content: './layer/carPlan/setFence.html?data=' + data,
+                            maxmin: false, //最大化最小化
+                            success: function (layero) {
+                                if (style == false) {
+                                    $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                                } else {
+                                }
+                            },
+                    });
+                }
+            })
+
             form.on('submit(data-search-btn)', function (data) {
                 var result = data.field;
                 console.log(result)
@@ -218,19 +223,7 @@
                     where: result
                 }, 'data');
                 return false;
-            });
-            //监听行单击事件（双击事件为：rowDouble，单击事件为：row）
-            // table.on('row', function (obj) {
-            //     var data = obj.data;
-            //     //标注单选框
-            //     obj.tr.find('i[class="layui-anim layui-icon"]').trigger("click");
-            //     //标注选中样式
-            //     obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
-            // });
-            // form.on('submit(formDemo)', function (data) {
-            //     layer.msg(JSON.stringify(data.field));
-            //     return false;
-            // });
+            });          
         });
     </script>
 </body>

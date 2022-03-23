@@ -23,22 +23,22 @@
             background: #1E9FFF;
         }
 
-        body:after {
-            content: '';
-            background-repeat: no-repeat;
-            background-size: cover;
-            -webkit-filter: blur(3px);
-            -moz-filter: blur(3px);
-            -o-filter: blur(3px);
-            -ms-filter: blur(3px);
-            filter: blur(3px);
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
-        }
+            body:after {
+                content: '';
+                background-repeat: no-repeat;
+                background-size: cover;
+                -webkit-filter: blur(3px);
+                -moz-filter: blur(3px);
+                -o-filter: blur(3px);
+                -ms-filter: blur(3px);
+                filter: blur(3px);
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: -1;
+            }
 
         .layui-container {
             width: 100%;
@@ -62,11 +62,11 @@
             padding: 14px 0;
         }
 
-        .logo-title h1 {
-            color: #1E9FFF;
-            font-size: 25px;
-            font-weight: bold;
-        }
+            .logo-title h1 {
+                color: #1E9FFF;
+                font-size: 25px;
+                font-weight: bold;
+            }
 
         .login-form {
             background-color: #fff;
@@ -76,23 +76,23 @@
             box-shadow: 0 0 8px #eeeeee;
         }
 
-        .login-form .layui-form-item {
-            position: relative;
-        }
+            .login-form .layui-form-item {
+                position: relative;
+            }
 
-        .login-form .layui-form-item label {
-            position: absolute;
-            left: 1px;
-            top: 1px;
-            width: 38px;
-            line-height: 36px;
-            text-align: center;
-            color: #d2d2d2;
-        }
+                .login-form .layui-form-item label {
+                    position: absolute;
+                    left: 1px;
+                    top: 1px;
+                    width: 38px;
+                    line-height: 36px;
+                    text-align: center;
+                    color: #d2d2d2;
+                }
 
-        .login-form .layui-form-item input {
-            padding-left: 36px;
-        }
+                .login-form .layui-form-item input {
+                    padding-left: 36px;
+                }
 
         .captcha {
             width: 60%;
@@ -105,12 +105,12 @@
             /* float: right; */
         }
 
-        .captcha-img img {
-            height: 34px;
-            border: 1px solid #e6e6e6;
-            height: 36px;
-            width: 100%;
-        }
+            .captcha-img img {
+                height: 34px;
+                border: 1px solid #e6e6e6;
+                height: 36px;
+                width: 100%;
+            }
 
         body {
             margin: 10px;
@@ -144,8 +144,8 @@
         }
 
         /* input:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
-    } */
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+        } */
     </style>
 </head>
 
@@ -155,22 +155,22 @@
             <div class="layui-form login-form">
                 <form class="layui-form" action="">
                     <div class="layui-form-item logo-title">
-                        <h1>环卫管理云平台登陆</h1>
+                        <h1>叉车管理云平台登陆</h1>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-icon layui-icon-username" for="username"></label>
                         <input type="text" name="username" lay-verify="required|account" placeholder="用户名或者邮箱"
-                            autocomplete="off" class="layui-input">
+                               autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-icon layui-icon-password" for="password"></label>
                         <input type="password" name="password" lay-verify="required|password" placeholder="密码"
-                            autocomplete="off" class="layui-input">
+                               autocomplete="off" class="layui-input">
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-icon layui-icon-vercode" for="captcha"></label>
                         <input type="text" name="captcha" lay-verify="required|account" placeholder="图形验证码"
-                            autocomplete="off" class="layui-input verification captcha input-val">
+                               autocomplete="off" class="layui-input verification captcha input-val">
                         <!-- <canvas id="canvas" width="100" height="38"></canvas> -->
                         <img src="" id="canvas" width="100" height="38">
                     </div>
@@ -179,7 +179,9 @@
                     </div>
                     <div class="layui-form-item">
                         <button class="layui-btn layui-btn layui-btn-normal layui-btn-fluid" lay-submit=""
-                            lay-filter="login">登 录</button>
+                                lay-filter="login">
+                            登 录
+                        </button>
                     </div>
                 </form>
             </div>
@@ -189,9 +191,30 @@
     <script src="./lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
     <script src="./lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
     <script src="./js/jquery.md5.min.js"></script>
-    <script src="./js/common.js"></script>
     <script src="./js/lay-config.js"></script>
-    <script>
+    <script type="module">
+
+        import conf from './js/conf.js'
+
+        var baseUrl = conf.apis
+
+        /**
+         * @description 生成guid方法
+         * @param {l:String} 连接方式，默认："_"
+         * @return {h} 生成的guid
+         */
+        function guid(l) {
+            l = l || "-";
+            var h = "";
+            for (var j = 1; j <= 32; j++) {
+                var k = Math.floor(Math.random() * 16).toString(16);
+                h += k;
+                if ((j == 8) || (j == 12) || (j == 16) || (j == 20)) {
+                    h += l
+                }
+            }
+            return h
+        }
         layui.use(['form', 'jquery'], function () {
             var form = layui.form,
                 $ = layui.jquery,
@@ -208,10 +231,10 @@
 
             $(function () {
                 var guids = guid();
-                $('#canvas').attr('src', "http://192.168.31.39:10808/Authorization/GenerateCaptcha?id=" + guids)
+                $('#canvas').attr('src', baseUrl + "Authorization/GenerateCaptcha?id=" + guids)
                 $('#canvas').click(function () {
                     guids = guid();
-                    $(this)[0].src = "http://192.168.31.39:10808/Authorization/GenerateCaptcha?id=" + guids
+                    $(this)[0].src = baseUrl + "Authorization/GenerateCaptcha?id=" + guids
                 })
                 form.on('submit(login)', function (data) {
 
@@ -248,7 +271,7 @@
                         }
                         $.ajax({
                             type: 'post',
-                            url: 'http://192.168.31.39:10808/Authorization/RequestToken',
+                            url: baseUrl + "Authorization/RequestToken",
                             //url: 'https://localhost:44352/Authorization/RequestToken',
                             data: JSON.stringify(loginData),
                             contentType: "application/json;charset=UTF-8",
@@ -268,11 +291,11 @@
                                         time: 2000
                                     }, function () {
                                         if (data.msg = "验证码错误") {
-                                            
+
                                             guids = guid();
                                             console.log(guids)
-                                            $('#canvas')[0].src = "http://192.168.31.39:10808/Authorization/GenerateCaptcha?id=" + guids
-                                        }                                
+                                            $('#canvas')[0].src = baseUrl + "Authorization/GenerateCaptcha?id=" + guids
+                                        }
                                     });
                                 }
                             },
@@ -283,8 +306,6 @@
                 });
             })
         });
-
     </script>
 </body>
-
 </html>

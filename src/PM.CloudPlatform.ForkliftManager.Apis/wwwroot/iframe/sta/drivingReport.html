@@ -53,11 +53,9 @@
     </script>
     <table id="test" lay-filter="currentTableFilter"></table>
     <script type="text/html" id="F_CategoryBar">
-        {{#  if( d.lengthOfUse< 300) { }}
+        {{#  if( d.lengthOfUse<= d.lengthOfMaintenanceTime) { }}
             <span class="category category-admin">无需维护</span>
-        {{#  } else if(d.lengthOfUse < 400){ }}
-            <span class="category category-tixing">需要维护</span>
-        {{#  } else  if(500<= d.lengthOfUse) {  }}
+        {{#  } else  if(d.lengthOfUse > d.lengthOfMaintenanceTime) {  }}
             <span  class="category category-gen" lay-event="again">请维护</span>
         {{#  } }}
     </script>
@@ -91,8 +89,9 @@
                     , cols: [[ //表头
                         { type: 'radio' }
                         , { field: 'licensePlateNumber', title: '车牌号', merge: true, }
-                        , { field: 'lastOfMaintenanceTime', title: '上次维护时间' }
                         , { field: 'serialNumber', title: '车辆编号', }
+                        , { field: 'carTypename', title: '车辆类型', }
+                        , { field: 'lastOfMaintenanceTime', title: '上次维护时间' }                        
                         , { field: 'brand', title: '品牌' }
                         , { field: 'lengthOfUse', title: '使用时长', }
                         , { field: 'maintainerContent', toolbar: '#F_CategoryBar', title: '维修信息', align: "center", sort: true }

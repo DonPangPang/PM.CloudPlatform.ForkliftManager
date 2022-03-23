@@ -42,6 +42,7 @@
         border-radius: 3px;
     }
 </style>
+
 <body>
     <script type="text/html" id="toolbarDemo">
         <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="pm_add"> 添加 </button>
@@ -167,7 +168,7 @@
                         , { field: 'password', title: '密码' }
                         , { field: 'name', title: '姓名' }
                         , { field: 'tel', title: '手机号', sort: true }
-                        , { field: 'enableMark', title: '账号状态', toolbar:'#enable' }
+                        , { field: 'enableMark', title: '账号状态', toolbar: '#enable' }
                         //, { field: 'number', title: '租赁车辆数' }
                         // , { field: 'buy_time', title: '租赁时间', }
                         // , { field: 'use_time', title: '使用时长（h）', }
@@ -257,6 +258,7 @@
                                 ajax("delete", "api/User/DeleteEntity/" + data.id)
                                     .then(function (res) {
                                         if (res.code = 200) {
+                                            layer.close(index);
                                             table.reload('test');
                                             layer.msg('删除成功', {
                                                 time: 2000
@@ -266,8 +268,9 @@
                                                 time: 2000
                                             });
                                         }
+
                                     });
-                                layer.close(index);
+
                             }
                         });
                     } else {
@@ -300,6 +303,7 @@
                                             ajax('get', 'api/User/Disable?id=' + data.id)
                                                 .then(function (data) {
                                                     if (data.code == 200) {
+                                                        layer.close(index);
                                                         layer.msg('禁用账号成功', {
                                                             time: 2000
                                                         }, function () {
@@ -311,8 +315,8 @@
                                                             time: 2000
                                                         });
                                                     }
-
-                                                });                                          
+                                                    table.reload('test');
+                                                });
                                         }
                                     });
                                 } else {
@@ -336,6 +340,7 @@
                                             ajax('get', 'api/User/Enable?id=' + data.id)
                                                 .then(function (data) {
                                                     if (data.code == 200) {
+                                                        layer.close(index);
                                                         layer.msg('启用账号成功', {
                                                             time: 2000
                                                         }, function () {

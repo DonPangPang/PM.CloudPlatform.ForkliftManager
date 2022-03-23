@@ -65,7 +65,6 @@
                         , { field: 'imei', title: '设备名称' }
                         , {
                             field: 'licensePlateNumber', title: '绑定车辆', templet: function (d) {
-                                console.log(d)
                                if (!d.licensePlateNumber) {
                                 return "未绑定车辆"
                                } else {

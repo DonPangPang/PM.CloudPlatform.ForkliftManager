@@ -124,6 +124,7 @@
             pitch: 0,
             viewMode: '2D',
         });
+        //开始绘制
         function drawPolygon() {
             $("#record").addClass('dn')
             $('#hint').removeClass('dn')
@@ -238,11 +239,11 @@
                 $('#edit').removeClass('dn');
                 $('#save').removeClass('dn');
             }
-            // if (mapCoord.length < 3) {
-            //     layer.msg('无效绘图，请重新绘制', {
-            //         time: 2000,
-            //     })
-            // }
+            if (mapCoord.length < 3) {
+                layer.msg('无效绘图，请重新绘制', {
+                    time: 2000,
+                })
+            }
             // nood = [];
         })
         //关闭绘图
@@ -274,6 +275,7 @@
         var editboolean = false;
         var boolean = false; //判断是否点击div
         let array = []; //临时数组
+
         var edit = function () {
             editboolean = true;
             $("#record").addClass('dn');
@@ -324,7 +326,6 @@
                 obj = []  //清除绘制覆盖物
                 // map.remove(polygon);
                 editMap = new AMap.Polygon({
-
                     path: mapCoordLat[mapCoordLat.length - 1],
                     strokeColor: "#FF33FF",
                     strokeWeight: 6,
@@ -403,7 +404,6 @@
                 mapCoordLat.push({ name: "围栏", lngLats: nood });
                 nood = [];
             }
-
             $("#record").removeClass('dn');
             $("#edit").addClass('dn');
             $("#Delete").addClass('dn');
@@ -469,6 +469,7 @@
         }
         //围栏二次显示
         $('body').on('click', '.number', function () {
+            console.log(mapCoordLat)
             boolean = true;
             add.close(true) //结束绘制事件
             map.remove(obj); //清除绘制覆盖物
@@ -487,7 +488,6 @@
             let m = [];
             if (mapCoordLat[n] != undefined) {
                 m = mapCoordLat[n].lngLats;
-
             }
             look = m;
             lookIndex = mapCoordLat[n].id;
@@ -503,9 +503,18 @@
             map.add(polygon)
             // 缩放地图到合适的视野级别
             // map.setFitView([polygon])
+            coordinates = []
+            m.forEach(element => {
+                coordinates.push([element.lng, element.lat])
+            });
+            mapCoordLat[n].lngLats = []
+            mapCoordLat[n].lngLats = coordinates;
+            console.log(mapCoordLat)
             m = [];
             n = null;
         })
+
+
         layui.use(['element', 'jquery', 'form', 'laydate'], function () {
             var element = layui.element,
                 $ = layui.jquery,
@@ -525,7 +534,6 @@
             }
             if (objType.type == 'edit') {  //如果是编辑 显示添加过的围栏
                 var data = JSON.parse(sessionStorage.getItem('firmData'));
-
                 F_Id = data.id,
                     //编辑文本框赋值
                     form.val('overTimeForm', {
@@ -533,21 +541,16 @@
                         contact: data.contact,
                         tel: data.tel,
                         address: data.address,
-
                     });
 
                 let electronicFence = data.electronicFences
                 electronicFence.forEach(item => {
-
                     let lngLats = JSON.parse(item.lngLats)
                     let coordinates = lngLats.coordinates[0]
                     coordinates.length = coordinates.length - 1
                     console.log(coordinates)
-
                     mapCoordLat.push({ id: item.id, name: item.name, lngLats: coordinates })
                 })
-
-
                 // 围栏参数 坐标
                 // let Lat =[[
                 //     [
@@ -559,11 +562,11 @@
                 //         [113.35448, 34.212517],
                 //         [113.468463, 34.225576],
                 //         [113.407352, 34.101149]
-                //     ]]]
-
+                //     ]]]               
                 $('#record').html('');
                 for (let n = 0; n < mapCoordLat.length; n++) {
                     let a = n + 1;
+
                     if (mapCoordLat[n].lngLats.length == 0) {  //清除无效围栏
                         mapCoordLat.splice(n, 1);
                     } else {
@@ -571,15 +574,14 @@
                         a = null;
                     }
                 }
-            } else if (objType.type == 'add') {
-
+                console.log(mapCoordLat)
             }
             //公司信息保存提交
             form.on('submit(formDemo)', function (fromval) {
+
                 var electronicFences = [];
                 mapCoordLat.forEach(item => {
                     item.lngLats.push(item.lngLats[0])
-                    console.log(item.lngLats)
                     let lngLats = [item.lngLats]
                     let list = {
                         "id": item.id,
@@ -592,10 +594,17 @@
 
                     electronicFences.push(list)
                 });
-                if ($("#add").hasClass("dn")) {
-                    layer.msg('请将当前电子围栏绘制完成后提交', {
-                        time: 2000,
-                    })
+                if ($("#add").hasClass("dn") == true && $("#edit").hasClass("dn") == true) {
+                    if ($("#save").hasClass("dn") == false) {
+                        layer.msg('请保存当前电子围栏', {
+                            time: 2000,
+                        })
+                    } else {
+                        layer.msg('请将当前电子围栏绘制完成后提交', {
+                            time: 2000,
+                        })
+                    }
+
                 } else {
                     var result = fromval.field;
                     let datas = {
@@ -607,6 +616,7 @@
                     }
 
                     if (!!F_Id) {
+
                         ajax('put', 'api/RentalCompany/UpdateEntity/' + F_Id, datas)
                             .then(function (res) {
                                 if (res.code == 200) {
@@ -622,14 +632,11 @@
                                     );
                                 }
                             })
-
                     } else {
                         ajax('post', 'api/RentalCompany/CreateEntity', datas)
                             .then(function (res) {
                                 if (res.code == 200) {
-
                                     layer.msg('添加成功', {
-
                                         time: 2000
                                     },
                                         function () {
@@ -638,10 +645,7 @@
                                             parent.layer.close(iframeIndex);
                                         }
                                     );
-
-
                                 }
-
                             })
                     }
 

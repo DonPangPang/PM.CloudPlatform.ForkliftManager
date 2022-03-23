@@ -21,14 +21,6 @@
                     class="layui-input">
             </div>
         </div>   
-        <!-- <div class="layui-form-item">
-            <label class="layui-form-label">绑定车辆</label>
-            <div class="layui-input-block">
-                <select name="carId" id="carId" lay-verify="carId">
-                    <option value=""></option>
-                </select>
-            </div>
-        </div> -->
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
@@ -49,8 +41,9 @@
             var style = JSON.parse(sessionStorage.getItem('style'));
 
             if (style == false) {
-                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
                 $('link[title="blue"]').removeAttr('disabled');
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+               
             } else {
                 $('link[title="white"]').removeAttr('disabled');
                 $('link[title="blue"]').attr('disabled', 'true');

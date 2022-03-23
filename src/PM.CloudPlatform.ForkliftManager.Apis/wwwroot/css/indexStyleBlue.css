@@ -41,9 +41,11 @@ body,
     height: 600px;
     min-width: 25rem;
 }
-.rightBox2 > div {
-    height: 50%;
-}
+
+    .rightBox2 > div {
+        height: 50%;
+    }
+
 #bottomIframe {
     position: fixed !important;
     width: 40%;
@@ -53,56 +55,62 @@ body,
     bottom: 0;
     padding: unset;
 }
-#bottomIframe:after {
-    width: 40%;
-    font-size: 18px;
-    height: 110px;
-    position: fixed;
-    left: 30%;
-    bottom: 0;
-    z-index: -1;
-    content: "";
-    border-radius: 50% 50% 0 0;
-    /* box-shadow: 0 2px 40px 0 #62c1d8; */
-    background-image: linear-gradient(45deg, #1b557390, #31afc390);
-    /* background-image: linear-gradient(45deg, #1b5573,#000); */
-    /* background: #000 ; */
-    /* background: #1b5573 ;
+
+    #bottomIframe:after {
+        width: 40%;
+        font-size: 18px;
+        height: 110px;
+        position: fixed;
+        left: 30%;
+        bottom: 0;
+        z-index: -1;
+        content: "";
+        border-radius: 50% 50% 0 0;
+        /* box-shadow: 0 2px 40px 0 #62c1d8; */
+        background-image: linear-gradient(45deg, #1b557390, #31afc390);
+        /* background-image: linear-gradient(45deg, #1b5573,#000); */
+        /* background: #000 ; */
+        /* background: #1b5573 ;
     opacity: 0.9; */
-}
-#bottomIframe > div {
-    width: 90px;
-    height: 90px;
-    /* margin: 0 30px; */
-}
+    }
 
-#bottomIframe > div:nth-child(1){
-    background: url(../images/face/车务管理\ –\ 1.png);
-    background-size:90px 90px;
-    background-repeat:no-repeat;
-}
-#bottomIframe > div:nth-child(2)  {
-    background: url(../images/face/调度管理\ \ –\ 1.png);
-    background-size:90px 90px;
-    background-repeat:no-repeat;
-}
-#bottomIframe > div:nth-child(3)  {
-    background: url(../images/face/档案管理\ –\ 1.png);
-    background-size:90px 90px;
-    background-repeat:no-repeat;
-}
-#bottomIframe > div:nth-child(4)  {
-    background: url(../images/face/统计管理\ –\ 1.png);
-    background-size:90px 90px;
-    background-repeat:no-repeat;
-}
-#bottomIframe > div:nth-child(5)  {
-    background: url(../images/face/系统管理\ –\ 1.png);
-    background-size:90px 90px;
-    background-repeat:no-repeat;
-}
+    #bottomIframe > div {
+        width: 90px;
+        height: 90px;
+        /* margin: 0 30px; */
+    }
 
-/* #bottomIframe > div:nth-child(1):hover  {
+        #bottomIframe > div:nth-child(1) {
+            background: url(../images/face/menu_car.png);
+            background-size: 90px 90px;
+            background-repeat: no-repeat;
+        }
+
+        #bottomIframe > div:nth-child(2) {
+            background: url(../images/face/menu_dispatch.png);
+            background-size: 90px 90px;
+            background-repeat: no-repeat;
+        }
+
+        #bottomIframe > div:nth-child(3) {
+            background: url(../images/face/menu_archives.png);
+            background-size: 90px 90px;
+            background-repeat: no-repeat;
+        }
+
+        #bottomIframe > div:nth-child(4) {
+            background: url(../images/face/menu_statistics.png);
+            background-size: 90px 90px;
+            background-repeat: no-repeat;
+        }
+
+        #bottomIframe > div:nth-child(5) {
+            background: url(../images/face/menu_system.png);
+            background-size: 90px 90px;
+            background-repeat: no-repeat;
+        }
+
+    /* #bottomIframe > div:nth-child(1):hover  {
     background: url(../images/face/动态.gif);
     background-size:90px 90px;
     background-repeat:no-repeat;
@@ -128,18 +136,18 @@ body,
     background-repeat:no-repeat;
 } */
 
-#bottomIframe div:hover  {
-    margin-top: -20px;
-    /* margin-left: 40px;
+    #bottomIframe div:hover {
+        margin-top: -20px;
+        /* margin-left: 40px;
     margin-right: 40px; */
-    transition: transform 0.2s ease-out;
-    -o-transition: transform 0.2s ease-out;
-    -webkit-transition: transform 0.2s ease-out;
-    -moz-transition: transform 0.2s ease-out;
-    transform: scale(1.2);
-    -ms-transform: scale(1.2);
-    -webkit-transform: scale(1.2);
-}
+        transition: transform 0.2s ease-out;
+        -o-transition: transform 0.2s ease-out;
+        -webkit-transition: transform 0.2s ease-out;
+        -moz-transition: transform 0.2s ease-out;
+        transform: scale(1.2);
+        -ms-transform: scale(1.2);
+        -webkit-transform: scale(1.2);
+    }
 
 .layui-nav-child {
     top: unset;
@@ -154,10 +162,10 @@ body,
     height: 80px;
 }
 
-.btn > i {
-    display: block;
-    margin: 20px -8px;
-}
+    .btn > i {
+        display: block;
+        margin: 20px -8px;
+    }
 
 .stat-main {
     width: 300px;
@@ -171,6 +179,7 @@ body,
     color: #000;
     /* box-shadow: 0 2px 6px 0 rgb(225, 220, 216, 50%); */
 }
+
 .videodiv {
     position: fixed;
     bottom: 10px;
@@ -180,10 +189,12 @@ body,
     padding: unset;
     overflow: hidden;
 }
+
 .video_cage {
     width: 300px;
     height: 170px;
 }
+
 #input {
     position: fixed;
     top: 5rem;
@@ -192,24 +203,24 @@ body,
     /* width: 350px; */
 }
 
-#input input {
-    width: 300px;
-    height: 40px;
-    border-radius: 1.25rem;
-    background: linear-gradient(to right, #00000050, #31afc355);
-    border: none;
-    color: #fff;
-    font-size: 18px;
-    padding-left: 25px;
-    font-weight: 600;
-    padding-right: 30px;
-    /* background: none; */
-}
+    #input input {
+        width: 300px;
+        height: 40px;
+        border-radius: 1.25rem;
+        background: linear-gradient(to right, #00000050, #31afc355);
+        border: none;
+        color: #fff;
+        font-size: 18px;
+        padding-left: 25px;
+        font-weight: 600;
+        padding-right: 30px;
+        /* background: none; */
+    }
 
-#input input::-webkit-input-placeholder {
-    /* WebKit browsers */
-    color: #fff;
-}
+        #input input::-webkit-input-placeholder {
+            /* WebKit browsers */
+            color: #fff;
+        }
 
 #inputImg {
     position: fixed;
@@ -224,17 +235,17 @@ body,
     height: 2rem;
 }
 
-#map-styles .input-item span {
-    display: inline-block;
-    width: 4rem;
-}
+    #map-styles .input-item span {
+        display: inline-block;
+        width: 4rem;
+    }
 
-#map-styles .input-item .input-text {
-    color: #0288d1;
-    margin-left: 1rem;
-    margin-right: 0rem;
-    width: 6rem;
-}
+    #map-styles .input-item .input-text {
+        color: #0288d1;
+        margin-left: 1rem;
+        margin-right: 0rem;
+        width: 6rem;
+    }
 
 .input-card {
     top: 5rem;
@@ -251,16 +262,18 @@ label {
     display: block;
     color: #fff;
 }
+
 .layui-card-header {
     color: #fff !important;
 }
+
 .custom-input-card {
     width: 18rem;
 }
 
-.custom-input-card .btn:last-child {
-    margin-left: 1rem;
-}
+    .custom-input-card .btn:last-child {
+        margin-left: 1rem;
+    }
 
 .content-window-card {
     position: relative;
@@ -271,9 +284,10 @@ label {
     left: 0;
 }
 
-.content-window-card p {
-    height: 2rem;
-}
+    .content-window-card p {
+        height: 2rem;
+    }
+
 .amap-info-content {
     box-shadow: 0 2px 40px 0 #62c1d8;
     background-image: linear-gradient(45deg, #1b557370, #31afc380);
@@ -281,11 +295,13 @@ label {
     border-radius: 10px;
     color: #fff;
 }
+
 .input-card {
     background-image: linear-gradient(45deg, #1b557380, #31afc380);
     background: unset;
     color: #fff;
 }
+
 .top {
     position: fixed;
     top: 0;
@@ -305,6 +321,7 @@ label {
     z-index: 10003;
     color: #fff;
 }
+
 .icon-cha,
 .icon-zuidahua {
     color: #fff;

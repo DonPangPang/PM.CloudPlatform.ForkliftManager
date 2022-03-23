@@ -133,8 +133,7 @@
         </div>
     </div>
 
-    <script
-        src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor,AMap.MouseTool,AMap.CircleEditor,AMap.Polygon"></script>
+    <script src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor,AMap.MouseTool,AMap.CircleEditor,AMap.Polygon"></script>
     <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
     <script src="../../../../layui.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
@@ -216,9 +215,9 @@
             }
             let n = $(this).attr('number') - 1;
             number = n;
-            let m = [];                 
+            let m = [];
             xy = mapCoordLat[n]
-            m = xy.lngLats;  
+            m = xy.lngLats;
             polygon = new AMap.Polygon({
                 path: m,
                 strokeColor: "#FF33FF",
@@ -302,33 +301,41 @@
                         console.log(res)
                         if (res.code = 200) {
                             let data = res.data
-                            form.val('overTimeForm', {
-                                site: data.address,
-                                rentalEmployeeName: data.contact,
-                                rentalEmployeeTel: data.tel
-                            });
+
                             mapCoordLat = [];
                             let electronicFences = data.electronicFences
-                            electronicFences.forEach(item => {
-                                let lngLats = JSON.parse(item.lngLats)
-                                let coordinates = lngLats.coordinates[0]
-                                coordinates.length = coordinates.length - 1
-                                console.log(coordinates)
+                            if (electronicFences.length == 0) {
+                                layer.msg('该公司没有围栏请先添加围栏', {
+                                    time: 2000
+                                });
+                            } else {
+                                form.val('overTimeForm', {
+                                    site: data.address,
+                                    rentalEmployeeName: data.contact,
+                                    rentalEmployeeTel: data.tel
+                                });
+                                electronicFences.forEach(item => {
+                                    let lngLats = JSON.parse(item.lngLats)
+                                    let coordinates = lngLats.coordinates[0]
+                                    coordinates.length = coordinates.length - 1
+                                    console.log(coordinates)
 
-                                mapCoordLat.push({ id: item.id, name: item.name, lngLats: coordinates })
-                            })
-                            //围栏参数 坐标
+                                    mapCoordLat.push({ id: item.id, name: item.name, lngLats: coordinates })
+                                })
+                                //围栏参数 坐标
 
-                            $('#record').html('');
-                            for (let n = 0; n < mapCoordLat.length; n++) {
-                                let a = n + 1;
-                                if (mapCoordLat[n].lngLats.length == 0) {  //清除无效围栏
-                                    mapCoordLat.splice(n, 1);
-                                } else {
-                                    $('#record').append('<div class = "number" number=' + a + '>围栏' + a + '</div>');
-                                    a = null;
+                                $('#record').html('');
+                                for (let n = 0; n < mapCoordLat.length; n++) {
+                                    let a = n + 1;
+                                    if (mapCoordLat[n].lngLats.length == 0) {  //清除无效围栏
+                                        mapCoordLat.splice(n, 1);
+                                    } else {
+                                        $('#record').append('<div class = "number" number=' + a + '>围栏' + a + '</div>');
+                                        a = null;
+                                    }
                                 }
                             }
+
                         }
                     })
 
@@ -352,20 +359,13 @@
                 })
             });
 
-
-            var type = [{ '叉车': 0 }, { "托盘车": 0 }, { "堆垛车": 0 }];
-
-            for (let i = 0; i < addData.length; i++) {
-                if (addData[i].type == '叉车') {
-                    type[0].叉车++
-                } else if (addData[i].type == '托盘车') {
-                    type[1].托盘车++
-                } else if (addData[i].type == '堆垛车') {
-                    type[2].堆垛车++
-                }
-            }
+            var carType=[];
+           addData.forEach(item=>{
+              
+              carType.push(item.carTypeName)
+           })
             form.val('overTimeForm', {
-                type: "叉车数：" + type[0].叉车 + "托盘车数量：" + type[1].托盘车 + "堆垛车数量：" + type[2].堆垛车,
+                type: carType,
                 number: addData.length,
             });
             laydate.render({
@@ -420,7 +420,7 @@
 
             })
             //租赁公司下拉框绑定
-            ajax('get', 'api/RentalCompany/GetRentalCompanyIncludeElectronicFencePaged')
+            ajax('get', 'api/RentalCompany/GetRentalCompanylist')
                 .then(function (res) {
                     console.log(res)
                     if (res.code = 200) {

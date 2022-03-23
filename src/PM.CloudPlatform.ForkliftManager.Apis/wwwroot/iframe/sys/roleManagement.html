@@ -36,6 +36,7 @@
         border-radius: 3px;
     }
 </style>
+
 <body>
     <script type="text/html" id="toolbarDemo">
         <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="pm_add"> 添加 </button>
@@ -43,7 +44,7 @@
         <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="pm_delete"> 删除 </button>
         <div class="layui-inline">
             <div class="layui-input-inline">
-                <input type="text" name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+                <input type="text" name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询角色">
             </div>
         </div>
         <div class="layui-inline">
@@ -224,6 +225,7 @@
             table.on('tool(test)', function (obj) {
                 console.log(obj)
                 var data = obj.data;
+                console.log(data)
                 if (obj.event === 'Capabilities') {
                     sessionStorage.setItem('data-edit', JSON.stringify(data));
                     var index = layer.open({
@@ -256,15 +258,17 @@
                             ajax("get", "api/Role/Disable?id=" + data.id)
                                 .then(function (res) {
                                     if (res.code = 200) {
-                                        table.reload('test');
+
                                         layer.msg('禁用成功', {
                                             time: 2000
                                         });
                                     } else {
+
                                         layer.msg(res.info, {
                                             time: 2000
                                         });
                                     }
+                                    table.reload('test');
                                 });
                             layer.close(index);
                         }
@@ -282,20 +286,23 @@
                         btn: ['是', '否'],
                         btnAlign: 'r',
                         yes: function (index, layero) {
+
                             ajax("get", "api/Role/Enable?id=" + data.id)
                                 .then(function (res) {
                                     if (res.code = 200) {
-                                        table.reload('test');
+
                                         layer.msg('启用成功', {
                                             time: 2000
                                         });
                                     } else {
+
                                         layer.msg(res.info, {
                                             time: 2000
                                         });
                                     }
+                                    table.reload('test');
                                 });
-                            layer.close(index);
+                                layer.close(index);
                         }
                     });
                 }

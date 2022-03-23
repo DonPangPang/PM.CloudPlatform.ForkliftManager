@@ -77,7 +77,7 @@
                 console.log(data.field)
                 console.log(parentData.id)
                 data.field.id = parentData.id;
-                ajax("put", "api/Car/GetCarTerminals"+parentData.id,result)
+                ajax("put", "api/Terminal/UpdateEntity/"+parentData.id,result)
                     .then(function (res) {
                         layer.msg('修改成功', {
                             time: 2000

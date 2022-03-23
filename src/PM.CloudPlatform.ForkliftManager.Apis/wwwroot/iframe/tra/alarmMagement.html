@@ -11,6 +11,13 @@
     <link rel="stylesheet" id="white" title="white" href="../../css/openStyleWhite.css" disabled='true'>
 </head>
 <body>
+    <script type="text/html" id="enable">
+        {{#  if( d.isReturn) { }}
+      <span class="category category-admin">是</span>
+  {{#  } else  {  }}
+      <span  class="category category-gen" lay-event="again">否</span>
+  {{#  } }}  
+    </script>
     <script type="text/html" id="toolbarDemo">
         <!-- <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 车辆绑定 </button> -->
         <!-- <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="edit"> 编辑 </button>
@@ -56,12 +63,12 @@
                     , toolbar: '#toolbarDemo'
                     , post: 'get'
                     , headers: { Authorization: "Bearer " + Token }
-                    , url: requestUrl + 'api/AlarmRecord/GetEntitiesByPaged' //数据接口
+                    , url: requestUrl + 'api/AlarmRecord/GetPageList' //数据接口
                     , cols: [[ //表头
                         //  { field: 'id', title: 'id' }
                          { field: 'imei', title: '设备名称' }
-                        , { field: 'carId', title: '绑定车辆' }
-                        , { field: 'isReturn', title: '是否回归围栏' }
+                        , { field: 'licensePlateNumber', title: '绑定车辆' }
+                        , { field: 'isReturn', title: '是否回归围栏',toolbar:'#enable' }
                     ]]
                     , page: true //开启分页
                     , limit: 30
@@ -131,7 +138,6 @@
                             // layer.msg(JSON.stringify(data));
                             ajax("get", "api/Car/SetCarTerminalUnBind", result)
                                 .then(function (res) {
-                                    console.log(res)
                                     if (res.code = 200) {
                                         layer.msg('解除绑定成功', {
                                             time: 2000

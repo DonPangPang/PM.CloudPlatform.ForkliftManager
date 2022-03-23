@@ -383,6 +383,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                                 {
                                                     // 终端Id
                                                     TerminalId = s["TerminalId"].ToString(),
+                                                    // 车牌号
+                                                    LicensePlateNumber = terminal.Car!.LicensePlateNumber,
                                                     // 纬度
                                                     Lon = gdPoint.X,
                                                     // 经度
@@ -410,6 +412,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                             {
                                                 // 终端Id
                                                 TerminalId = s["TerminalId"].ToString(),
+                                                // 车牌号
+                                                    LicensePlateNumber = terminal.Car!.LicensePlateNumber,
                                                 // 纬度
                                                 Lon = gdPoint.X,
                                                 // 经度

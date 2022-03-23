@@ -7,22 +7,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>叉车管理云平台</title>
     <link rel="shortcut icon" href="./images/face/favicon.ico">
-    <!-- <link rel="shortcut icon" href="#"/> -->
+    <!-- <link rel="shortcut icon" href="#" /> -->
     <link rel="stylesheet" href="css/layui.css">
     <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
     <link rel="stylesheet" href="//at.alicdn.com/t/font_2336083_pzm1z2b2hr.css">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link rel="stylesheet" id="blue" title="blue" href="./css/indexStyleBlue.css">
     <link rel="stylesheet" disabled='true' id="white" title="white" href="./css/indexStyleWhite.css">
-
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css" />
     <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
     <style>
         #mp3 {
             display: none;
         }
-    </style>
 
+        #track,
+        #SetFence {
+            display: inline-block;
+            height: 38px;
+            line-height: 38px;
+            padding: 0 18px;
+            background-color: #009688;
+            color: #fff;
+            white-space: nowrap;
+            text-align: center;
+            font-size: 14px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .dn {
+            display: none;
+        }
+
+        .layui-tab-bar {
+            display: none
+        }
+    </style>
     <script src="layui.js"></script>
     <script src="dist/echarts.js"></script>
 </head>
@@ -37,8 +60,6 @@
     var chartsColor = chartsColorConfig.dark;
 </script>
 <!-- 颜色配置 -->
-
-
 <!-- 参数配置 -->
 
 <body>
@@ -54,7 +75,6 @@
                 <input type="radio" lay-filter='mapStyle' name="mapStyle" value="blue" title="科技" checked>
             </div>
         </div>
-
     </div>
     <!-- <style>
         #myPageTop1 {
@@ -84,10 +104,10 @@
         </table>
     </div> -->
 
-    <img id="inputImg" src="./images/face/搜索--1 (1).png" alt="">
+    <img id="inputImg" src="./images/face/search.png" alt="">
     <div id="input">
         <input type="text" class="style1 style2" name="title" required lay-verify="required" placeholder="请输入要查找的设备号"
-            autocomplete="off" class="layui-input">
+               autocomplete="off" class="layui-input">
     </div>
     <!-- 右边区域图表 -->
     <style>
@@ -98,17 +118,17 @@
             margin-bottom: 10px;
         }
 
-        .right-panel-box>div:nth-child(1) {
+        .right-panel-box > div:nth-child(1) {
             top: 60px;
             right: 40px;
         }
 
-        .right-panel-box>div:nth-child(2) {
+        .right-panel-box > div:nth-child(2) {
             top: 315px;
             right: 40px;
         }
 
-        .right-panel-box>div:nth-child(3) {
+        .right-panel-box > div:nth-child(3) {
             top: 570px;
             right: 40px;
             height: 500px;
@@ -125,31 +145,31 @@
             padding-right: 5px;
         }
 
-        #message-list::-webkit-scrollbar {
-            width: 3px;
-        }
+            #message-list::-webkit-scrollbar {
+                width: 3px;
+            }
 
-        #message-list::-webkit-scrollbar-thumb {
-            background-color: #62c1d8;
-            border-radius: 10px;
-        }
+            #message-list::-webkit-scrollbar-thumb {
+                background-color: #62c1d8;
+                border-radius: 10px;
+            }
 
-        #message-list::-webkit-scrollbar-track {
-            border-radius: 10px;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
+            #message-list::-webkit-scrollbar-track {
+                border-radius: 10px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
 
-        #message-list>div {
-            height: auto;
-            width: 100%;
-            border-bottom: #62c1d8 1px solid;
-            border-radius: 1rem;
-            margin-top: 10px;
-            padding-bottom: 10px;
-            padding-top: 10px;
-            padding-left: 20px;
-        }
+            #message-list > div {
+                height: auto;
+                width: 100%;
+                border-bottom: #62c1d8 1px solid;
+                border-radius: 1rem;
+                margin-top: 10px;
+                padding-bottom: 10px;
+                padding-top: 10px;
+                padding-left: 20px;
+            }
     </style>
     <div class="right-panel-box">
         <div id="right-box-chart1" class="style right-panel-chart"></div>
@@ -159,14 +179,12 @@
                 消息通知
             </div>
             <div id="message-list">
-
             </div>
         </div>
     </div>
     <!-- chart1 -->
     <script>
         function chart1(ParameterConfig) {
-            console.log(ParameterConfig)
             var rightBoxChart_1 = document.getElementById('right-box-chart1');
             var rightBoxMyChart_1 = echarts.init(rightBoxChart_1);
             var rightBoxOption_1;
@@ -311,21 +329,18 @@
                 <div class="layui-tab-item">
                     <form class="layui-form layui-form-pane" action="">
                         <div class="layui-input-item" id="allCarMgs">
-
                         </div>
                     </form>
                 </div>
                 <div class="layui-tab-item">
                     <form class="layui-form layui-form-pane" action="">
                         <div class="layui-input-item" id="onlineCarMgs">
-
                         </div>
                     </form>
                 </div>
                 <div class="layui-tab-item">
                     <form class="layui-form layui-form-pane" action="">
                         <div class="layui-input-item" id="NotOnlineCarMgs">
-
                         </div>
                     </form>
                 </div>
@@ -333,25 +348,29 @@
         </div>
     </div>
     <div id="bottomIframe" class=''>
-        <div lay-event='archivesManagement' title='档案管理' onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        <div lay-event='archivesManagement' class="dn" title='档案管理'
+             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
-        <div lay-event='dispatchManagement' title='调度管理' onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        <div lay-event='dispatchManagement' class="dn" title='调度管理'
+             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
-        <div lay-event='statisticsManagement' title="车辆维护" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'></div>
-        <div lay-event='trafficManagement' title="历史记录" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        <div lay-event='statisticsManagement' class="dn" title="车辆维护"
+             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
-        <div lay-event='systemManagement' title="系统管理" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        <div lay-event='trafficManagement' class="dn" title="历史记录"
+             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        </div>
+        <div lay-event='systemManagement' class="dn" title="系统管理"
+             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
         <!-- <div lay-event='' title="预留" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div> -->
     </div>
-
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-<script
-    src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor"></script>
+<script src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor"></script>
 <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
 <script src="./js/common.js"></script>
@@ -507,8 +526,6 @@
 
         return date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
     }
-
-
 </script>
 <script>
     var shade;
@@ -521,7 +538,7 @@
         center: [113.55188343417585, 34.83054622480247],
         pitch: 0,
         viewMode: '2D',
-        //设置地图背景图 
+        //设置地图背景图
         mapStyle: "amap://styles/blue"
     });
     //map.setFitView([113.55188343417585, 34.83054622480247])
@@ -532,7 +549,7 @@
     AMap.plugin('AMap.DistrictSearch', function () {
         var district = new AMap.DistrictSearch({
             extensions: 'all',
-            // 设置查询行政区级别为 区 
+            // 设置查询行政区级别为 区
             level: 'province'
         })
         district.search('河南省', function (status, result) {
@@ -563,11 +580,11 @@
                 fillOpacity: 1,
                 //轮廓线样式，实线:solid，虚线:dashed
                 strokeStyle: 'dashed',
-                /*勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在    
-                    ie9+浏览器有效 取值： 
-                    实线：[0,0,0] 
+                /*勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在
+                    ie9+浏览器有效 取值：
+                    实线：[0,0,0]
                     虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
-                    点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实 
+                    点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
                     线和10个像素的空白 （如此反复）组成的虚线*/
                 strokeDasharray: [10, 2, 10]
             });
@@ -674,7 +691,6 @@
 </script>
 
 <!--左侧-->
-
 <!-- Message List -->
 
 <script>
@@ -685,6 +701,20 @@
             form = layui.form,
             layer = layui.layer;
         var index;
+
+        ajax('get', 'api/User/GetLoginUserModules')
+            .then(function (res) {
+                let v = res.data;
+                v.forEach(item => {
+                    let url = item.url
+                    let event = url.split('/')[url.split('/').length - 1];
+                    $('.dn').each(function () {
+                        if ($(this).attr('lay-event') + '.html' == event) {
+                            $(this).removeClass();
+                        }
+                    })
+                });
+            })
         element.on('tab(demo)', function (data) {
             index = data.index;
         });
@@ -725,9 +755,14 @@
             else {
                 $('#NotOnlineCar').click();
             }
-
+            if (!$('#leftBtn').hasClass("btndb")) {
+                $('.stat-main').animate({ width: 'show' }, 360);
+                $('#leftBtn').animate({ left: "340px" }, 360);
+                $('#leftBtn').addClass('btndb');
+                $('.btn i').addClass('icon-left3').removeClass('icon-arrow-right');
+                $('#allCar').click();
+            }
         })
-
         $("#input").keyup(function (event) {
             if (event.keyCode == 13) {
                 //map.setFitView([markerData[$("#input input").val()]])
@@ -738,6 +773,13 @@
                 }
                 else {
                     $('#NotOnlineCar').click();
+                }
+                if (!$('#leftBtn').hasClass("btndb")) {
+                    $('.stat-main').animate({ width: 'show' }, 360);
+                    $('#leftBtn').animate({ left: "340px" }, 360);
+                    $('#leftBtn').addClass('btndb');
+                    $('.btn i').addClass('icon-left3').removeClass('icon-arrow-right');
+                    $('#allCar').click();
                 }
             }
         });
@@ -758,9 +800,6 @@
             }
 
         });
-
-
-
         //绑定radio点击事件
         form.on('radio(mapStyle)', function (data) {
             console.log(data.value); //被点击的radio的value值
@@ -771,35 +810,35 @@
                 $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
                 $('link[title="blue"]').removeAttr('disabled');
                 $('#inputImg').attr('src', './images/face/搜索--1 (1).png');
-                shade.setOptions(shade.Ce.fillColor = "#000"); //修改覆盖物样式
-                rightBoxOption_1.title.textStyle.color = "#FFF";
-                rightBoxOption_1.legend.textStyle.color = "#FFF";
-                rightBoxOption_1.series[0].label.color = "#FFF";
-                rightBoxOption_1 && rightBoxMyChart_1.setOption(rightBoxOption_1);
-                rightBoxOption_2.title.textStyle.color = "#FFF";
-                rightBoxOption_2.legend.textStyle.color = "#FFF";
-                rightBoxOption_2.xAxis.axisLabel.color = "#FFF";
-                rightBoxOption_2.yAxis.axisLabel.color = "#FFF";
-                rightBoxOption_2 && rightBoxMyChart_2.setOption(rightBoxOption_2);
+                // //shade.setOptions(shade.Ce.fillColor = "#000"); //修改覆盖物样式
+                // rightBoxOption_1.title.textStyle.color = "#FFF";
+                // rightBoxOption_1.legend.textStyle.color = "#FFF";
+                // rightBoxOption_1.series[0].label.color = "#FFF";
+                // rightBoxOption_1 && rightBoxMyChart_1.setOption(rightBoxOption_1);
+                // rightBoxOption_2.title.textStyle.color = "#FFF";
+                // rightBoxOption_2.legend.textStyle.color = "#FFF";
+                // rightBoxOption_2.xAxis.axisLabel.color = "#FFF";
+                // rightBoxOption_2.yAxis.axisLabel.color = "#FFF";
+                // rightBoxOption_2 && rightBoxMyChart_2.setOption(rightBoxOption_2);
             } else if (data.value == "normal") {
                 boolean = true;
                 $('link[title="white"]').removeAttr('disabled');
                 $('link[title="blue"]').attr('disabled', 'true');
                 $('#inputImg').attr('src', './images/face/搜索--1.png');
-                shade.setOptions(shade.Ce.fillColor = "#e2ebf3"); //修改覆盖物样式
-                rightBoxOption_1.title.textStyle.color = "#000";
-                rightBoxOption_1.legend.textStyle.color = "#000";
-                rightBoxOption_1.series[0].label.color = "#000";
-                rightBoxOption_1 && rightBoxMyChart_1.setOption(rightBoxOption_1);
-                rightBoxOption_2.title.textStyle.color = "#000";
-                rightBoxOption_2.legend.textStyle.color = "#000";
-                rightBoxOption_2.xAxis.axisLabel.color = "#000";
-                rightBoxOption_2.yAxis.axisLabel.color = "#000";
-                rightBoxOption_2 && rightBoxMyChart_2.setOption(rightBoxOption_2);
+                // shade.setOptions(shade.Ce.fillColor = "#e2ebf3"); //修改覆盖物样式
+                // rightBoxOption_1.title.textStyle.color = "#000";
+                // rightBoxOption_1.legend.textStyle.color = "#000";
+                // rightBoxOption_1.series[0].label.color = "#000";
+                // rightBoxOption_1 && rightBoxMyChart_1.setOption(rightBoxOption_1);
+                // rightBoxOption_2.title.textStyle.color = "#000";
+                // rightBoxOption_2.legend.textStyle.color = "#000";
+                // rightBoxOption_2.xAxis.axisLabel.color = "#000";
+                // rightBoxOption_2.yAxis.axisLabel.color = "#000";
+                // rightBoxOption_2 && rightBoxMyChart_2.setOption(rightBoxOption_2);
             }
         });
         $('#allCar').on('click', function () {
-            var a = $("#input input").val()
+            let a = $("#input input").val()
             ajax("get", "api/Terminal/GetTerminals")
                 .then(function (res) {
                     if (res.code == 200) {
@@ -817,18 +856,20 @@
                 });
         })
         $('#onlineCar').on('click', function () {
-            var a = $("#input input").val()
+            let a = $("#input input").val()
             console.log(a)
             ajax("get", "api/Terminal/GetOnlineTerminals")
                 .then(function (res) {
                     if (res.code == 200) {
                         $('#onlineCarMgs').html("")
                         let data = res.data;
+                        console.log(data)
                         for (let i = 0; i < data.length; i++) {
-                            let imeidata = data[i].imei;
+                            let imeidata = data[i].key;
+                            console.log(imeidata)
                             if (imeidata.indexOf(a) >= 0) {
                                 // $('#onlineCarMgs').append(' <label><input type="radio" name="sex" lay-filter="sex"  title="" lay-skin="primary">' + data[i].imei + '</label>')
-                                $('#onlineCarMgs').append('<input type="radio" lay-filter="sex" name="sex" value="' + data[i].imei + '" title="' + data[i].imei + '">  ')
+                                $('#onlineCarMgs').append('<input type="radio" lay-filter="sex" name="sex" value="' + data[i].key + '" title="' + data[i].key + '">  ')
                                 form.render();
                             }
                         }
@@ -836,7 +877,7 @@
                 });
         })
         $('#NotOnlineCar').on('click', function () {
-            var a = $("#input input").val()
+            let a = $("#input input").val()
             console.log(a)
             ajax("get", "api/Terminal/GetOfflineTerminals")
                 .then(function (res) {
@@ -912,15 +953,9 @@
                 },
             }
         })
-
-
     });
 </script>
 <script>
-    // marker.on('click', function () {
-    //     alert("123")
-    // })
-
     $("body").on("click", "#track", function () {
         let id = vehicleData.TerminalId;
         var index = layer.open({
@@ -933,6 +968,18 @@
             content: 'track.html?id=' + id,
         });
     })
+    $("body").on("click", "#SetFence", function () {
+        sessionStorage.setItem('vehicleData', JSON.stringify(vehicleData));
+        let id = vehicleData.TerminalId;
+        var index = layer.open({
+            title: '围栏查看',
+            type: 2,
+            shade: 0.2,
+            maxmin: true,
+            shadeClose: true,
+            area: ['80%', '90%'],
+            content: 'setFenceManagement.html?id=' + id,
+        });
+    })
 </script>
-
 </html>

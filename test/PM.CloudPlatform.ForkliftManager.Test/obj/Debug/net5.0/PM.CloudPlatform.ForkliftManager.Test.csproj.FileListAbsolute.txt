@@ -197,7 +197,6 @@ E:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManag
 E:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\PM.CloudPlatform.ForkliftManager.Test.runtimeconfig.json
 E:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\PM.CloudPlatform.ForkliftManager.Test.runtimeconfig.dev.json
 E:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\PM.CloudPlatform.ForkliftManager.Test.dll
-E:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\ref\PM.CloudPlatform.ForkliftManager.Test.dll
 E:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\PM.CloudPlatform.ForkliftManager.Test.pdb
 E:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\AutoMapper.dll
 E:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
@@ -403,3 +402,4 @@ e:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManag
 e:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\SixLabors.Fonts.dll
 e:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\SixLabors.ImageSharp.dll
 e:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\bin\Debug\net5.0\SixLabors.ImageSharp.Drawing.dll
+e:\CCSource\PM.CloudPlatform.ForkliftManager\test\PM.CloudPlatform.ForkliftManager.Test\obj\Debug\net5.0\refint\PM.CloudPlatform.ForkliftManager.Test.dll

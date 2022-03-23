@@ -115,6 +115,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     Brand = x.Brand,
                     SerialNumber = x.SerialNumber,
                     BuyTime = x.BuyTime,
+                    CarTypename=x.CarType!.Name,
+                    LengthOfMaintenanceTime=x.CarType!.LengthOfMaintenanceTime,
                     LengthOfUse = x.UseRecords!.Where(
                         t => x.CarMaintenanceRecords!.Any() ?
                             //.OrderByDescending(t => t.CreateDate)
