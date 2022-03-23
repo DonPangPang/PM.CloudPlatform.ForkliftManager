@@ -59,7 +59,6 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                     x.IMEI,
                     x.IsReturn,                
                 })
-                .AsSplitQuery()
                 .ToListAsync();
 
             return Success(data);

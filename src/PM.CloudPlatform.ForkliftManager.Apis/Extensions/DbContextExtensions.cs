@@ -54,16 +54,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
                 switch (setting.Name)
                 {
                     case "Sqlite":
-                        opts.UseSqlite(setting.ConnectionString);
+                        opts.UseSqlite(setting.ConnectionString, x=>x.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
                         break;
 
                     case "Npgsql":
-                        opts.UseNpgsql(setting.ConnectionString, x => x.UseNetTopologySuite());
+                        opts.UseNpgsql(setting.ConnectionString, x => x.UseNetTopologySuite().UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
                         break;
 
                     case "SqlServer":
                     default:
-                        opts.UseSqlServer(setting.ConnectionString, x => x.UseNetTopologySuite());
+                        opts.UseSqlServer(setting.ConnectionString, x => x.UseNetTopologySuite().UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
                         break;
                 }
                 //opts.UseNpgsql("Host=192.168.31.39;Database=forklift;Username=postgres;Password=postgres");

@@ -55,8 +55,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Include(x => x.RentalCompany)
                 .Include(x => x.Car)
                 .ThenInclude(t => t!.CarType)
-                .ApplyPaged(parameters)
                 .OrderBy(x=>x.RentalCompany!.Name)
+                .ApplyPaged(parameters)
                 .Select(x => new
                 {
                     //Source = x.MapTo<RentalRecord>(),

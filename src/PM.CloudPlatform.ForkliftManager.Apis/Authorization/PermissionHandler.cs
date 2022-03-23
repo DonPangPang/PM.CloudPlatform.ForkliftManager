@@ -89,14 +89,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
                 return;
             }
 
-            var questUrl = _httpContextAccessor.HttpContext!.Request.Path.ToString();
+            // var questUrl = _httpContextAccessor.HttpContext!.Request.Path.ToString();
 
-            if (!user.Roles!.Any(x => x.Modules!.Any(t => questUrl.Contains(t.Name))))
-            {
-                context.Fail();
-                await Task.CompletedTask;
-                return;
-            }
+            // if (!user.Roles!.Any(x => x.Modules!.Any(t => questUrl.Contains(t.Name))))
+            // {
+            //     context.Fail();
+            //     await Task.CompletedTask;
+            //     return;
+            // }
 
             context.Succeed(requirement);
             await Task.CompletedTask;
