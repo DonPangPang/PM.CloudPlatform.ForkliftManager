@@ -217,7 +217,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddMemoryCacheCaptcha(Configuration);
+            //验证码
+            //services.AddMemoryCacheCaptcha(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

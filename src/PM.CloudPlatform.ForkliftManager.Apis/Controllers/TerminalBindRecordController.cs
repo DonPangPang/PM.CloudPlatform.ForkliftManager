@@ -30,6 +30,20 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             _generalRepository = generalRepository;
         }
 
+        public class BindRecordDtoParameters: DtoParametersBase
+        {
+            /// <summary>
+            /// imei
+            /// </summary>
+            /// <value></value>
+            public string? IMEI{get; set;}
+            /// <summary>
+            /// 车牌号
+            /// </summary>
+            /// <value></value>
+            public string? LicensePlateNumber{get; set;}
+        }
+
         /// <summary>
         /// 获取车辆绑定记录
         /// </summary>

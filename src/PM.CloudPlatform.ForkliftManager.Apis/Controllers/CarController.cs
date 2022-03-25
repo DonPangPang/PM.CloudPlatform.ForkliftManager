@@ -127,23 +127,94 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             }
         }
 
+        public class CarArchiveDtoParamters:DtoParametersBase
+        {
+            /// <summary>
+            /// 车牌号
+            /// </summary>
+            /// <value></value>
+            public string? LicensePlateNumber{get; set;}
+            /// <summary>
+            /// 编号
+            /// </summary>
+            /// <value></value>
+            public string? SerialNumber{get; set;}
+            /// <summary>
+            /// 车辆类型
+            /// </summary>
+            /// <value></value>
+            public CarType? CarType{get; set;}
+            /// <summary>
+            /// 是否归还
+            /// </summary>
+            /// <value></value>
+            public bool? IsReturn{get; set;}
+        }
+
         /// <summary>
         /// 获取车辆状态
         /// </summary>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> GetCarArchives([FromQuery] DtoParametersBase parameters)
+        public async Task<IActionResult> GetCarArchives([FromQuery] CarArchiveDtoParamters parameters)
         {
             //var res = await Users.SelectMany(u => u.Roles!.Select(r => new { u, r })).ToListAsync();
 
             //var res = await Cars.SelectMany(x =>
             //    x.RentalRecords!.Select(r => new { x, r }).Where(t => t.r.IsReturn || t.x.RentalRecords!.Count <= 0)).ToListAsync();
 
-            var data = await Cars.FilterDeleted()
+            #region 丢弃
+            // var data = await Cars.FilterDeleted()
+            //     .Include(x => x.CarType)
+            //     .Include(x => x.UseRecords)
+            //     .Include(x => x.RentalRecords)
+            //     .ApplyPaged(parameters)
+            //     .Select(x => new
+            //     {
+            //         //Source = x.MapTo<CarDto>(),
+            //         CarId = x.Id,
+            //         CarTypeId = x.CarType!.Id,
+            //         CarTypeName = x.CarType!.Name,
+            //         LengthOfMaintenanceTime = x.CarType.LengthOfMaintenanceTime,
+            //         CarModel = x.CarModel,
+            //         LicensePlateNumber = x.LicensePlateNumber,
+            //         Brand = x.Brand,
+            //         SerialNumber = x.SerialNumber,
+            //         BuyTime = x.BuyTime,
+            //         IsReturn = (x.RentalRecords == null || !x.RentalRecords!.Where(t => !t.IsReturn).Any()),
+            //         LengthOfUse = x.UseRecords!.Sum(t => t.LengthOfTime) + x.LengthOfUse,
+            //     })
+            //     .AsSplitQuery()
+            //     .ToListAsync();
+            #endregion 丢弃
+
+            var query = Cars.FilterDeleted()
                 .Include(x => x.CarType)
                 .Include(x => x.UseRecords)
                 .Include(x => x.RentalRecords)
-                .ApplyPaged(parameters)
+                .AsQueryable();
+
+            if(!string.IsNullOrEmpty(parameters.LicensePlateNumber))
+            {
+                query = query.Where(x => x.LicensePlateNumber!.Contains(parameters.LicensePlateNumber));
+            }
+
+            if(!string.IsNullOrEmpty(parameters.SerialNumber))
+            {
+                query = query.Where(x => x.SerialNumber!.Contains(parameters.SerialNumber));
+            }
+
+            if(parameters.CarType != null)
+            {
+                query = query.Where(x => x.CarType!.Id == parameters.CarType!.Id);
+            }
+
+            if(parameters.IsReturn != null)
+            {
+                query = query.Where(x => (x.RentalRecords == null || !x.RentalRecords!.Where(t => !t.IsReturn).Any()) == parameters.IsReturn);
+            }
+
+            var data = query.ApplyPaged(parameters)
                 .Select(x => new
                 {
                     //Source = x.MapTo<CarDto>(),

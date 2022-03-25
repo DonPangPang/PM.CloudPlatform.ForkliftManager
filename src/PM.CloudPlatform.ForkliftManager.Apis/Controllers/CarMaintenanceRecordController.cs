@@ -1,11 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.DtoParameters.Base;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
@@ -13,7 +13,6 @@ using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using PM.CloudPlatform.ForkliftManager.Apis.Models;
 using PM.CloudPlatform.ForkliftManager.Apis.Repositories;
-using PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 {
@@ -33,24 +32,53 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             _generalRepository = generalRepository;
         }
 
+        public class MaintenanceRecordDtoParameters : DtoParametersBase
+        {
+            /// <summary>
+            /// 车牌号
+            /// </summary>
+            /// <value></value>
+            public string? LicensePlateNumber { get; set; }
+            /// <summary>
+            /// 车辆编号
+            /// </summary>
+            /// <value></value>
+            public string? SerialNumber{get; set;}
+            /// <summary>
+            /// 车辆类型
+            /// </summary>
+            /// <value></value>
+            public CarType? CarType{get; set;}
+            /// <summary>
+            /// 维护时间
+            /// </summary>
+            /// <value></value>
+            public DateTime? MaintenanceTime{get; set;}
+        }
+
         /// <summary>
         /// 获取车辆维护的历史记录
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetCarMaintenanceRecords([FromQuery]DtoParametersBase parameters)
+        public async Task<IActionResult> GetCarMaintenanceRecords([FromQuery] MaintenanceRecordDtoParameters parameters)
         {
             var data = await _generalRepository.GetQueryable<CarMaintenanceRecord>()
                 .FilterDeleted()
                 .Include(x => x.Car)
                 .ThenInclude(t => t!.CarType)
+                .Where(x=>x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber ?? ""))
+                .Where(x=>x.Car!.SerialNumber!.Contains(parameters.SerialNumber ?? ""))
+                .Where(x=> parameters.CarType == null ? true:x.Car!.CarType == parameters.CarType)
+                .Where(x=>x.MaintenanceTime == null ? true:x.MaintenanceTime == parameters.MaintenanceTime)
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
                     x.Id,
                     x.CarId,
                     x.Car!.LicensePlateNumber,
+                    x.Car!.SerialNumber,
                     x.Car!.CarType!.Name,
                     x.Maintainer,
                     x.MaintainerTel,
@@ -64,6 +92,27 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             return Success(data);
         }
 
+        public class CarUseRecordsMaintenanceDtoParameters : DtoParametersBase
+        {
+            /// <summary>
+            /// 车牌号
+            /// </summary>
+            /// <value></value>
+            public string? LicensePlateNumber { get; set; }
+
+            /// <summary>
+            /// 车辆编号
+            /// </summary>
+            /// <value></value>
+            public string? SerialNumber { get; set; }
+
+            /// <summary>
+            /// 车辆类型
+            /// </summary>
+            /// <value></value>
+            public CarType? CarType { get; set; }
+        }
+
         /// <summary>
         /// 获取车辆自上次维护后的使用时长
         /// </summary>
@@ -71,7 +120,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <returns> </returns>
         // TODO: 车辆使用记录
         [HttpGet]
-        public async Task<IActionResult> GetCarUseRecordsMaintenance([FromQuery] DtoParametersBase parameters)
+        public async Task<IActionResult> GetCarUseRecordsMaintenance([FromQuery] CarUseRecordsMaintenanceDtoParameters parameters)
         {
             #region 移除
             //var maintenanceRecords = await _generalRepository.GetQueryable<CarMaintenanceRecord>()
@@ -101,33 +150,83 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //    .ToListAsync();
             #endregion 移除
 
-            var data = await _generalRepository.GetQueryable<Car>()
+            #region 替换
+            // var data = await _generalRepository.GetQueryable<Car>()
+            //     .FilterDeleted()
+            //     .Include(x => x.CarType)
+            //     .Include(x => x.UseRecords)
+            //     .Include(x => x.CarMaintenanceRecords)
+            //     .ApplyPaged(parameters)
+            //     .Select(x => new
+            //     {
+            //         //Source = x.MapTo<CarDto>(),
+            //         CarId = x.Id,
+            //         LicensePlateNumber = x.LicensePlateNumber,
+            //         Brand = x.Brand,
+            //         SerialNumber = x.SerialNumber,
+            //         BuyTime = x.BuyTime,
+            //         CarTypename=x.CarType!.Name,
+            //         LengthOfMaintenanceTime=x.CarType!.LengthOfMaintenanceTime,
+            //         LengthOfUse = x.UseRecords!.Where(
+            //             t => x.CarMaintenanceRecords!.Any() ?
+            //                 //.OrderByDescending(t => t.CreateDate)
+            //                 //.FirstOrDefault()!.CreateDate
+            //                 t.CreateDate > x.CarMaintenanceRecords!.Max(t => t.CreateDate)
+            //                      : true)
+            //             .Sum(t => t.LengthOfTime),
+            //         MaintenanceTimes = x.CarMaintenanceRecords!.Count,
+            //         LastOfMaintenanceTime = x.CarMaintenanceRecords
+            //             .Max(t => t.CreateDate)
+            //     })
+            //     .AsSplitQuery()
+            //     .ToListAsync();
+            #endregion 替换
+
+            var query = _generalRepository.GetQueryable<Car>()
                 .FilterDeleted()
                 .Include(x => x.CarType)
                 .Include(x => x.UseRecords)
                 .Include(x => x.CarMaintenanceRecords)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(parameters.LicensePlateNumber))
+            {
+                query = query.Where(x => x.LicensePlateNumber!.Contains(parameters.LicensePlateNumber));
+            }
+
+            if (!string.IsNullOrEmpty(parameters.SerialNumber))
+            {
+                query = query.Where(x => x.SerialNumber!.Contains(parameters.SerialNumber));
+            }
+
+            if (parameters.CarType != null)
+            {
+                query = query.Where(x => x.CarType!.Equals(parameters.CarType));
+            }
+
+            var data = await query
                 .ApplyPaged(parameters)
-                .Select(x => new
-                {
-                    //Source = x.MapTo<CarDto>(),
-                    CarId = x.Id,
-                    LicensePlateNumber = x.LicensePlateNumber,
-                    Brand = x.Brand,
-                    SerialNumber = x.SerialNumber,
-                    BuyTime = x.BuyTime,
-                    CarTypename=x.CarType!.Name,
-                    LengthOfMaintenanceTime=x.CarType!.LengthOfMaintenanceTime,
-                    LengthOfUse = x.UseRecords!.Where(
+                                .Select(x => new
+                                {
+                                    //Source = x.MapTo<CarDto>(),
+                                    CarId = x.Id,
+                                    LicensePlateNumber = x.LicensePlateNumber,
+                                    Brand = x.Brand,
+                                    SerialNumber = x.SerialNumber,
+                                    BuyTime = x.BuyTime,
+                                    CarTypename = x.CarType!.Name,
+                                    LengthOfMaintenanceTime = x.CarType!.LengthOfMaintenanceTime,
+                                    LengthOfUse = x.UseRecords!.Where(
                         t => x.CarMaintenanceRecords!.Any() ?
                             //.OrderByDescending(t => t.CreateDate)
                             //.FirstOrDefault()!.CreateDate
                             t.CreateDate > x.CarMaintenanceRecords!.Max(t => t.CreateDate)
                                  : true)
                         .Sum(t => t.LengthOfTime),
-                    MaintenanceTimes = x.CarMaintenanceRecords!.Count,
-                    LastOfMaintenanceTime = x.CarMaintenanceRecords
+                                    MaintenanceTimes = x.CarMaintenanceRecords!.Count,
+                                    LastOfMaintenanceTime = x.CarMaintenanceRecords
                         .Max(t => t.CreateDate)
-                })
+                                })
                 .AsSplitQuery()
                 .ToListAsync();
 

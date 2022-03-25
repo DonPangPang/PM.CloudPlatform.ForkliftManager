@@ -42,19 +42,35 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             _generalRepository = generalRepository;
         }
 
+        public class RentalRecordDtoParameters : DtoParametersBase
+        {
+            /// <summary>
+            /// 租借处理人
+            /// </summary>
+            /// <value></value>
+            public string? RentalEmployeeName { get; set; }
+            /// <summary>
+            /// 车牌号
+            /// </summary>
+            /// <value></value>
+            public string? LicensePlateNumber { get; set; }
+        }
+
         /// <summary>
         /// 获取租赁车辆档案
         /// </summary>
         /// <param name="parameters"> </param>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> GetRentalCars([FromQuery] DtoParametersBase parameters)
+        public async Task<IActionResult> GetRentalCars([FromQuery] RentalRecordDtoParameters parameters)
         {
             var data = await _generalRepository.GetQueryable<RentalRecord>()
                 .FilterDeleted()
                 .Include(x => x.RentalCompany)
                 .Include(x => x.Car)
                 .ThenInclude(t => t!.CarType)
+                .Where(x=>x.RentalEmployeeName!.Contains(parameters.RentalEmployeeName ?? ""))
+                .Where(x=>x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber ?? ""))
                 .OrderBy(x=>x.RentalCompany!.Name)
                 .ApplyPaged(parameters)
                 .Select(x => new

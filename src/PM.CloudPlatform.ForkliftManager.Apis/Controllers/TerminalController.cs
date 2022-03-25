@@ -162,27 +162,63 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             return Success();
         }
 
+        public class TerminalStatusDtoParameters: DtoParametersBase
+        {
+            public string? IMEI { get; set; }
+            public string? LicensePlateNumber { get; set; }
+        }
+
         /// <summary>
         /// 获取终端绑定车辆的状态
         /// </summary>
         /// <param name="parameters"></param>
         /// <returns></returns>
         [HttpGet] 
-        public async Task<IActionResult> GetTerminalStatus([FromQuery] DtoParametersBase parameters)
+        public async Task<IActionResult> GetTerminalStatus([FromQuery] TerminalStatusDtoParameters parameters)
         {
-            var terminals = await _generalRepository.GetQueryable<Terminal>()
+            var query = _generalRepository.GetQueryable<Terminal>()
                 .FilterDeleted()
                 .FilterDisabled()
-                .ApplyPaged(parameters)
+                .Include(x=>x.Car)
+                .AsQueryable();
+
+            if(!string.IsNullOrEmpty(parameters.IMEI))
+            {
+                query = query.Where(x => x.IMEI.Contains(parameters.IMEI));
+            }
+
+            if(!string.IsNullOrEmpty(parameters.LicensePlateNumber))
+            {
+                query = query.Where(x => x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber));
+            }
+
+            var terminals = await query 
+                .ApplyPaged(parameters)         
                 .Select(x => new
                 {
                     x.Id,
                     x.IMEI,
+                    LicensePlateNumber = x.Car == null ? "" :  x.Car.LicensePlateNumber,
                     x.EnableMark,
                     x.DeleteMark,
                     Binded = (x.CarId == null)
-                })
-                .ToListAsync();
+                }).ToListAsync();
+
+            // var terminals = await _generalRepository.GetQueryable<Terminal>()
+            //     .FilterDeleted()
+            //     .FilterDisabled()
+            //     .Include(x=>x.Car)
+            //     .ApplyPaged(parameters)
+            //     .Select(x => new
+            //     {
+            //         x.Id,
+            //         x.IMEI,
+            //         LicensePlateNumber = x.Car == null ? "" :  x.Car.LicensePlateNumber,
+            //         x.EnableMark,
+            //         x.DeleteMark,
+            //         Binded = (x.CarId == null)
+            //     })
+            //     .ToListAsync();
 
             return Success(terminals);
         }
