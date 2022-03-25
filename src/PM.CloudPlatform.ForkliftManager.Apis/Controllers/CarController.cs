@@ -214,7 +214,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 query = query.Where(x => (x.RentalRecords == null || !x.RentalRecords!.Where(t => !t.IsReturn).Any()) == parameters.IsReturn);
             }
 
-            var data = query.ApplyPaged(parameters)
+            var data = await query.ApplyPaged(parameters)
                 .Select(x => new
                 {
                     //Source = x.MapTo<CarDto>(),
