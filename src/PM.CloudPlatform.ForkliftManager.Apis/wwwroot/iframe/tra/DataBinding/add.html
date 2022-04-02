@@ -11,7 +11,6 @@
     <link rel="stylesheet" id="blue" title="blue" href="../../../css/openStyleBlue.css" disabled='true'>
     <link rel="stylesheet" id="white" title="white" href="../../../css/openStyleWhite.css" disabled='true'>
 </head>
-
 <body>
     <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
         <div class="layui-form-item">
@@ -53,14 +52,20 @@
                 form = layui.form;
             let Barer = JSON.parse(sessionStorage.getItem('userInfo'));
 
-            // var boolean = getCaption(aaa);
             function getCaption(obj) {  //提取boolean
                 var index = obj.lastIndexOf("=");
                 obj = obj.substring(index + 1, obj.length);
                 return obj;
             }
            
-
+            var style = JSON.parse(sessionStorage.getItem('style'));
+            if (style == false) {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+            }
             //车辆下拉框
             ajax('get', 'api/Car/GetNoBindCars')
                 .then(function (res) {

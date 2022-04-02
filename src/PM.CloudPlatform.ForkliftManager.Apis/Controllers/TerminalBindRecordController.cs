@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -52,12 +53,24 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="licensePlateNumber"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetBindRecord([FromQuery]DtoParametersBase parameters, string? imei, string? licensePlateNumber)
+        public async Task<IActionResult> GetBindRecord([FromQuery]DtoParametersBase parameters, string? imei, string? licensePlateNumber, Guid? CarId, Guid? TerminalId)
         {
-            var records = await _generalRepository.GetQueryable<TerminalBindRecord>()
+            var query = _generalRepository.GetQueryable<TerminalBindRecord>()
+               .FilterDeleted()
+               .FilterDisabled()
+               .Include(x => x.Car)
+                .Include(x => x.Terminal)
+               .AsQueryable();
+            if (!string.IsNullOrEmpty(TerminalId.ToString()))
+            {
+                query = query.Where(x => x.TerminalId == TerminalId);
+            }
+            if (!string.IsNullOrEmpty(CarId.ToString()))
+            {
+                query = query.Where(x => x.Id == CarId);
+            }
+            var records = await query
                 .ApplyPaged(parameters)
-                .Include(x=>x.Car)
-                .Include(x=>x.Terminal)
                 .Where(x=>x.Terminal!.IMEI.Contains(imei ?? ""))
                 .Where(x=>x.Car!.LicensePlateNumber!.Contains(licensePlateNumber ?? ""))
                 .Select(x=>new 

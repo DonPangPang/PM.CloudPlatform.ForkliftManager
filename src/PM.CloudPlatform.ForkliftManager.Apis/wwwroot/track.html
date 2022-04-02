@@ -182,7 +182,15 @@
                             var map = new AMap.Map('container', {
                                 zoom: 13,
                             });
+                            if (!!style) {
+                                let styleNames = "amap://styles/normal";
+                                map.setMapStyle(styleNames);
+                              
+                            } else {
+                                let styleNames = "amap://styles/blue";
+                                map.setMapStyle(styleNames);
 
+                            }
                             var icon = new AMap.Icon({
                                 //size: new AMap.Size(40, 40),    // 图标尺寸
                                 image: './images/fk_car.png',  // Icon的图像 images/011-叉车.png

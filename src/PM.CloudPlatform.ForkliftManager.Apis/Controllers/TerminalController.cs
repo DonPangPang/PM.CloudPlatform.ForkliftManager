@@ -166,6 +166,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         {
             public string? IMEI { get; set; }
             public string? LicensePlateNumber { get; set; }
+
+            public Guid? CarId { get; set; }
+            public Guid? TerminalId { get; set; }
         }
 
         /// <summary>
@@ -191,7 +194,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 query = query.Where(x => x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber));
             }
-
+            if (!string.IsNullOrEmpty(parameters.CarId.ToString()))
+            {
+                query = query.Where(x => x.CarId == parameters.CarId);
+            }
+            if (!string.IsNullOrEmpty(parameters.TerminalId.ToString()))
+            {
+                query = query.Where(x => x.Id == parameters.TerminalId);
+            }
             var terminals = await query 
                 .ApplyPaged(parameters)         
                 .Select(x => new
@@ -229,9 +239,22 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="parameters"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetTerminalsBindStatus([FromQuery]DtoParametersBase parameters)
+        public async Task<IActionResult> GetTerminalsBindStatus([FromQuery] TerminalStatusDtoParameters parameters)
         {
-            var data = await _generalRepository.GetQueryable<Terminal>()
+            var query = _generalRepository.GetQueryable<Terminal>()
+              .FilterDeleted()
+              .FilterDisabled()
+              .Include(x => x.Car)
+              .AsQueryable();
+            if (!string.IsNullOrEmpty(parameters.CarId.ToString()))
+            {
+                query = query.Where(x => x.CarId == parameters.CarId);
+            }
+            if (!string.IsNullOrEmpty(parameters.TerminalId.ToString()))
+            {
+                query = query.Where(x => x.Id == parameters.TerminalId);
+            }
+            var data = await query
                 .FilterDeleted()
                 .FilterDisabled()
                 .Include(x=>x.Car)

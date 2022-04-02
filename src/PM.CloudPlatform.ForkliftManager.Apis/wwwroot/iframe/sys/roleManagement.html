@@ -198,7 +198,7 @@
                             btn: ['是', '否'],
                             btnAlign: 'r',
                             yes: function (index, layero) {
-                                ajax("delete", "api/Role/DeleteEntity?id=" + data.id)
+                                ajax("delete", "api/Role/DeleteEntityVirtual/" + data.id)
                                     .then(function (res) {
                                         if (res.code = 200) {
                                             table.reload('test');

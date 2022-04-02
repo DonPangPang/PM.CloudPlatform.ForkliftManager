@@ -15,11 +15,12 @@ var loginMark = localStorage.getItem('loginMark');   //loginMark
 var userInfo = sessionStorage.getItem('userInfo');
 
 var Token = JSON.parse(sessionStorage.getItem('Token'));
-
+var test = window.top.location.href.split('index.html')[0];
 // //登录判断
 if (!Token) {
-    window.location = '/login.html';
+   window.location.href = test+'/login.html';
 }
+
 
 // 以下为封装方法
 /**
@@ -87,13 +88,13 @@ var ajax = function (methods, url, param, dataType) {
                         layer.msg('授权过期!', {
                             time: 2000
                         }, function () {
-                            window.top.location.href = './login.html';
+                           window.location.href = test+'/login.html';
                         });
                     } else if (error.status == 403) {
                         layer.msg('授权过期!', {
                             time: 2000
                         }, function () {
-                            window.top.location.href = './login.html';
+                           window.location.href = test+'/login.html';
                         });
                     } else {
                         layer.msg('请求错误：错误状态' + error.status + '，错误信息：' + error.msg)
@@ -119,6 +120,8 @@ var ajax = function (methods, url, param, dataType) {
                         } else {
                             layer.msg(data.msg, {
                                 time: 2000
+                            }, function () {
+                                window.location.href = '/login.html';
                             })
                         }
                     }
@@ -129,13 +132,13 @@ var ajax = function (methods, url, param, dataType) {
                         layer.msg('授权过期!', {
                             time: 2000
                         }, function () {
-                            window.top.location.href = './login.html';
+                           window.location.href = test+'/login.html';
                         });
                     } else if (error.status == 403) {
                         layer.msg('授权过期!', {
                             time: 2000
                         }, function () {
-                            window.top.location.href = './login.html';
+                           window.location.href = test+'/login.html';
                         });
                     } else {
                         layer.msg('请求错误：错误状态' + error.status + '，错误信息：' + error.msg)
@@ -330,6 +333,8 @@ function authorize(url) {
             data: JSON.stringify({ url: url })
         },
         success: function (data) {
+            console.log(data)
+            console.log(3)
             if (data) {
                 if (data.code == 200) {
                     // 字段权限处理
@@ -394,3 +399,11 @@ function down(options) {
         $form.appendTo('body').submit().remove();
     };
 }
+
+//用户信息
+// ajax("get", "api/User/GetLoginUserInfo")
+//     .then(function (res) {
+//         if (res.code == 200) {
+           
+//         }
+//     });

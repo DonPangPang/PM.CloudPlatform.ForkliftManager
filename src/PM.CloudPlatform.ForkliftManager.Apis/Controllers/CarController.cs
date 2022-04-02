@@ -149,6 +149,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             /// </summary>
             /// <value></value>
             public bool? IsReturn{get; set;}
+            /// <summary>
+            /// 车辆类型Id
+            /// </summary>
+            public Guid? CarTypeId { get; set; }
+            /// <summary>
+            /// 车辆Id
+            /// </summary>
+            public Guid? CarId { get; set; }
         }
 
         /// <summary>
@@ -204,12 +212,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 query = query.Where(x => x.SerialNumber!.Contains(parameters.SerialNumber));
             }
 
-            if(parameters.CarType != null)
+            if(!string.IsNullOrEmpty(parameters.CarTypeId.ToString()))
             {
-                query = query.Where(x => x.CarType!.Id == parameters.CarType!.Id);
+                query = query.Where(x => x.CarType!.Id == parameters.CarTypeId);
             }
-
-            if(parameters.IsReturn != null)
+            if (!string.IsNullOrEmpty(parameters.CarId.ToString()))
+            {
+                query = query.Where(x => x.Id == parameters.CarId);
+            }
+            
+            if (parameters.IsReturn != null)
             {
                 query = query.Where(x => (x.RentalRecords == null || !x.RentalRecords!.Where(t => !t.IsReturn).Any()) == parameters.IsReturn);
             }
@@ -278,7 +290,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="description"> 描述 </param>
         /// <returns> </returns>
         [HttpGet]
-        public async Task<IActionResult> SetCarTerminalBind(Guid carId, Guid terminalId, string description)
+        public async Task<IActionResult> SetCarTerminalBind(Guid carId, Guid terminalId, string? description)
         {
             var car = await _generalRepository.FindAsync<Car>(x => x.Id.Equals(carId));
             var terminal = await _generalRepository.FindAsync<Terminal>(x => x.Id.Equals(terminalId));

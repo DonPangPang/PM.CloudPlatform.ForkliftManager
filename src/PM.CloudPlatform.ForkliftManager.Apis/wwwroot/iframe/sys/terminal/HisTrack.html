@@ -109,7 +109,16 @@
                 $ = layui.jquery,
                 form = layui.form;
             laydate = layui.laydate;
-
+            var style = JSON.parse(sessionStorage.getItem('style'));
+            if (style == false) {
+                $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
+                $('link[title="blue"]').removeAttr('disabled');
+                var color = 'color:#fff;background-color:#033447;'
+            } else {
+                $('link[title="white"]').removeAttr('disabled');
+                $('link[title="blue"]').attr('disabled', 'true');
+                var color = 'color:#000;background-color:#FFF;'
+            }
             let obj = {};
             var localUrl = window.location.search.substr(1).split('&');
             localUrl.map(function (v, i) {
@@ -158,7 +167,6 @@
                         routeInfo = [];
                         res.data.forEach(v => {
                             let geo = JSON.parse(v.geo)
-                            //console.log(geo)
                             routeInfo.push({
                                 "lat": geo.coordinates[1],
                                 "lng": geo.coordinates[0],
@@ -167,13 +175,20 @@
                             })
                             lineArr.push([geo.coordinates[1], geo.coordinates[0]])
                         })
-                        //console.log(routeInfo)
                         if (routeInfo.length != 0) {
                             // 1. 创建地图
                             var map = new AMap.Map('container', {
                                 zoom: 13,
                             });
+                            if (!!style) {
+                                let styleNames = "amap://styles/normal";
+                                map.setMapStyle(styleNames);
+                              
+                            } else {
+                                let styleNames = "amap://styles/blue";
+                                map.setMapStyle(styleNames);
 
+                            }
                             var icon = new AMap.Icon({
                                 //size: new AMap.Size(40, 40),    // 图标尺寸
                                 image: '../../../images/fk_car.png',  // Icon的图像 images/011-叉车.png

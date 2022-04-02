@@ -107,7 +107,7 @@
     <img id="inputImg" src="./images/face/search.png" alt="">
     <div id="input">
         <input type="text" class="style1 style2" name="title" required lay-verify="required" placeholder="请输入要查找的设备号"
-               autocomplete="off" class="layui-input">
+            autocomplete="off" class="layui-input">
     </div>
     <!-- 右边区域图表 -->
     <style>
@@ -118,17 +118,17 @@
             margin-bottom: 10px;
         }
 
-        .right-panel-box > div:nth-child(1) {
+        .right-panel-box>div:nth-child(1) {
             top: 60px;
             right: 40px;
         }
 
-        .right-panel-box > div:nth-child(2) {
+        .right-panel-box>div:nth-child(2) {
             top: 315px;
             right: 40px;
         }
 
-        .right-panel-box > div:nth-child(3) {
+        .right-panel-box>div:nth-child(3) {
             top: 570px;
             right: 40px;
             height: 500px;
@@ -145,31 +145,31 @@
             padding-right: 5px;
         }
 
-            #message-list::-webkit-scrollbar {
-                width: 3px;
-            }
+        #message-list::-webkit-scrollbar {
+            width: 3px;
+        }
 
-            #message-list::-webkit-scrollbar-thumb {
-                background-color: #62c1d8;
-                border-radius: 10px;
-            }
+        #message-list::-webkit-scrollbar-thumb {
+            background-color: #62c1d8;
+            border-radius: 10px;
+        }
 
-            #message-list::-webkit-scrollbar-track {
-                border-radius: 10px;
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
+        #message-list::-webkit-scrollbar-track {
+            border-radius: 10px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
 
-            #message-list > div {
-                height: auto;
-                width: 100%;
-                border-bottom: #62c1d8 1px solid;
-                border-radius: 1rem;
-                margin-top: 10px;
-                padding-bottom: 10px;
-                padding-top: 10px;
-                padding-left: 20px;
-            }
+        #message-list>div {
+            height: auto;
+            width: 100%;
+            border-bottom: #62c1d8 1px solid;
+            border-radius: 1rem;
+            margin-top: 10px;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            padding-left: 20px;
+        }
     </style>
     <div class="right-panel-box">
         <div id="right-box-chart1" class="style right-panel-chart"></div>
@@ -349,32 +349,33 @@
     </div>
     <div id="bottomIframe" class=''>
         <div lay-event='archivesManagement' class="dn" title='档案管理'
-             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+            onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
         <div lay-event='dispatchManagement' class="dn" title='调度管理'
-             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+            onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
         <div lay-event='statisticsManagement' class="dn" title="车辆维护"
-             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+            onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
         <div lay-event='trafficManagement' class="dn" title="历史记录"
-             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+            onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
         <div lay-event='systemManagement' class="dn" title="系统管理"
-             onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+            onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
         </div>
-        <!-- <div lay-event='' title="预留" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
-        </div> -->
+        <div lay-event='Login' title="退出登录" onMouseOver='play_over("./video/WindowsNavigationStart.wav")'>
+        </div>
     </div>
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
-<script src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor"></script>
+<script
+    src="https://webapi.amap.com/maps?v=1.4.15&key=be4041052db55801afbb3104989b3262&&plugin=AMap.Scale,AMap.ToolBar,AMap.PolyEditor"></script>
 <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
 <script src="./js/common.js"></script>
-<script src="/websocket.js"></script>
+<script src="./websocket.js"></script>
 
 <!-- 参数配置 -->
 <script>
@@ -398,7 +399,7 @@
             console.log(res)
             if (res.code == 200) {
                 let data = res.data
-                let ParameterConfig = [['product', '闲置量', '租赁量', '保养量']];
+                let ParameterConfig = [['product', '闲置量', '保养量', '租赁量']];
                 let maintenanceRecords = data.maintenanceRecords
                 let carRecords = data.carRecords
                 let rentalRecords = data.rentalRecords
@@ -727,22 +728,40 @@
             } else {
                 color = 'color:#000;background-color:#FFF;'
             }
-            sessionStorage.setItem('style', boolean);
-            let index = layer.open({
-                title: [html, color],
-                type: 2,
-                shadeClose: true, //是否点击遮罩关闭
-                shade: 0.2, //遮罩透明度
-                area: ['80%', '80%'],
-                content: 'iframe/' + $(this).attr('lay-event') + '.html',
-                maxmin: false, //最大化最小化
-                success: function (layero) {
-                    if (boolean == false) {
-                        $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
-                    } else {
+            if ($(this).attr('lay-event') == "Login") {
+                console.log(1223)
+                layer.open({
+                    type: 1,
+                    title: ['提示', color],
+                    offset: 'auto',
+                    id: 'layerDemo',
+                    content: '<div style="padding: 20px 100px;">是否退出</div>',
+                    btn: ['是', '否'],
+                    btnAlign: 'r',
+                    shade: 0,
+                    yes: function () {
+                        window.location.href = test + '/login.html';
                     }
-                },
-            });
+                });
+            } else {
+                sessionStorage.setItem('style', boolean);
+                let index = layer.open({
+                    title: [html, color],
+                    type: 2,
+                    shadeClose: true, //是否点击遮罩关闭
+                    shade: 0.2, //遮罩透明度
+                    area: ['80%', '80%'],
+                    content: 'iframe/' + $(this).attr('lay-event') + '.html',
+                    maxmin: false, //最大化最小化
+                    success: function (layero) {
+                        if (boolean == false) {
+                            $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                        } else {
+                        }
+                    },
+                });
+            }
+
             return false;
         })
         //点击图片和敲回车会提取搜索框字段
@@ -956,30 +975,62 @@
     });
 </script>
 <script>
+
     $("body").on("click", "#track", function () {
+        let color;
+        if (boolean == false) {
+            color = 'color:#fff;background-color:#033447;'
+            aaa = ''
+        } else {
+            color = 'color:#000;background-color:#FFF;'
+            aaa = color
+        }
+        sessionStorage.setItem('style', JSON.stringify(boolean));
         let id = vehicleData.TerminalId;
         var index = layer.open({
-            title: '轨迹回放',
+            title: ['轨迹回放', color],
             type: 2,
             shade: 0.2,
-            maxmin: true,
+            maxmin: false,
             shadeClose: true,
             area: ['80%', '90%'],
             content: 'track.html?id=' + id,
+            success: function (layero) {
+                if (boolean == false) {
+                    $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                } else {
+                }
+            },
         });
     })
     $("body").on("click", "#SetFence", function () {
+        let color;
+        if (boolean == false) {
+            color = 'color:#fff;background-color:#033447;'
+            aaa = ''
+        } else {
+            color = 'color:#000;background-color:#FFF;'
+            aaa = color
+        }
+        sessionStorage.setItem('style', JSON.stringify(boolean));
         sessionStorage.setItem('vehicleData', JSON.stringify(vehicleData));
         let id = vehicleData.TerminalId;
         var index = layer.open({
-            title: '围栏查看',
+            title: ['围栏查看', color],
             type: 2,
             shade: 0.2,
-            maxmin: true,
+            maxmin: false,
             shadeClose: true,
             area: ['80%', '90%'],
             content: 'setFenceManagement.html?id=' + id,
+            success: function (layero) {
+                if (boolean == false) {
+                    $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                } else {
+                }
+            },
         });
     })
 </script>
+
 </html>

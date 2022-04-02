@@ -55,7 +55,7 @@
 
     <table id="test" lay-filter="test"></table>
     <script type="text/html" id="enable">
-        {{#  if( d.enableMark) { }}
+        {{#  if(d.isActive) { }}
       <span class="category category-admin">有效</span>
   {{#  } else  {  }}
       <span  class="category category-gen" lay-event="again">无效</span>

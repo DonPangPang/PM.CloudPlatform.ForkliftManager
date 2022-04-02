@@ -54,6 +54,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             /// </summary>
             /// <value></value>
             public DateTime? MaintenanceTime{get; set;}
+            /// <summary>
+            /// 车辆类型Id
+            /// </summary>
+            public Guid? CarTypeId { get; set; }
+            /// <summary>
+            /// 车辆Id
+            /// </summary>
+            public Guid? CarId { get; set; }
         }
 
         /// <summary>
@@ -64,14 +72,28 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCarMaintenanceRecords([FromQuery] MaintenanceRecordDtoParameters parameters)
         {
-            var data = await _generalRepository.GetQueryable<CarMaintenanceRecord>()
+            var query = _generalRepository.GetQueryable<CarMaintenanceRecord>()
+              .Include(x => x.Car)
+              .ThenInclude(t => t!.CarType)           
+              .AsQueryable();
+            if (!string.IsNullOrEmpty(parameters.CarTypeId.ToString()))
+            {
+                query = query.Where(x => x.Car!.CarTypeId == parameters.CarTypeId);
+            }
+            if (!string.IsNullOrEmpty(parameters.CarId.ToString()))
+            {
+                query = query.Where(x => x.CarId == parameters.CarId);
+            }
+            if (!string.IsNullOrEmpty(parameters.MaintenanceTime.ToString()))
+            {
+                query = query.Where(x => x.MaintenanceTime == parameters.MaintenanceTime);
+            }
+            var data = await query
                 .FilterDeleted()
-                .Include(x => x.Car)
-                .ThenInclude(t => t!.CarType)
                 .Where(x=>x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber ?? ""))
                 .Where(x=>x.Car!.SerialNumber!.Contains(parameters.SerialNumber ?? ""))
-                .Where(x=> parameters.CarType == null ? true:x.Car!.CarType == parameters.CarType)
-                .Where(x=>x.MaintenanceTime == null ? true:x.MaintenanceTime == parameters.MaintenanceTime)
+                //.Where(x=> parameters.CarType == null ? true:x.Car!.CarType == parameters.CarType)
+                //.Where(x=>x.MaintenanceTime == null ? true:x.MaintenanceTime == parameters.MaintenanceTime)
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
@@ -111,6 +133,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             /// </summary>
             /// <value></value>
             public CarType? CarType { get; set; }
+            /// <summary>
+            /// 车辆类型Id
+            /// </summary>
+            public Guid? CarTypeId { get; set; }
+            /// <summary>
+            /// 车辆Id
+            /// </summary>
+            public Guid? CarId { get; set; }
         }
 
         /// <summary>
@@ -203,7 +233,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 query = query.Where(x => x.CarType!.Equals(parameters.CarType));
             }
-
+            if (!string.IsNullOrEmpty(parameters.CarTypeId.ToString()))
+            {
+                query = query.Where(x => x.CarTypeId==parameters.CarTypeId);
+            }
+            if (!string.IsNullOrEmpty(parameters.CarId.ToString()))
+            {
+                query = query.Where(x => x.Id == parameters.CarId);
+            }
             var data = await query
                 .ApplyPaged(parameters)
                                 .Select(x => new

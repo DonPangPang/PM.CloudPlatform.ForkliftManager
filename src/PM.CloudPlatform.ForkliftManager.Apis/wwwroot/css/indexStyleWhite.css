@@ -120,6 +120,11 @@ body,
     background-size:90px 90px;
     background-repeat:no-repeat;
 }
+#bottomIframe > div:nth-child(6)  {
+    background: url(../images/face/menu_logout_light.png);
+    background-size:90px 90px;
+    background-repeat:no-repeat;
+}
 
 
 /* #bottomIframe > div:nth-child(1):hover{

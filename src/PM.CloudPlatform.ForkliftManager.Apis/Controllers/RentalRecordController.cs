@@ -54,6 +54,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             /// </summary>
             /// <value></value>
             public string? LicensePlateNumber { get; set; }
+            /// <summary>
+            /// 车辆Id
+            /// </summary>
+            public Guid? CarId { get; set; }
         }
 
         /// <summary>
@@ -64,6 +68,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRentalCars([FromQuery] RentalRecordDtoParameters parameters)
         {
+            var query = _generalRepository.GetQueryable<RentalRecord>()
+              .Include(x => x.Car)
+              .AsQueryable();
+            if (!string.IsNullOrEmpty(parameters.CarId.ToString()))
+            {
+                query = query.Where(x => x.CarId == parameters.CarId);
+            }
             var data = await _generalRepository.GetQueryable<RentalRecord>()
                 .FilterDeleted()
                 .Include(x => x.RentalCompany)
