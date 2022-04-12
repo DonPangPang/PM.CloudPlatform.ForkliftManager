@@ -254,6 +254,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 query = query.Where(x => x.Id == parameters.TerminalId);
             }
+            if (!string.IsNullOrEmpty(parameters.IMEI))
+            {
+                query = query.Where(x => x.IMEI.Contains(parameters.IMEI));
+            }
+
+            if (!string.IsNullOrEmpty(parameters.LicensePlateNumber))
+            {
+                query = query.Where(x => x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber));
+            }
             var data = await query
                 .FilterDeleted()
                 .FilterDisabled()

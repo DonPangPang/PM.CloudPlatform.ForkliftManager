@@ -73,9 +73,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
               .AsQueryable();
             if (!string.IsNullOrEmpty(parameters.CarId.ToString()))
             {
-                query = query.Where(x => x.CarId == parameters.CarId);
+                query = query.Where(x => x.Car!.Id == parameters.CarId);
             }
-            var data = await _generalRepository.GetQueryable<RentalRecord>()
+            var data = await query
                 .FilterDeleted()
                 .Include(x => x.RentalCompany)
                 .Include(x => x.Car)

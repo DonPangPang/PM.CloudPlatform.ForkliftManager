@@ -729,16 +729,23 @@
                 color = 'color:#000;background-color:#FFF;'
             }
             if ($(this).attr('lay-event') == "Login") {
-                console.log(1223)
+                var colors;
+                if (boolean == false) {
+                    var fontcolor="#fff";    
+                    colors = 'color:#fff;background-color:#033447;'
+                } else {
+                    var fontcolor="#000"; 
+                    colors = 'color:#000;background-color:#FFF;'
+                }
                 layer.open({
                     type: 1,
-                    title: ['提示', color],
+                    title: ['提示', colors],
                     offset: 'auto',
                     id: 'layerDemo',
-                    content: '<div style="padding: 20px 100px;">是否退出</div>',
+                    content: '<div style="padding: 20px 100px;color:'+fontcolor+'; font-size:18px">是否退出</div>',
                     btn: ['是', '否'],
                     btnAlign: 'r',
-                    shade: 0,
+                    // shade: 0.2,
                     yes: function () {
                         window.location.href = test + '/login.html';
                     }

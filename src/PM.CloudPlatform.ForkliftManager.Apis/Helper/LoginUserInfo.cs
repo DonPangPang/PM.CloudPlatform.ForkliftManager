@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities.Base;
@@ -44,7 +45,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Helper
                 }
 
                 var id = Guid.Parse(_httpContextAccessor.HttpContext!.User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name))!.Value);
-                var res = _generalRepository.GetQueryable<T>().FirstOrDefault(x => x.Id.Equals(id));
+                var res = _generalRepository.GetQueryable<T>().AsNoTracking().FirstOrDefault(x => x.Id.Equals(id));
 
                 return res;
             }

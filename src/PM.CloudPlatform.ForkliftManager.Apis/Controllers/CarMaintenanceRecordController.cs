@@ -132,7 +132,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             /// 车辆类型
             /// </summary>
             /// <value></value>
-            public CarType? CarType { get; set; }
+            public string? CarType { get; set; }
             /// <summary>
             /// 车辆类型Id
             /// </summary>
@@ -229,9 +229,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 query = query.Where(x => x.SerialNumber!.Contains(parameters.SerialNumber));
             }
 
-            if (parameters.CarType != null)
+            if (!string.IsNullOrEmpty(parameters.CarType))
             {
-                query = query.Where(x => x.CarType!.Equals(parameters.CarType));
+                query = query.Where(x => x.CarType!.Name!.Contains(parameters.CarType));
             }
             if (!string.IsNullOrEmpty(parameters.CarTypeId.ToString()))
             {

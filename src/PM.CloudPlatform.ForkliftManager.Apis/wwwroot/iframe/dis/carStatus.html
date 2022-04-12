@@ -41,9 +41,24 @@
         <button class="layui-btn layui-btn-sm" lay-event="add">新增租赁</button>
         <div class="layui-inline">
             <div class="layui-input-inline">
-                <input type="text" name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
+                <input type="text" name="licensePlateNumber" autocomplete="off" class="layui-input" placeholder="请输入要查询车牌号">
             </div>
         </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="SerialNumber" autocomplete="off" class="layui-input" placeholder="请输入要查询车辆编号">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <select name="IsReturn" id="IsReturn" lay-verify="IsReturn" lay-search>
+                    <option value="">请选择车辆状态</option>
+                    <option value="true">空闲</option>
+                    <option value="false">租赁中</option>
+                </select>
+            </div>
+        </div>
+       
         <div class="layui-inline">
             <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i
                     class="layui-icon"></i>
@@ -63,11 +78,11 @@
     <script src="../../js/common.js"></script>
     <!-- <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script> -->
     <script>
-        layui.use(['element', 'table', 'jquery', 'layer','form'], function () {
+        layui.use(['element', 'table', 'jquery', 'layer', 'form'], function () {
             var element = layui.element,
                 layer = layui.layer,
                 $ = layui.jquery,
-                form=layui.form,
+                form = layui.form,
                 table = layui.table;
             var style = JSON.parse(sessionStorage.getItem('style'));
             var arr = [];
@@ -89,7 +104,7 @@
                     , url: requestUrl + 'api/Car/GetCarArchives' //数据接口
                     , toolbar: '#toolbarDemo'
                     , cols: [[ //表头
-                          { type: "checkbox" }
+                        { type: "checkbox" }
                         , { field: 'licensePlateNumber', title: '车牌号', sort: true }
                         , { field: 'carTypeName', title: '车辆类型' }
                         , { field: 'serialNumber', title: '车辆编号', sort: true }
@@ -149,7 +164,7 @@
                                                 if (style == false) {
                                                     $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
                                                 } else {
-                                                    
+
                                                 }
                                             },
                                         });
@@ -208,7 +223,7 @@
                 e.stopPropagation();
             });
 
-           
+
 
             var cars = [
                 {

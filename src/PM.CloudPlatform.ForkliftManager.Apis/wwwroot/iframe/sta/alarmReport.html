@@ -13,29 +13,55 @@
 </head>
 
 <body>
+    <!-- <form class="layui-form" action="" style="padding: 20px;" lay-filter="overTimeForm">
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="licensePlateNumber" autocomplete="off" class="layui-input" placeholder="请输入要查询车牌号">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="maintenanceTime"  id="maintenanceTime" placeholder="请输入维护时间"
+                        autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+                搜 索</button>
+        </div>
+    </form> -->
     <table id="test" lay-filter="test"></table>
     <script type="text/html" id="toolbarDemo">
-            <div class="layui-inline">
-                <div class="layui-input-inline">
-                    <input type="text" name="SearchTerm" autocomplete="off" class="layui-input" placeholder="请输入要查询关键字">
-                </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="licensePlateNumber" autocomplete="off" class="layui-input" placeholder="请输入要查询车牌号">
             </div>
-            <div class="layui-inline">
-                <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
-                    搜 索</button>
+        </div>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="maintenanceTime" required id="maintenanceTime" placeholder="请输入维护时间"
+                        autocomplete="off" class="layui-input">
             </div>
-        </script>
+        </div>
+        <div class="layui-inline">
+            <button type="submit" class="layui-btn layui-btn-primary" lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i>
+                搜 索</button>
+        </div>
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <script src="../../layui.js"></script>
     <script src="../../js/jquery-3.5.1.min.js"></script>
     <script src="../../js/common.js"></script>
     <script>
-        layui.use(['element', 'table', "jquery","form"], function () {
+        layui.use(['element', 'table', "jquery", "form", "laydate"], function () {
             var $ = layui.jquery,
                 element = layui.element,
-                form=layui.form,
+                form = layui.form,
+                laydate = layui.laydate,
                 table = layui.table;
+
+
             var color;
             var style = JSON.parse(sessionStorage.getItem('style'));
             if (style == false) {
@@ -47,6 +73,7 @@
                 $('link[title="blue"]').attr('disabled', 'true');
                 color = 'color:#000;background-color:#FFF;'
             }
+
             setTimeout(function () {
                 table.render({
                     elem: '#test'
@@ -54,15 +81,15 @@
                     , toolbar: '#toolbarDemo'
                     , post: 'get'
                     , headers: { Authorization: "Bearer " + Token }
-                    , url:  requestUrl + 'api/CarMaintenanceRecord/GetCarMaintenanceRecords' //数据接口
+                    , url: requestUrl + 'api/CarMaintenanceRecord/GetCarMaintenanceRecords' //数据接口
                     , cols: [[ //表头
-                         { field: 'licensePlateNumber', title: '维护车辆' }
+                        { field: 'licensePlateNumber', title: '维护车辆' }
                         , { field: 'maintainer', title: '维护人' }
                         , { field: 'maintainerTel', title: '手机号' }
                         , { field: 'maintainerContent', title: '维护内容', }
                         , { field: 'maintenanceTime', title: '维护时间', sort: true }
-                       // , {field:'maintenanceDateLength', title: '维护时长'}
-                        , { field: 'remarks', title: '描述'}
+                        // , {field:'maintenanceDateLength', title: '维护时长'}
+                        , { field: 'remarks', title: '描述' }
                     ]]
                     , page: true //开启分页
                     , limit: 30
@@ -87,9 +114,21 @@
                         countName: 'count',
                         dataName: 'data'
                     }
-                   
+                    , done: function (res) {
+
+                        $("#maintenanceTime").each(function (i) {
+                            layui.laydate.render({
+                                elem: this,
+                                format: "yyyy-MM-dd",
+
+                            });
+                        });
+                    }
                 });
             }, 500)
+
+
+
             table.on('toolbar(test)', function (obj) {
                 let checkStatus = table.checkStatus('test'),
                     data = checkStatus.data[0];
@@ -124,8 +163,8 @@
                         break;
                 };
             });
-           
-           
+
+
             form.on('submit(data-search-btn)', function (data) {
                 var result = data.field;
                 console.log(result)
@@ -138,58 +177,6 @@
                 }, 'data');
                 return false;
             });
-            var cars = [
-                {
-                    type: '叉车',
-                },
-                {
-                    type: '托盘车',
-                },
-                {
-                    type: '堆垛车',
-                },
-            ];
-            var location = [
-                {
-                    type: '黄河路',
-                },
-                {
-                    type: '人民路',
-                },
-                {
-                    type: '花都大道',
-                },
-            ];
-            function random(min, max) {
-                return parseInt(Math.random() * (max - min + 1) + min, 10);
-            }
-            function dateTime() {
-                var date = new Date();
-                return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
-            }
-
-            function getData() {
-                var data = []
-                for (var i = 0; i < 100; i++) {
-                    var item = {
-                        id: random(10000000, 19999999),
-                        car_plate: '1556510' + random(0000, 9999),
-                        car_no: random(10000000, 19999999),
-                        firm: '公司' + random(1, 100),
-                        name: '法定人' + random(1, 100),
-                        brand: '品牌' + random(1, 5),
-                        location: location[random(0, 2)].type,
-                        // zhonglei: cars[random(0, 2)].type,
-                        buy_time: dateTime(),
-                        upkeep: random(20, 100),
-                        number: random(20, 100),
-                        use_time: random(500, 10000),
-                        time: dateTime(),
-                    }
-                    data.push(item)
-                }
-                return data;
-            }
 
 
             //监听行单击事件（双击事件为：rowDouble，单击事件为：row）

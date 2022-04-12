@@ -332,3 +332,13 @@ label {
     width: 16px;
     height: 16px;
 }
+.layui-layer-content {
+    /* border: 1px solid #FFF; */
+    background-color: #033447;
+    color: #fff;
+}
+.layui-layer-btn {
+    /* border: 1px solid #FFF; */
+    background-color: #033447;
+    color: #fff;
+}

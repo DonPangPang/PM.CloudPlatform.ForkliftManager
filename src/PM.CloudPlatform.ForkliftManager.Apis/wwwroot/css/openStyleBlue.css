@@ -1,6 +1,7 @@
 html {
     background: #033447;
 }
+
 /* 高德地图icon */
 .amap-logo,
 .amap-copyright {
@@ -9,115 +10,150 @@ html {
 
 .layui-tab-brief {
     color: #fff;
-    background-color: #033447 ;
+    background-color: #033447;
 }
-.layui-layer-setwin .layui-layer-min cite{
+
+.layui-layer-setwin .layui-layer-min cite {
     background-color: #fff !important;
 }
-.layui-btn-primary{
+
+.layui-btn-primary {
     background-color: unset;
     color: #fff;
 }
-.layui-icon{
-    color: #FFF ;
-}
-.layui-table-tool{
-    color:#fff;background-color:#033447;
-}
-.layui-layer{
-    color:#fff;background-color:#033447;border: 1px solid #FFF;
-}
-/* 表头部分 */
-.layui-table thead tr{
-    color:#fff;background-color:#033447;
-}
-/* 表格部分 */
-.layui-table{
-    color:#fff;background-color:#033447;
-}
-.layui-table tr:hover{
-    color:#000;background-color:#fff;
-}
-.layui-table-click{
-    color:#000;background-color:#fff;
-}
-.layui-table-page .layui-laypage span{
+
+.layui-icon {
     color: #FFF;
 }
-.layui-table-body::-webkit-scrollbar{
+
+.layui-table-tool {
+    color: #fff;
+    background-color: #033447;
+}
+
+.layui-layer {
+    color: #fff;
+    background-color: #033447;
+    border: 1px solid #FFF;
+}
+
+/* 表头部分 */
+.layui-table thead tr {
+    color: #fff;
+    background-color: #033447;
+}
+
+/* 表格部分 */
+.layui-table {
+    color: #fff;
+    background-color: #033447;
+}
+
+.layui-table tr:hover {
+    color: #000;
+    background-color: #fff;
+}
+
+.layui-table-click {
+    color: #000;
+    background-color: #fff;
+}
+
+.layui-table-page .layui-laypage span {
+    color: #FFF;
+}
+
+.layui-table-body::-webkit-scrollbar {
     width: 6px;
     height: 1px;
     z-index: 10002;
 }
-.layui-table-body::-webkit-scrollbar-thumb  {
-    border-radius: 6px;
-    box-shadow: inset 0 0 5px rgba(0,  0,  0,  0.2);
-    background:red;
-    z-index: 10002;
 
-}
-.layui-table-body::-webkit-scrollbar-track  {
+.layui-table-body::-webkit-scrollbar-thumb {
+    border-radius: 6px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
     background: red;
-    box-shadow: inset 0 0 5px rgba(0,  0,  0,  0.2);
+    z-index: 10002;
+
+}
+
+.layui-table-body::-webkit-scrollbar-track {
+    background: red;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
     border-radius: 6px;
     z-index: 10002;
 
 }
-.el-timeline-item__content{
+
+.el-timeline-item__content {
     color: #fff;
 }
-.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span{
+
+.layui-table-page .layui-laypage a,
+.layui-table-page .layui-laypage span {
     color: #fff;
 }
-.image-list{
-    background-color:#033447
+
+.image-list {
+    background-color: #033447
 }
-.image-list .cover{
+
+.image-list .cover {
     background-color: rgb(196, 145, 145);
 }
-.layui-input{
+
+.layui-input {
     background-color: #ddd;
 }
 
 input::-webkit-input-placeholder {
     color: #333;
 }
-.layui-btn-primary:hover{
+
+.layui-btn-primary:hover {
     color: #ddd;
 }
+
 /* loading动画背景颜色 */
 
 .pageload-overlay svg path {
-	fill: #033447;
+    fill: #033447;
 }
-.layui-form-select dl dd{
+
+.layui-form-select dl dd {
     color: #000;
 }
 
-.layui-tab-item{
+.layui-tab-item {
     height: 89vh;
 }
 
-.layui-layer-content{
+.layui-layer-content {
     /* border: 1px solid #FFF; */
     background-color: #033447;
     color: #FFF;
 }
-.layui-layer-btn{
+
+.layui-layer-btn {
     background-color: #033447;
 }
-.layui-tab{
+
+.layui-tab {
     margin: 0;
 }
-.layui-tab-content{
+
+.layui-tab-content {
     padding: 0;
 }
-.layui-form>.layui-form-item>.layui-form-label{
+
+.layui-form>.layui-form-item>.layui-form-label {
     color: #FFF;
 }
-.layui-form{
+
+.layui-form {
     background-color: #033447;
 }
+
 /* .layui-layer .layui-layer-dialog .layui-layer-border .layui-layer-msg .layui-layer-hui{
     border: 1px solid #FFF;
 } */
@@ -127,21 +163,26 @@ input::-webkit-input-placeholder {
     width: 16px;
     height: 16px;
 }
+
 /* layer添加白色边框 */
-.layui-layer-hui{
-    border: 1px solid #FFF !important; 
+.layui-layer-hui {
+    border: 1px solid #FFF !important;
 }
+
 /* 地图logo清除 */
-.amap-logo{
+.amap-logo {
     display: none !important;
 }
-.amap-copyright{
+
+.amap-copyright {
     display: none !important;
 }
-.layui-card{
+
+.layui-card {
     background-color: #033447;
     border: 1px solid #FFF;
 }
-.layui-card-header{
+
+.layui-card-header {
     color: #fff;
 }

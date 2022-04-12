@@ -169,7 +169,7 @@
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-icon layui-icon-vercode" for="captcha"></label>
-                        <input type="text" name="captcha" lay-verify="required|account" placeholder="图形验证码"
+                        <input type="text" name="captcha" id="verificationCode" lay-verify="required|account" placeholder="图形验证码"
                                autocomplete="off" class="layui-input verification captcha input-val">
                         <!-- <canvas id="canvas" width="100" height="38"></canvas> -->
                         <img src="" id="canvas" width="100" height="38">
@@ -197,7 +197,8 @@
         import conf from './js/conf.js'
 
         var baseUrl = conf.apis
-
+        let loginurl=window.location.href
+        sessionStorage.setItem('loginurl', JSON.stringify(loginurl));
         /**
          * @description 生成guid方法
          * @param {l:String} 连接方式，默认："_"
@@ -292,7 +293,7 @@
                                         if (data.msg = "验证码错误") {
 
                                             guids = guid();
-                                            console.log(guids)
+                                            $('#verificationCode').val('');
                                             $('#canvas')[0].src = baseUrl + "Authorization/GenerateCaptcha?id=" + guids
                                         }
                                     });

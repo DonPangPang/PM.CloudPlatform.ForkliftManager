@@ -67,7 +67,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             }
             if (!string.IsNullOrEmpty(CarId.ToString()))
             {
-                query = query.Where(x => x.Id == CarId);
+                query = query.Where(x => x.Car!.Id == CarId);
             }
             var records = await query
                 .ApplyPaged(parameters)
