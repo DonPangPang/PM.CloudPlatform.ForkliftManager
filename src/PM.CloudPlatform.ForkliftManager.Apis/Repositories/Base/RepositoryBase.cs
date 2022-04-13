@@ -237,7 +237,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
         /// </summary>
         /// <param name="parameters"> 查询条件 </param>
         /// <returns> </returns>
-        public async Task<PagedList<T>> GetEntitiesAsync(DtoParametersBase parameters)
+        public async Task<(PagedList<T>,int)> GetEntitiesAsync(DtoParametersBase parameters)
         {
             if (parameters is null)
             {
@@ -267,7 +267,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
                 queryExpression = queryExpression.ApplySort(parameters.OrderBy);
             }
 
-            return await PagedList<T>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize, parameters.IsNeedPaged);
+            var count = await queryExpression.CountAsync();
+
+            return (await PagedList<T>.CreateAsync(queryExpression, parameters.PageNumber, parameters.PageSize, parameters.IsNeedPaged), count);
         }
 
         /// <summary>

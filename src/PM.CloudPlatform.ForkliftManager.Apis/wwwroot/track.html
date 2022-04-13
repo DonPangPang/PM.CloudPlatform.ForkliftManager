@@ -69,13 +69,18 @@
         padding: 5px;">
             轨迹回放控制
         </h4>
+        <fieldset class="layui-elem-field layui-field-title" >
+            <legend>播放速度倍数</legend>
+            <legend>播放速度:<span id="multiple">200(km/h)</span></legend>
+        </fieldset>
+        <div id="slideTest3" class="demo-slider" style="margin-bottom: 10px;" ></div>
         <div class="input-item">
-            <button type="button" class="layui-btn" id="start" onclick="startAnimation()">开始动画</button>
-            <button type="button" class="layui-btn" id="pause" onclick="pauseAnimation()">暂停动画</button>
+            <button type="button" class="layui-btn" id="start" onclick="startAnimation()">开始播放</button>
+            <button type="button" class="layui-btn" id="pause" onclick="pauseAnimation()">暂停播放</button>
         </div>
         <div class="input-item">
-            <button type="button" class="layui-btn" id="resume" onclick="resumeAnimation()">继续动画</button>
-            <button type="button" class="layui-btn" id="stop" onclick="stopAnimation()">停止动画</button>
+            <button type="button" class="layui-btn" id="resume" onclick="resumeAnimation()">继续播放</button>
+            <button type="button" class="layui-btn" id="stop" onclick="stopAnimation()">停止播放</button>
         </div>
     </div>
 
@@ -105,11 +110,25 @@
         var marker;
         var lineArr = [];
         var routeInfo = [];
-        layui.use(['element', 'jquery', 'form', 'laydate'], function () {
+        var speed = 200;
+        var multiple=1;
+        layui.use(['element', 'jquery', 'form', 'laydate','slider'], function () {
             var element = layui.element,
                 $ = layui.jquery,
+                slider = layui.slider;
                 form = layui.form;
             laydate = layui.laydate;
+            slider.render({
+                elem: '#slideTest3'
+                , min: 1 //最小值
+                , max: 20 //最大值
+                , change: function (value) {                    
+                    multiple= value;
+                    speed=200* multiple;
+                    $("#multiple").html(speed+"(km/h)")
+                    startAnimation();
+                }
+            });
             var style = JSON.parse(sessionStorage.getItem('style'));
             if (style == false) {
                 $('link[title="white"]').attr('disabled', 'true'); //移除缓存样式
@@ -250,9 +269,7 @@
                             function setVehicleSpeedInWidowns(lnglat, index) {
                                 let e_index = lineArr.indexOf(lnglat);
                                 if (e_index >= 0) {
-
-                                    marker.moveAlong(lineArr.slice(e_index), (routeInfo[e_index].speed) * 10 + 150)
-
+                                    // marker.moveAlong(lineArr.slice(e_index), (routeInfo[e_index].speed) * 10 + 150)
                                     carWindow.setContent("速度:" + (routeInfo[e_index].speed) + "公里/时" + "--时间:" + routeInfo[e_index].locusTimestamp);
                                 }
                                 // console.log(routeInfo)
@@ -281,7 +298,7 @@
         });
 
         function startAnimation() {
-            marker.moveAlong(lineArr, 200);
+            marker.moveAlong(lineArr, speed);
         }
 
         function pauseAnimation() {

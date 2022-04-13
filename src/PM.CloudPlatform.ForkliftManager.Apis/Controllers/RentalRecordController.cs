@@ -75,14 +75,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 query = query.Where(x => x.Car!.Id == parameters.CarId);
             }
-            var data = await query
+
+            query = query
                 .FilterDeleted()
                 .Include(x => x.RentalCompany)
                 .Include(x => x.Car)
                 .ThenInclude(t => t!.CarType)
-                .Where(x=>x.RentalEmployeeName!.Contains(parameters.RentalEmployeeName ?? ""))
-                .Where(x=>x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber ?? ""))
-                .OrderBy(x=>x.RentalCompany!.Name)
+                .Where(x => x.RentalEmployeeName!.Contains(parameters.RentalEmployeeName ?? ""))
+                .Where(x => x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber ?? ""))
+                .OrderBy(x => x.RentalCompany!.Name);
+
+            var rows = await query.CountAsync();
+
+            var data = await query
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
@@ -107,7 +112,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .AsSplitQuery()
                 .ToListAsync();
 
-            return Success(data);
+            return Success(data, rows);
         }
 
         /// <summary>
@@ -221,12 +226,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetNeedReturnCars([FromQuery]DtoParametersBase parameters)
         {
-            var result = await _generalRepository.GetQueryable<RentalRecord>()
+            var query = _generalRepository.GetQueryable<RentalRecord>()
                 .FilterDeleted()
                 .Where(x => x.RentalEndTime < DateTime.Now.Date)
                 .Include(x => x.RentalCompany)
                 .Include(x => x.Car)
-                .ThenInclude(t => t!.CarType)
+                .ThenInclude(t => t!.CarType);
+
+            var rows = await query.CountAsync();
+
+            var data = await query
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
@@ -245,7 +254,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .AsSplitQuery()
                 .ToListAsync();
 
-            return Success(result);
+            return Success(data, rows);
         }
     }
 }

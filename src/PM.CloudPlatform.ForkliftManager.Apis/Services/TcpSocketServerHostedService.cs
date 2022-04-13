@@ -9,6 +9,7 @@ using NbazhGPS.Protocol.Enums;
 using NbazhGPS.Protocol.Extensions;
 using NbazhGPS.Protocol.MessageBody;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Index.HPRtree;
 using Pang.AutoMapperMiddleware;
 using PM.CloudPlatform.ForkliftManager.Apis.CorrPacket;
 using PM.CloudPlatform.ForkliftManager.Apis.Entities;
@@ -39,6 +40,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
     {
         private readonly IOptions<ServerOption> _serverOptions;
         private readonly IOptions<KafkaOption> _kafkaOptions;
+        private readonly IOptions<GpsPointFormatterOption> _gpsPointFormatterOption;
         private readonly ClientSessionManagers _clientSessionManager;
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
         private readonly ILogger<TcpSocketServerHostedService> _logger;
@@ -52,6 +54,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         /// </summary>
         /// <param name="serverOptions">            </param>
         /// <param name="kafkaOptions">             </param>
+        /// <param name="gpsPointFormatterOption"></param>
         /// <param name="clientSessionManager">     </param>
         /// <param name="gpsTrackerSessionManager"> </param>
         /// <param name="logger">                   </param>
@@ -59,6 +62,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         public TcpSocketServerHostedService(
             IOptions<ServerOption> serverOptions,
             IOptions<KafkaOption> kafkaOptions,
+            IOptions<GpsPointFormatterOption> gpsPointFormatterOption,
             ClientSessionManagers clientSessionManager,
             TerminalSessionManager gpsTrackerSessionManager,
             ILogger<TcpSocketServerHostedService> logger,
@@ -66,6 +70,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         {
             _serverOptions = serverOptions ?? throw new ArgumentNullException(nameof(serverOptions));
             _kafkaOptions = kafkaOptions;
+            _gpsPointFormatterOption = gpsPointFormatterOption;
             _clientSessionManager = clientSessionManager ?? throw new ArgumentNullException(nameof(clientSessionManager));
             _gpsTrackerSessionManager = gpsTrackerSessionManager ?? throw new ArgumentNullException(nameof(gpsTrackerSessionManager));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -188,7 +193,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                             // 终端登录
                             var terminal = await _generalRepository.GetQueryable<Terminal>()
                                 .FilterDeleted()
-                                .FirstOrDefaultAsync(x => x.IMEI.Equals(terminalId), cancellationToken: cancellationToken);
+                                .FirstOrDefaultAsync(x => x.IMEI.Equals(terminalId));
 
                             if (terminal is not null)
                             {
@@ -216,9 +221,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     .FilterDisabled()
                                     .Include(x => x.Car)
                                     .ThenInclude(t => t.ElectronicFence)
-                                    .Include(x => x.AlarmRecords.Where(t => !t.IsReturn))
+                                    .Include(x => x.AlarmRecords.Where(t => t.IsReturn == false))
                                     .Where(x => x.IMEI.Equals(s["TerminalId"].ToString()))
-                                    .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+                                    .FirstOrDefaultAsync();
 
                             #region 使用记录
 
@@ -247,7 +252,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     await _generalRepository.UpdateAsync(UseRecord);
                                     await _generalRepository.SaveAsync();
                                 }
-                            }, cancellationToken);
+                            });
 
                             #endregion 使用记录
 
@@ -288,13 +293,12 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                         .FilterDeleted()
                                         .FilterDisabled()
                                         .OrderByDescending(x => x.CreateDate)
-                                        .Where(x => x.EnableMark)
-                                        .FirstOrDefaultAsync(cancellationToken: cancellationToken) ?? new SystemConfig();
-
-                                    Console.WriteLine(@$"--------------{Environment.NewLine}距离:{distance};阈值:{fence.BeyondFenceDistance};围栏编号:{terminal.Car.ElectronicFence.Id};{Environment.NewLine}--------------");
+                                        .FirstOrDefaultAsync() ?? new SystemConfig();
 
                                     if (distance > fence.BeyondFenceDistance)
                                     {
+                                        Console.WriteLine(@$"--------------{Environment.NewLine}距离:{distance};阈值:{fence.BeyondFenceDistance};围栏编号:{terminal.Car.ElectronicFence.Id};{Environment.NewLine}--------------");
+
                                         if (terminal.AlarmRecords is null || !terminal.AlarmRecords!.Any())
                                         {
                                             await Task.Run(async () =>
@@ -309,7 +313,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                                 alarm.Create();
                                                 await _generalRepository.InsertAsync(alarm);
                                                 await _generalRepository.SaveAsync();
-                                            }, cancellationToken);
+                                                _generalRepository.Context.Entry(alarm).State = EntityState.Detached;
+                                                _generalRepository.Context.Entry(terminal).State = EntityState.Detached;
+                                            });
                                         }
 
                                         foreach (var client in _clientSessionManager.Sessions)
@@ -325,8 +331,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                                     LicensePlateNumber = terminal.Car!.LicensePlateNumber,
                                                     // 超出距离
                                                     Distance = distance,
+                                                    Fence = fence.BeyondFenceDistance,
                                                     // 提示信息
-                                                    Msg = $"{terminal.Car!.LicensePlateNumber}超出围栏{distance}米"
+                                                    Msg = $"{terminal.Car!.LicensePlateNumber}超出围栏{distance.ToString("0.00")}米"
                                                 }
                                             }.ToJson();
                                             await client.Value.SendAsync(msg);
@@ -342,10 +349,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                                 {
                                                     item.IsReturn = true;
                                                     await _generalRepository.UpdateAsync(item);
-                                                }
-
-                                                await _generalRepository.SaveAsync();
-                                            }, cancellationToken);
+                                                    await _generalRepository.SaveAsync();
+                                                    _generalRepository.Context.Entry(item).State = EntityState.Detached;
+                                                    _generalRepository.Context.Entry(terminal).State = EntityState.Detached;
+                                                } 
+                                            });
                                         }
                                     }
                                 }
@@ -354,7 +362,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     Console.WriteLine($"distance 无法计算, {ex.Message}");
                                     Console.WriteLine($"{ex}");
                                 }
-                            }, cancellationToken);
+                            });
 
                             // 向客户端发送定位
                             await Task.Run(async () =>
@@ -366,8 +374,49 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                 gpsPositionRecord.Lon = (decimal)gdPoint.X;
                                 gpsPositionRecord.Lat = (decimal)gdPoint.Y;
                                 gpsPositionRecord.ModifyUserName = gdPoint.ToGeoJson();
-                                await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
-                                await _generalRepository.SaveAsync();
+
+                                /*
+                                    查看当前坐标和上一个坐标差距是否过大
+                                    
+                                    查看过去五分钟是否存在历史坐标点, 如果不存在, 直接插入, 
+                                    如果存在, 对比, 过去五分钟内的最后一个坐标点和当前坐标点的距离是否在误差内
+                                 */
+                                await Task.Run(async () =>
+                                {
+                                    var thisPointDateFormat = gpsPositionRecord.DateTime.Value.AddSeconds(_gpsPointFormatterOption.Value.TimeInterval);
+                                    var elderGpsPoint = await _generalRepository.GetQueryable<GpsPositionRecord>().Where(x=>x.DateTime > thisPointDateFormat).OrderByDescending(x=>x.DateTime).FirstOrDefaultAsync();
+                                    
+                                    if(elderGpsPoint is not null)
+                                    {
+                                        var distance = gpsPositionRecord.Point
+                                           .ProjectTo(2855)
+                                           .Distance(elderGpsPoint.Point)
+                                           .ShapeDistance();
+
+                                        var timeDiffence = gpsPositionRecord.DateTime.MinuteDiff(elderGpsPoint.DateTime);
+                                        var thisTimeSpeed = distance / (double)timeDiffence;
+                                        var formatSpeed = _gpsPointFormatterOption.Value.Speed.To_m_s(_gpsPointFormatterOption.Value.Coefficient);
+                                        //当前点时速小于纠正时速
+                                        if (thisTimeSpeed < formatSpeed)
+                                        {
+                                            await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
+                                            await _generalRepository.SaveAsync();
+                                        }
+                                        else
+                                        {
+                                            // 大于则丢弃
+                                            gpsPositionRecord.DeleteMark = true;
+                                            gpsPositionRecord.EnableMark = false;
+                                            await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
+                                            await _generalRepository.SaveAsync();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        await _generalRepository.InsertAsync<GpsPositionRecord>(gpsPositionRecord);
+                                        await _generalRepository.SaveAsync();
+                                    }
+                                });
 
                                 //车辆追踪
                                 if (_clientSessionManager.IsTrace)
@@ -429,7 +478,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                         await client.Value.SendAsync(msg);
                                     }
                                 }
-                            }, cancellationToken);
+                            });
                         }
 
                         // 应答器

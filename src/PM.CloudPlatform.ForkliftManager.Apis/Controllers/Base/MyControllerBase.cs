@@ -15,6 +15,8 @@ using PM.CloudPlatform.ForkliftManager.Apis.Entities;
 using PM.CloudPlatform.ForkliftManager.Apis.General;
 using Microsoft.EntityFrameworkCore;
 using PM.CloudPlatform.ForkliftManager.Apis.Extensions;
+using PM.CloudPlatform.ForkliftManager.Apis.Helper;
+using System.Data;
 
 namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
 {
@@ -87,11 +89,11 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
                 throw new ArgumentNullException(nameof(parameters));
             }
 
-            var data = await _repository.GetEntitiesAsync(parameters);
+            var (data,count) = await _repository.GetEntitiesAsync(parameters);
             var returnDto = _mapper.Map<IEnumerable<TModel>>(data);
 
             // HACK: UserController 添加Links
-            return Success(returnDto);
+            return Success(returnDto, count);
         }
 
         /// <summary>
@@ -626,12 +628,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         }
 
         [NonAction]
-        public virtual OkObjectResult Success([ActionResultObjectValue] object value)
+        public virtual OkObjectResult Success([ActionResultObjectValue] object value, int rows = 0)
         {
             return new OkObjectResult(new
             {
                 code = 200,
-                data = value
+                data = value,
+                rows = rows
             });
         }
 
@@ -655,13 +658,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers.Base
         }
 
         [NonAction]
-        public virtual OkObjectResult Success(string msg, [ActionResultObjectValue] object value)
+        public virtual OkObjectResult Success(string msg, [ActionResultObjectValue] object value, int rows = 0)
         {
             return new OkObjectResult(new
             {
                 code = 200,
                 msg = msg,
-                data = value
+                data = value,
+                rows=rows
             });
         }
 

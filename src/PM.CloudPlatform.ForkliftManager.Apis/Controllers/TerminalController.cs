@@ -202,6 +202,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 query = query.Where(x => x.Id == parameters.TerminalId);
             }
+
+            var rows = await query.CountAsync();
+
             var terminals = await query 
                 .ApplyPaged(parameters)         
                 .Select(x => new
@@ -230,7 +233,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //     })
             //     .ToListAsync();
 
-            return Success(terminals);
+            return Success(terminals, rows);
         }
 
         /// <summary>
@@ -263,10 +266,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 query = query.Where(x => x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber));
             }
-            var data = await query
+
+            query = query
                 .FilterDeleted()
                 .FilterDisabled()
-                .Include(x=>x.Car)
+                .Include(x => x.Car);
+
+            var rows = await query.CountAsync();
+
+            var data = await query
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {

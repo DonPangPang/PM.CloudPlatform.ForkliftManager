@@ -45,9 +45,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPageList([FromQuery] DtoParametersBase parameters)
         {
-            var data = await _generalRepository.GetQueryable<AlarmRecord>()
+            var query = _generalRepository.GetQueryable<AlarmRecord>()
                 .FilterDeleted()
-                .Include(x => x.Car)
+                .Include(x => x.Car);
+
+            var rows = await query.CountAsync();
+
+            var data = await query
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
@@ -61,7 +65,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 })
                 .ToListAsync();
 
-            return Success(data);
+            return Success(data, rows);
         }
     }
 }

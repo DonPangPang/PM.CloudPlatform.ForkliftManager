@@ -12,6 +12,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.General
     public interface IGeneralRepository
     {
         DatabaseFacade Database { get; }
+        DbContext Context { get; }
         DbSet<T> GetDbSet<T>() where T : EntityBase;
 
         IQueryable<T> GetQueryable<T>() where T : EntityBase;

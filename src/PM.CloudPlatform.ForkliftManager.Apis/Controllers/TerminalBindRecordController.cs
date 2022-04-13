@@ -31,18 +31,18 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             _generalRepository = generalRepository;
         }
 
-        public class BindRecordDtoParameters: DtoParametersBase
+        public class BindRecordDtoParameters : DtoParametersBase
         {
             /// <summary>
             /// imei
             /// </summary>
             /// <value></value>
-            public string? IMEI{get; set;}
+            public string? IMEI { get; set; }
             /// <summary>
             /// 车牌号
             /// </summary>
             /// <value></value>
-            public string? LicensePlateNumber{get; set;}
+            public string? LicensePlateNumber { get; set; }
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="licensePlateNumber"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetBindRecord([FromQuery]DtoParametersBase parameters, string? imei, string? licensePlateNumber, Guid? CarId, Guid? TerminalId)
+        public async Task<IActionResult> GetBindRecord([FromQuery] DtoParametersBase parameters, string? imei, string? licensePlateNumber, Guid? CarId, Guid? TerminalId)
         {
             var query = _generalRepository.GetQueryable<TerminalBindRecord>()
                .FilterDeleted()
@@ -69,21 +69,26 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 query = query.Where(x => x.Car!.Id == CarId);
             }
-            var records = await query
+
+            query = query
                 .ApplyPaged(parameters)
-                .Where(x=>x.Terminal!.IMEI.Contains(imei ?? ""))
-                .Where(x=>x.Car!.LicensePlateNumber!.Contains(licensePlateNumber ?? ""))
-                .Select(x=>new 
+                .Where(x => x.Terminal!.IMEI.Contains(imei ?? ""))
+                .Where(x => x.Car!.LicensePlateNumber!.Contains(licensePlateNumber ?? ""));
+
+            var rows = await query.CountAsync();
+
+            var records = await query
+                .Select(x => new
                 {
                     Id = x.Id,
                     IMEI = x.Terminal!.IMEI,
                     LicensePlateNumber = x.Car!.LicensePlateNumber,
                     IsActive = x.IsActive,
-                    Description=x.Description
+                    Description = x.Description
                 })
                 .ToListAsync();
 
-                return Success(records);
+            return Success(records, rows);
         }
     }
 }

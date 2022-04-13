@@ -25,7 +25,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Extensions
         public static int HourDiff(this DateTime? d1, DateTime? d2)
         {
             TimeSpan ts = (d2 ?? default) - (d1 ?? default);
-            return ts.Hours;
+            return Math.Abs(ts.Hours);
+        }
+
+        public static int MinuteDiff(this DateTime? d1, DateTime? d2)
+        {
+            TimeSpan ts = (d2 ?? default) - (d1 ?? default);
+            return Math.Abs(ts.Minutes);
         }
     }
 }

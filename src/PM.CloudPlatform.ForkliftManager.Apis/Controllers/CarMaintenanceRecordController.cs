@@ -88,10 +88,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 query = query.Where(x => x.MaintenanceTime == parameters.MaintenanceTime);
             }
-            var data = await query
+
+            query = query
                 .FilterDeleted()
-                .Where(x=>x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber ?? ""))
-                .Where(x=>x.Car!.SerialNumber!.Contains(parameters.SerialNumber ?? ""))
+                .Where(x => x.Car!.LicensePlateNumber!.Contains(parameters.LicensePlateNumber ?? ""))
+                .Where(x => x.Car!.SerialNumber!.Contains(parameters.SerialNumber ?? ""));
+            var rows = await query.CountAsync();
+
+            var data = await query
                 //.Where(x=> parameters.CarType == null ? true:x.Car!.CarType == parameters.CarType)
                 //.Where(x=>x.MaintenanceTime == null ? true:x.MaintenanceTime == parameters.MaintenanceTime)
                 .ApplyPaged(parameters)
@@ -111,7 +115,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 })
                 .ToListAsync();
 
-            return Success(data);
+            return Success(data, rows);
         }
 
         public class CarUseRecordsMaintenanceDtoParameters : DtoParametersBase
@@ -241,6 +245,9 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             {
                 query = query.Where(x => x.Id == parameters.CarId);
             }
+
+            var rows = await query.CountAsync();
+
             var data = await query
                 .ApplyPaged(parameters)
                                 .Select(x => new
@@ -267,7 +274,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .AsSplitQuery()
                 .ToListAsync();
 
-            return Success(data);
+            return Success(data, rows);
         }
 
         /// <summary>
@@ -297,11 +304,15 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             //return Success(data);
             #endregion 移除
 
-            var data = await _generalRepository.GetQueryable<Car>()
+            var query = _generalRepository.GetQueryable<Car>()
                 .FilterDeleted()
                 .Include(x => x.CarType)
                 .Include(x => x.UseRecords)
-                .Include(x => x.CarMaintenanceRecords)
+                .Include(x => x.CarMaintenanceRecords);
+
+            var rows = await query.CountAsync();
+
+            var data = await query
                 .ApplyPaged(parameters)
                 .Select(x => new
                 {
@@ -318,7 +329,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 })
                 .AsSplitQuery()
                 .ToListAsync();
-            return Success(data);
+            return Success(data, rows);
         }
     }
 }

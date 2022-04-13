@@ -35,10 +35,11 @@
     <script src="../../js/jquery-3.5.1.min.js"></script>
     <script src="../../js/common.js"></script>
     <script>
-        layui.use(['element', 'table', "jquery","form"], function () {
+        layui.use(['element', 'table', "jquery", "form", 'layer'], function () {
             var $ = layui.jquery,
                 element = layui.element,
                 form = layui.form,
+                layer = layui.layer,
                 table = layui.table;
             var color;
             var style = JSON.parse(sessionStorage.getItem('style'));
@@ -65,7 +66,7 @@
                         , { field: 'brand', title: '品牌', }
                         , { field: 'serialNumber', title: '编号', sort: true }
                         , { field: 'carTypeName', title: '车辆类型' }
-                        , { field: 'carModel', title: '车辆型号' }                      
+                        , { field: 'carModel', title: '车辆型号' }
                         , { field: 'buyTime', title: '购买时间', }
                         , { field: 'lengthOfUse', title: '使用时长（h）', }
                         , { field: 'maintenanceTimes', title: '保养次数', sort: true }
@@ -78,10 +79,10 @@
                         pageName: 'PageNumber' //页码的参数名称，默认：page
                         , limitName: 'PageSize' //每页数据量的参数名，默认：limit
                     }
-                    , parseData: function (res) {             
+                    , parseData: function (res) {
                         return {
                             'code': res.code,
-                            'count': res.total,
+                            'count': res.rows,
                             'data': res.data,
                             'msg': res.msg
                         }
@@ -146,17 +147,36 @@
                         break;
                     case 'delete':
                         if (data) {
-                            console.log(data)
-                            ajax('delete', 'api/Car/DeleteEntityVirtual/' +data.carId)
-                                .then(function (res) {
-                                   console.log(res)
-                                   if (res.code=200) {
-                                        layer.msg('删除成功', {
-                                        time: 2000
-                                        });
-                                        table.reload('test');
-                                   }
-                                })
+                            var colors;
+                            if (style == false) {
+                                var fontcolor = "#fff";
+                                colors = 'color:#fff;background-color:#033447;'
+                            } else {
+                                var fontcolor = "#000";
+                                colors = 'color:#000;background-color:#FFF;'
+                            }
+                            layer.open({
+                                type: 1,
+                                title: ['提示', colors],
+                                offset: 'auto',
+                                id: 'layerDemo',
+                                content: '<div style="padding: 20px 100px;color:' + fontcolor + '; font-size:18px">是否删除该车辆</div>',
+                                btn: ['是', '否'],
+                                btnAlign: 'r',
+                                // shade: 0.2,
+                                yes: function () {
+                                    ajax('delete', 'api/Car/DeleteEntityVirtual/' + data.carId)
+                                        .then(function (res) {
+                                            console.log(res)
+                                            if (res.code = 200) {
+                                                layer.msg('删除成功', {
+                                                    time: 2000
+                                                });
+                                                table.reload('test');
+                                            }
+                                        })
+                                }
+                            })
                         } else {
                             layer.msg('请选中车辆后执行操作', {
                                 time: 2000

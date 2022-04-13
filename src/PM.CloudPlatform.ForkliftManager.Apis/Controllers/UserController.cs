@@ -65,16 +65,20 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers([FromQuery]UserDtoParameters parameters)
         {
-            var users = await _generalRepository.GetQueryable<User>()
-                .Where(x=>x.Name.Contains(parameters.Name ?? ""))
-                .Where(x=>x.Username.Contains(parameters.Username ?? ""))
-                .FilterDeleted()
+            var query = _generalRepository.GetQueryable<User>()
+                .Where(x => x.Name.Contains(parameters.Name ?? ""))
+                .Where(x => x.Username.Contains(parameters.Username ?? ""))
+                .FilterDeleted();
+
+            var rows = await query.CountAsync();
+
+            var users = await query
                 .ApplyPaged(parameters)
                 .ToListAsync();
 
             var returnDto = users.MapTo<UserDto>();
 
-            return Success(returnDto);
+            return Success(returnDto, rows);
         }
 
         /// <summary>

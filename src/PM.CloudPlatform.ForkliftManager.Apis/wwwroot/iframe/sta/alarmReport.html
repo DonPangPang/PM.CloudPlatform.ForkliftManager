@@ -99,10 +99,10 @@
                         , limitName: 'PageSize' //每页数据量的参数名，默认：limit
                     }
                     , parseData: function (res) {
-                        console.log()
+                        console.log(res)
                         return {
                             'code': res.code,
-                            'count': res.total,
+                            'count': res.rows,
                             'data': res.data,
                             'msg': res.msg
                         }

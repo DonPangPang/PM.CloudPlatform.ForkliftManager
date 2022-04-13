@@ -1,4 +1,4 @@
-var url = "ws://192.168.31.34:28081"
+var url = "ws://39.100.144.78:9002"
 //var url = "ws://localhost:28081"
 //import conf from './js/conf.js'
 //var url = conf.ws_url;

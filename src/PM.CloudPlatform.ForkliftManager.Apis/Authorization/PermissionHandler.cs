@@ -64,16 +64,16 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
 
             var id = Guid.Parse(context.User.Claims.FirstOrDefault(x => x.Type.Equals(ClaimTypes.Name))!.Value);
 
-            var token = await _redisHelper.GetStringAsync(id.ToString());
+            //var token = await _redisHelper.GetStringAsync(id.ToString());
 
-            var elderToken = await _httpContextAccessor.HttpContext!.GetTokenAsync("Bearer", "access_token");
+            //var elderToken = await _httpContextAccessor.HttpContext!.GetTokenAsync("Bearer", "access_token");
 
-            if (!token.Equals(elderToken))
-            {
-                context.Fail();
-                await Task.CompletedTask;
-                return;
-            }
+            //if (!token.Equals(elderToken))
+            //{
+            //    context.Fail();
+            //    await Task.CompletedTask;
+            //    return;
+            //}
 
             var user = await _generalRepository.GetQueryable<User>()
                 .FilterDeleted()

@@ -140,7 +140,7 @@
                         console.log()
                         return {
                             'code': res.code,
-                            'count': res.total,
+                            'count': res.rows,
                             'data': res.data,
                             'msg': res.msg
                         }
@@ -157,11 +157,18 @@
             table.on('toolbar(test)', function (obj) {
                 if (obj.event === 'restless') {
                     var selectData = layui.table.checkStatus('demo').data;
-                    data = selectData;
+                    var data = selectData;
                     sessionStorage.setItem('carData', JSON.stringify(data));
-                    if (data.length>0) {
-                        console.log(data)
-                        layer.msg('是否归还车辆', {
+
+                    if (data.length != 0) {
+                        let bool = true;
+                        data.forEach(item => {
+                            if (item.isReturn) {
+                                bool = false;
+                            }
+                        });
+                        if (bool) {
+                            layer.msg('是否归还车辆', {
                             time: 0 //不自动关闭
                             , btn: ['确定', '取消']
                             , yes: function (index) {
@@ -172,7 +179,7 @@
                                     shade: 0.2,
                                     maxmin: true,
                                     shadeClose: true,
-                                    area: ['90%', '90%'],
+                                    area: ['45%', '90%'],
                                     content: './layer/carPlan/restless.html?data=' + data,
                                     maxmin: false, //最大化最小化
                                     success: function (layero) {
@@ -183,15 +190,21 @@
                                     },
                                 });
                                 layer.close(index);
-
                             }
                         })
+                        }
+                        else{
+                            layer.msg('请重新选择车辆后执行操作', {
+                                    time: 2000
+                                });
+                        }
+                       
                     } else {
                         layer.msg('请选中数据后执行操作', {
                             time: 2000
                         });
                     }
-                }              
+                }
             });
             table.on('tool(test)', function (obj) {
                 console.log(obj)
@@ -200,19 +213,19 @@
                     sessionStorage.setItem('FenceData', JSON.stringify(data));
                     var index = layer.open({
                         title: ['查看围栏', color],
-                            type: 2,
-                            shade: 0.2,
-                            maxmin: true,
-                            shadeClose: true,
-                            area: ['90%', '90%'],
-                            content: './layer/carPlan/setFence.html?data=' + data,
-                            maxmin: false, //最大化最小化
-                            success: function (layero) {
-                                if (style == false) {
-                                    $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
-                                } else {
-                                }
-                            },
+                        type: 2,
+                        shade: 0.2,
+                        maxmin: true,
+                        shadeClose: true,
+                        area: ['90%', '90%'],
+                        content: './layer/carPlan/setFence.html?data=' + data,
+                        maxmin: false, //最大化最小化
+                        success: function (layero) {
+                            if (style == false) {
+                                $('.layui-layer-close').append('<i class="iconfont  icon-cha"></i>');
+                            } else {
+                            }
+                        },
                     });
                 }
             })
@@ -228,7 +241,7 @@
                     where: result
                 }, 'data');
                 return false;
-            });          
+            });
         });
     </script>
 </body>

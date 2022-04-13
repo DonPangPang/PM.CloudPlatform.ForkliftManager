@@ -8,7 +8,7 @@
 
 // 以下为公共参数
 //var  requestUrl = 'https://localhost:44352/'; //请求地址公共前缀
-var requestUrl = 'http://192.168.31.34:10808/'; //请求地址公共前缀
+var requestUrl = 'http://39.100.144.78:9001/'; //请求地址公共前缀
 //var requestUrl = 'http://localhost:10808/'; //请求地址公共前缀
 //var requestUrl = conf.apis;
 var loginMark = localStorage.getItem('loginMark');   //loginMark

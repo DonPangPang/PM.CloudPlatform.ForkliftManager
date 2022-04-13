@@ -20,11 +20,14 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.General
 
         public DatabaseFacade Database { get; }
 
+        public DbContext Context { get; }
+
         public GeneralRepository(ForkliftManagerDbContext forkliftManagerDbContext, IMapper mapper)
         {
             _forkliftManagerDbContext = forkliftManagerDbContext;
             _mapper = mapper;
             Database = _forkliftManagerDbContext.Database;
+            Context = forkliftManagerDbContext;
         }
 
         public DbSet<T> GetDbSet<T>() where T : EntityBase

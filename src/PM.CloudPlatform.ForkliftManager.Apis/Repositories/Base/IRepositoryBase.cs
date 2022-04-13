@@ -101,7 +101,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Repositories.Base
         /// <remarks> 异步 </remarks>
         /// <param name="parameters"> </param>
         /// <returns> </returns>
-        Task<PagedList<T>> GetEntitiesAsync(DtoParametersBase parameters);
+        Task<(PagedList<T>,int)> GetEntitiesAsync(DtoParametersBase parameters);
 
         #endregion 查询 -- R
 
