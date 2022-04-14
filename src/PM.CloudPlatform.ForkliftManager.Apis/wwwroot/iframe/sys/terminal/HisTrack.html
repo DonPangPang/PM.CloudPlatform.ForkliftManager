@@ -68,11 +68,11 @@
         padding: 5px;">
             轨迹回放控制
         </h4>
-        <fieldset class="layui-elem-field layui-field-title" >
+        <fieldset class="layui-elem-field layui-field-title">
             <legend>播放速度倍数</legend>
             <legend>播放速度:<span id="multiple">200(km/h)</span></legend>
         </fieldset>
-        <div id="slideTest3" class="demo-slider" style="margin-bottom: 10px;" ></div>
+        <div id="slideTest3" class="demo-slider" style="margin-bottom: 10px;"></div>
         <div class="input-item">
             <button type="button" class="layui-btn" id="start" onclick="startAnimation()">开始播放</button>
             <button type="button" class="layui-btn" id="pause" onclick="pauseAnimation()">暂停播放</button>
@@ -111,23 +111,24 @@
         var lineArr = [];
         var routeInfo = [];
         var speed = 200;
-        var multiple=1;
+        var multiple = 1;
+        var index = 0;
         layui.use(['element', 'jquery', 'form', 'laydate', 'slider'], function () {
             var element = layui.element,
                 $ = layui.jquery,
-                slider = layui.slider;
-            form = layui.form;
-            laydate = layui.laydate;
+                slider = layui.slider,
+                form = layui.form,
+                laydate = layui.laydate;
 
             slider.render({
                 elem: '#slideTest3'
                 , min: 1 //最小值
                 , max: 20 //最大值
-                , change: function (value) {                    
-                    multiple= value;
-                    speed=200* multiple;
-                    $("#multiple").html(speed+"(km/h)")
-                    startAnimation();
+                , change: function (value) {
+                    multiple = value;
+                    speed = 200 * multiple;
+                    $("#multiple").html(speed + "(km/h)")
+                    Speedup();
                 }
             });
             var style = JSON.parse(sessionStorage.getItem('style'));
@@ -244,6 +245,14 @@
 
                                 carWindow.setPosition(lastLocation);
                                 setVehicleSpeedInWidowns(lastLocation, e.passedPath.length - 1);
+                                let us=lineArr.getIndexByValue(lastLocation)
+                                console.log(us)
+                                if ( us!= -1) {
+                                    index = us
+                                }
+
+                                // index=Math.round(routeInfo.length)
+                                console.log(index)
                             });
                             // 7.打开速度框
                             carWindow.open(map, marker.getPosition());
@@ -284,8 +293,17 @@
         });
 
         function startAnimation() {
-            console.log(speed)
+            // console.log(index)
             marker.moveAlong(lineArr, speed);
+          
+        }
+
+        function Speedup(){
+            var replayPath = [];
+            for (var i = index; i < lineArr.length; i++) {
+                replayPath.push(lineArr[i]);
+            }
+            marker.moveAlong(replayPath, speed);
         }
 
         function pauseAnimation() {
@@ -318,6 +336,16 @@
                 };
             };
             return fmt;
+        }
+
+
+        Array.prototype.getIndexByValue = function (arr) {
+            for (var i = 0; i < this.length; i++) {
+                if (this[i] == arr) {
+                    return i;
+                }
+            }
+            return -1;//没找到则返回-1
         }
     </script>
 </body>

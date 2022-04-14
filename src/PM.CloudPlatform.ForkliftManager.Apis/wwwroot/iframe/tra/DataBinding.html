@@ -73,12 +73,12 @@
                         , { field: 'imei', title: '设备名称' }
                         , {
                             field: 'licensePlateNumber', title: '绑定车辆', templet: function (d) {
-                               if (!d.licensePlateNumber) {
-                                return "未绑定车辆"
-                               } else {
-                                return d.licensePlateNumber 
-                               }
-                               
+                                if (!d.licensePlateNumber) {
+                                    return "未绑定车辆"
+                                } else {
+                                    return d.licensePlateNumber
+                                }
+
                             }
                         }
                     ]]
@@ -141,16 +141,29 @@
 
                     case 'delete':
                         if (data) {
-                            ajax("get", "api/Car/SetCarTerminalUnBind?terminalId=" + data.id + "&carId=" + data.carId)
-                                .then(function (res) {
-                                    console.log(res)
-                                    if (res.code = 200) {
-                                        layer.msg('解除绑定成功', {
-                                            time: 2000
-                                        });
-                                        table.reload('test');
-                                    }
-                                })
+                            layer.open({
+                                type: 1,
+                                shade: 0.2,
+                                shadeClose: true,
+                                title: ['提示', color],
+                                offset: 'auto',
+                                id: 'layerDemo',
+                                content: '<div style="padding: 20px 100px;">是否解除绑定</div>',
+                                btn: ['是', '否'],
+                                btnAlign: 'r',
+                                yes: function (index, layero) {
+                                    ajax("get", "api/Car/SetCarTerminalUnBind?terminalId=" + data.id + "&carId=" + data.carId)
+                                        .then(function (res) {
+                                            console.log(res)
+                                            if (res.code = 200) {
+                                                layer.msg('解除绑定成功', {
+                                                    time: 2000
+                                                });
+                                                table.reload('test');
+                                            }
+                                        })
+                                }
+                            })
                         } else {
                             layer.msg('请选中数据后执行操作', {
                                 time: 2000

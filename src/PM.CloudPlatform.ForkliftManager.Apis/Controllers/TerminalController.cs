@@ -55,6 +55,32 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         }
 
         /// <summary>
+        /// 获取所有在线终端, 附带车辆信息
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetOnlineTerminalsWithCarInfo()
+        {
+            var terminals = _gpsTrackerSessionManager.GetAllSessions().Where(x => x.Value.State == SessionState.Connected).Select(x => new { x.Key, x.Value.State });
+            if (terminals is null || !terminals.Any())
+            {
+                return Success();
+            }
+            else
+            {
+                var data = await _generalRepository.GetQueryable<Terminal>()
+                    .Include(x=>x.Car)
+                    .Where(x => terminals.FirstOrDefault(t => t.Key.Equals(x.IMEI)) != null).Select(x => new
+                    {
+                        key = x.IMEI,
+                        State = true,
+                        LicensePlateNumber = (x.Car == null) ? $"无绑定车辆[{x.IMEI}]" : x.Car.LicensePlateNumber
+                    }).ToListAsync();
+                return Success(data);
+            }
+        }
+
+        /// <summary>
         /// 获取所有不在线设备
         /// </summary>
         /// <returns> </returns>
@@ -68,6 +94,32 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
                 .Where(x => !onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, IsOnline = false }).ToListAsync();
 
             return Success(offlineTerminals);
+        }
+
+        /// <summary>
+        /// 获取所有不在线设备, 附带车辆信息
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetOfflineTerminalsWithCarInfo()
+        {
+            var onlineTerminals = _gpsTrackerSessionManager.GetAllSessions().Values
+                .Select(x => x["TerminalId"].ToString());
+
+            var offlineTerminals = await _generalRepository.GetQueryable<Terminal>()
+                .Where(x => !onlineTerminals.Contains(x.IMEI)).Select(x => x.IMEI).ToListAsync();
+
+            var data = await _generalRepository.GetQueryable<Terminal>()
+                .Include(x=>x.Car)
+                .Where(x => offlineTerminals.Contains(x.IMEI))
+                .Select(x => new
+                {
+                    IMEI = x.IMEI,
+                    IsOnline = false,
+                    LicensePlateNumber = (x.Car == null) ? $"无绑定车辆[{x.IMEI}]":x.Car.LicensePlateNumber,
+                }).ToListAsync();
+
+            return Success(data);
         }
 
         /// <summary>
@@ -85,6 +137,35 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
 
             var offlineTerminals = await _generalRepository.GetQueryable<Terminal>()
                 .Where(x => !onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, IsOnline = false }).ToListAsync();
+
+            if (allTerminals is null)
+            {
+                return Success(offlineTerminals);
+            }
+
+            allTerminals.AddRange(offlineTerminals);
+
+            return Success(allTerminals);
+        }
+
+        /// <summary>
+        /// 获取所有终端及状态
+        /// </summary>
+        /// <returns> </returns>
+        [HttpGet]
+        public async Task<IActionResult> GetTerminalsWithCarInfo()
+        {
+            var onlineTerminals = _gpsTrackerSessionManager.GetAllSessions().Values
+                .Select(x => x["TerminalId"].ToString());
+
+            var allTerminals = await _generalRepository.GetQueryable<Terminal>()
+                .Include(x=>x.Car)
+                .Where(x => onlineTerminals.Contains(x.IMEI))
+                .Select(x => new { IMEI = x.IMEI, IsOnline = true, LicensePlateNumber = (x.Car == null) ? $"无绑定车辆[{x.IMEI}]" : x.Car.LicensePlateNumber, }).ToListAsync();
+
+            var offlineTerminals = await _generalRepository.GetQueryable<Terminal>()
+                .Include(x=>x.Car)
+                .Where(x => !onlineTerminals.Contains(x.IMEI)).Select(x => new { IMEI = x.IMEI, IsOnline = false, LicensePlateNumber = (x.Car == null) ? $"无绑定车辆[{x.IMEI}]" : x.Car.LicensePlateNumber, }).ToListAsync();
 
             if (allTerminals is null)
             {
