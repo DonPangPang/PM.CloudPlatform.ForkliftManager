@@ -32,28 +32,30 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
         private readonly IGeneralRepository _generalRepository;
 
-        private Random rand = new Random();
+        #region 车辆测试
+        // private Random rand = new Random();
 
-        private List<TestTerminal> testTerminals = new List<TestTerminal>()
-        {
-            new TestTerminal{IMEI = "868120278343188"},
-            new TestTerminal{IMEI = "868120278343189"},
-            new TestTerminal{IMEI = "868120278343190"},
-            new TestTerminal{IMEI = "868120278343191"},
-            new TestTerminal{IMEI = "868120278343192"},
-            new TestTerminal{IMEI = "868120278343193"},
-            new TestTerminal{IMEI = "868120278343194"},
-            new TestTerminal{IMEI = "868120278343195"},
-            new TestTerminal{IMEI = "868120278343196"},
-            new TestTerminal{IMEI = "868120278343197"},
-        };
+        // private List<TestTerminal> testTerminals = new List<TestTerminal>()
+        // {
+        //     new TestTerminal{IMEI = "868120278343188"},
+        //     new TestTerminal{IMEI = "868120278343189"},
+        //     new TestTerminal{IMEI = "868120278343190"},
+        //     new TestTerminal{IMEI = "868120278343191"},
+        //     new TestTerminal{IMEI = "868120278343192"},
+        //     new TestTerminal{IMEI = "868120278343193"},
+        //     new TestTerminal{IMEI = "868120278343194"},
+        //     new TestTerminal{IMEI = "868120278343195"},
+        //     new TestTerminal{IMEI = "868120278343196"},
+        //     new TestTerminal{IMEI = "868120278343197"},
+        // };
 
-        private class TestTerminal
-        {
-            public string IMEI { get; set; }
-            public double Lon { get; set; } = 34.826682222222222222222222222;
-            public double Lat { get; set; } = 113.55184;
-        }
+        // private class TestTerminal
+        // {
+        //     public string IMEI { get; set; }
+        //     public double Lon { get; set; } = 34.826682222222222222222222222;
+        //     public double Lat { get; set; } = 113.55184;
+        // }
+        #endregion 车辆测试
 
         /// <summary>
         /// </summary>
