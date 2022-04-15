@@ -203,6 +203,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
             services.Configure<ServerOption>(Configuration.GetSection("ServerOption"));
             services.Configure<KafkaOption>(Configuration.GetSection("KafkaOption"));
             services.Configure<GpsPointFormatterOption>(Configuration.GetSection("GpsPointFormatterOption"));
+            services.Configure<WebSocketOption>(Configuration.GetSection("WebSocketOption"));
             //services.AddSingleton<TcpSocketServerHostedService>();
 
             services.AddDistributedMemoryCache();

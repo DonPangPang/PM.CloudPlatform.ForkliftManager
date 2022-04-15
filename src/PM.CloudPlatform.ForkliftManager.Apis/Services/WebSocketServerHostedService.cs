@@ -27,6 +27,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
     public class WebSocketServerHostedService : IHostedService
     {
         private readonly IOptions<ServerOption> _serverOptions;
+        private readonly IOptions<WebSocketOption> _webSocketOption;
         private readonly ClientSessionManagers _clientSessionManager;
         private readonly TerminalSessionManager _gpsTrackerSessionManager;
         private readonly IGeneralRepository _generalRepository;
@@ -57,16 +58,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         /// <summary>
         /// </summary>
         /// <param name="serverOptions">            </param>
+        /// <param name="webSocketOption"></param>
         /// <param name="clientSessionManager">     </param>
         /// <param name="gpsTrackerSessionManager"> </param>
         /// <param name="factory">                  </param>
         public WebSocketServerHostedService(
             IOptions<ServerOption> serverOptions,
+            IOptions<WebSocketOption> webSocketOption,
             ClientSessionManagers clientSessionManager,
             TerminalSessionManager gpsTrackerSessionManager,
             IServiceScopeFactory factory)
         {
             _serverOptions = serverOptions ?? throw new ArgumentNullException(nameof(_serverOptions));
+            _webSocketOption = webSocketOption;
             _clientSessionManager = clientSessionManager ?? throw new ArgumentNullException(nameof(clientSessionManager));
             _gpsTrackerSessionManager = gpsTrackerSessionManager ?? throw new ArgumentNullException(nameof(gpsTrackerSessionManager));
             _generalRepository = factory.CreateScope().ServiceProvider.GetRequiredService<IGeneralRepository>();
@@ -202,7 +206,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                             await s.CloseAsync(CloseReason.ProtocolError, "ClientId不存在");
                         }
 
-                        var verifyCode = Guid.NewGuid().ToString();
+                        var verifyCode = _webSocketOption.Value.VerifyCode;
                         var loginPacket = new ClientPackage()
                         {
                             PackageType = PackageType.Login,
