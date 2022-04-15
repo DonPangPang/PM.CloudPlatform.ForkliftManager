@@ -51,6 +51,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
         /// <param name="parameters"></param>
         /// <param name="imei"></param>
         /// <param name="licensePlateNumber"></param>
+        /// <param name="CarId"></param>
+        /// <param name="TerminalId"></param>
         /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetBindRecord([FromQuery] DtoParametersBase parameters, string? imei, string? licensePlateNumber, Guid? CarId, Guid? TerminalId)
