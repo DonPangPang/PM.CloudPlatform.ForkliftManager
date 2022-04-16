@@ -22,19 +22,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Authorization
     {
         private readonly IGeneralRepository _generalRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly RedisHelper _redisHelper;
+        //private readonly RedisHelper _redisHelper;
         private readonly PermissionRequirement _tokenParameter;
 
         public PermissionHandler(
             IConfiguration config,
             IGeneralRepository generalRepository,
-            IHttpContextAccessor httpContextAccessor,
-            RedisHelper redisHelper
+            IHttpContextAccessor httpContextAccessor
+            //RedisHelper redisHelper
             )
         {
             _generalRepository = generalRepository;
             _httpContextAccessor = httpContextAccessor;
-            _redisHelper = redisHelper;
+            //_redisHelper = redisHelper;
             _tokenParameter = config.GetSection("TokenParameter").Get<PermissionRequirement>();
         }
 
