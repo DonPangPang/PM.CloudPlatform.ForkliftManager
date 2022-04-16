@@ -32,13 +32,13 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
     {
         private readonly IGeneralRepository _generalRepository;
         private PermissionRequirement _tokenParameter;
-        private readonly RedisHelper _redisHelper;
+        //private readonly RedisHelper _redisHelper;
         private readonly ICaptcha _captcha;
 
-        public AuthorizationController(IGeneralRepository generalRepository, RedisHelper redisHelper, ICaptcha captcha)
+        public AuthorizationController(IGeneralRepository generalRepository/*, RedisHelper redisHelper*/, ICaptcha captcha)
         {
             _generalRepository = generalRepository;
-            _redisHelper = redisHelper;
+            //_redisHelper = redisHelper;
             _captcha = captcha;
             var config = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
@@ -123,7 +123,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Controllers
             var token = GenUserToken(user.Id, request.Username, "admin");
             var refreshToken = "123456";
 
-            await _redisHelper.SetStringAsync(user.Id.ToString(), token);
+            //await _redisHelper.SetStringAsync(user.Id.ToString(), token);
 
             //LoginUserInfo.Set(user);
 

@@ -48,17 +48,19 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
         /// <param name="services"> </param>
         public void ConfigureServices(IServiceCollection services)
         {
-            //redis缓存
-            var section = Configuration.GetSection("Redis:Default");
-            //连接字符串
-            string _connectionString = section.GetSection("Connection").Value;
-            //实例名称
-            string _instanceName = section.GetSection("InstanceName").Value;
-            //默认数据库
-            int _defaultDB = int.Parse(section.GetSection("DefaultDB").Value ?? "0");
-            services.AddSingleton(new RedisHelper(_connectionString, _instanceName, _defaultDB));
+            #region Redis
+            // //redis缓存
+            // var section = Configuration.GetSection("Redis:Default");
+            // //连接字符串
+            // string _connectionString = section.GetSection("Connection").Value;
+            // //实例名称
+            // string _instanceName = section.GetSection("InstanceName").Value;
+            // //默认数据库
+            // int _defaultDB = int.Parse(section.GetSection("DefaultDB").Value ?? "0");
+            // services.AddSingleton(new RedisHelper(_connectionString, _instanceName, _defaultDB));
+            #endregion Redis
 
-            var AppContig = Configuration.GetSection("TokenParameter").Get<PermissionRequirement>();
+            var AppConfig = Configuration.GetSection("TokenParameter").Get<PermissionRequirement>();
             services.AddAuthorization(options =>
                 {
                     options.AddPolicy("Identify", policy =>
@@ -78,10 +80,10 @@ namespace PM.CloudPlatform.ForkliftManager.Apis
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidAudience = AppContig.Audience,
-                        ValidIssuer = AppContig.Issuer,
+                        ValidAudience = AppConfig.Audience,
+                        ValidIssuer = AppConfig.Issuer,
                         IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppContig.Secret))
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppConfig.Secret))
                     };
 
                     options.SaveToken = true;
