@@ -352,7 +352,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                                     await _generalRepository.SaveAsync();
                                                     _generalRepository.Context.Entry(item).State = EntityState.Detached;
                                                     _generalRepository.Context.Entry(terminal).State = EntityState.Detached;
-                                                } 
+                                                }
                                             });
                                         }
                                     }
@@ -383,18 +383,21 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                  */
                                 await Task.Run(async () =>
                                 {
-                                    var thisPointDateFormat = gpsPositionRecord.DateTime.Value.AddSeconds(_gpsPointFormatterOption.Value.TimeInterval);
-                                    var elderGpsPoint = await _generalRepository.GetQueryable<GpsPositionRecord>().Where(x=>x.DateTime > thisPointDateFormat).OrderByDescending(x=>x.DateTime).FirstOrDefaultAsync();
-                                    
-                                    if(elderGpsPoint is not null)
+                                    var thisPointDateFormat = gpsPositionRecord.DateTime.Value.AddSeconds(-(_gpsPointFormatterOption.Value.TimeInterval));
+                                    var elderGpsPoint = await _generalRepository.GetQueryable<GpsPositionRecord>()
+                                        .Where(x => x.CreateUserName.Equals(gpsPositionRecord.CreateUserName))
+                                        .Where(x => x.DateTime > thisPointDateFormat)
+                                        .OrderByDescending(x => x.DateTime).FirstOrDefaultAsync();
+
+                                    if (elderGpsPoint is not null)
                                     {
-                                        var distance = gpsPositionRecord.Point
+                                        var distance = gdPoint
                                            .ProjectTo(2855)
                                            .Distance(elderGpsPoint.Point)
                                            .ShapeDistance();
 
-                                        var timeDiffence = gpsPositionRecord.DateTime.MinuteDiff(elderGpsPoint.DateTime);
-                                        var thisTimeSpeed = distance / (double)timeDiffence;
+                                        var timeDifference = gpsPositionRecord.DateTime.MinuteDiff(elderGpsPoint.DateTime);
+                                        var thisTimeSpeed = distance / (double)timeDifference;
                                         var formatSpeed = _gpsPointFormatterOption.Value.Speed.To_m_s(_gpsPointFormatterOption.Value.Coefficient);
                                         //当前点时速小于纠正时速
                                         if (thisTimeSpeed < formatSpeed)
@@ -462,7 +465,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                                 // 终端Id
                                                 TerminalId = s["TerminalId"].ToString(),
                                                 // 车牌号
-                                                    LicensePlateNumber = terminal.Car!.LicensePlateNumber,
+                                                LicensePlateNumber = terminal.Car!.LicensePlateNumber,
                                                 // 纬度
                                                 Lon = gdPoint.X,
                                                 // 经度
