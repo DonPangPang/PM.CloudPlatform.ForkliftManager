@@ -54,7 +54,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
         /// </summary>
         /// <param name="serverOptions">            </param>
         /// <param name="kafkaOptions">             </param>
-        /// <param name="gpsPointFormatterOption"></param>
+        /// <param name="gpsPointFormatterOption">  </param>
         /// <param name="clientSessionManager">     </param>
         /// <param name="gpsTrackerSessionManager"> </param>
         /// <param name="logger">                   </param>
@@ -377,8 +377,8 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
 
                                 /*
                                     查看当前坐标和上一个坐标差距是否过大
-                                    
-                                    查看过去五分钟是否存在历史坐标点, 如果不存在, 直接插入, 
+
+                                    查看过去五分钟是否存在历史坐标点, 如果不存在, 直接插入,
                                     如果存在, 对比, 过去五分钟内的最后一个坐标点和当前坐标点的距离是否在误差内
                                  */
                                 await Task.Run(async () =>
@@ -393,7 +393,7 @@ namespace PM.CloudPlatform.ForkliftManager.Apis.Services
                                     {
                                         var distance = gdPoint
                                            .ProjectTo(2855)
-                                           .Distance(elderGpsPoint.Point)
+                                           .Distance(elderGpsPoint.Point.ProjectTo(2855))
                                            .ShapeDistance();
 
                                         var timeDifference = gpsPositionRecord.DateTime.MinuteDiff(elderGpsPoint.DateTime);

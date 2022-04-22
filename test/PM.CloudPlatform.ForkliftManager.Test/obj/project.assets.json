@@ -11163,11 +11163,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
+      "projectUniqueName": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
       "projectName": "PM.CloudPlatform.ForkliftManager.Test",
-      "projectPath": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
+      "projectPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\PM.CloudPlatform.ForkliftManager.Test.csproj",
       "packagesPath": "C:\\Users\\pm011\\.nuget\\packages\\",
-      "outputPath": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\obj\\",
+      "outputPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\test\\PM.CloudPlatform.ForkliftManager.Test\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pm011\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -11186,8 +11186,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj": {
-              "projectPath": "e:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj"
+            "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj": {
+              "projectPath": "E:\\CCSource\\PM.CloudPlatform.ForkliftManager\\src\\PM.CloudPlatform.ForkliftManager.Apis\\PM.CloudPlatform.ForkliftManager.Apis.csproj"
             }
           }
         }

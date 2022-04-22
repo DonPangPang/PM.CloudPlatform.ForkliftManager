@@ -1,6 +1,7 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using NetTopologySuite.Algorithm;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
@@ -228,6 +229,25 @@ namespace PM.CloudPlatform.ForkliftManager.Test
             var distance = point.ProjectTo(2855).Distance(border.ProjectTo(2855));
 
             _testOutputHelper.WriteLine($"Distance is: {distance.ToString()}");
+        }
+
+        [Fact]
+        public void SpeedFormatTest()
+        {
+            var point1 = "{\"type\":\"Point\",\"coordinates\":[113.55786582561987,34.82559001411604]}".ToGeometry<Point>();
+
+            var point2 = "{\"type\":\"Point\",\"coordinates\":[113.55804310833192,34.82554072421719]}".ToGeometry<Point>();
+
+            var distance = point1.ProjectTo(2855).Distance(point2.ProjectTo(2855));
+
+            _testOutputHelper.WriteLine($"Distance is: {distance.ToString()}");
+
+            var formatSpeed = 60f / 3.6f;
+            var thisSpeed = distance / 10f;
+
+            _testOutputHelper.WriteLine($"Format Speed: {formatSpeed}; This Speed: {thisSpeed}");
+
+            Assert.True(thisSpeed < formatSpeed);
         }
     }
 }
